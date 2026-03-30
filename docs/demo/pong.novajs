@@ -8,31 +8,35 @@ PADDLE_H = 60
 BALL_R   = 6
 MAX_SCORE = 5
 
-// Velocidades em pixels por segundo
+// Speeds in pixels per second
 PADDLE_SPEED = 350 
 BALL_SPEED   = 400 
 
+// Player 1 (left), Player 2 (CPU), and ball
 p1    = { x: 20,     y: H/2 - PADDLE_H/2, dy: 0 }
 p2    = { x: W - 30, y: H/2 - PADDLE_H/2 } // CPU
 ball  = { x: W/2,    y: H/2, vx: 0, vy: 0 }
 
+// Score and game state
 score = { p1: 0, p2: 0 }
 state = 'waiting'
 lastTime = 0
 
-// ── Lógica do Jogo ────────────────────────────────────────────────────────
+// ── Game Logic ────────────────────────────────────────────────────────────
 
+// Reset ball to center and launch in given direction
 fn resetBall(direction) {
     ball.x = W / 2
     ball.y = H / 2
     
-    // Lança a bola com um leve ângulo aleatório para não ficar reto
+    // Launch with slight random angle to avoid straight movement
     angle = (random() * Math.PI/4) - Math.PI/8 
     
-    ball.vx = direction * BALL_SPEED * Math.cos(angle)
-    ball.vy = BALL_SPEED * Math.sin(angle)
+    ball.vx = direction * BALL_SPEED * angle.cos()
+    ball.vy = BALL_SPEED * angle.sin()
 }
 
+// Reset entire match
 fn resetGame() {
     score.p1 = 0
     score.p2 = 0
@@ -41,9 +45,11 @@ fn resetGame() {
     resetBall(1)
 }
 
-// ── Controles ─────────────────────────────────────────────────────────────
+// ── Controls ──────────────────────────────────────────────────────────────
 
+// Handle key press
 window.on('keydown', e => {
+    // Start or restart game
     if state === 'waiting' || state === 'gameover' {
         if e.key === 'Enter' {
             state = 'playing'
@@ -52,32 +58,34 @@ window.on('keydown', e => {
         return
     }
 
+    // Player movement input
     switch e.key {
         case 'ArrowUp':   p1.dy = -1; break
         case 'ArrowDown': p1.dy = 1;  break
     }
 })
 
+// Stop movement on key release
 window.on('keyup', e => {
-    if e.key === 'ArrowUp' && p1.dy === -1 p1.dy = 0
-    if e.key === 'ArrowDown' && p1.dy === 1 p1.dy = 0
+    if e.key === 'ArrowUp' and p1.dy === -1 p1.dy = 0
+    if e.key === 'ArrowDown' and p1.dy === 1 p1.dy = 0
 })
 
-// ── Física e Atualização ──────────────────────────────────────────────────
+// ── Physics & Update ──────────────────────────────────────────────────────
 
 fn updatePhysics(dt) {
-    // Delta em segundos para movimento suave independente de FPS
+    // Convert delta time to seconds (frame-independent movement)
     delta = dt / 1000 
 
-    // 1. Move Jogador 1 (Limitado às bordas)
+    // 1. Move Player 1 (clamped to screen bounds)
     p1.y += p1.dy * PADDLE_SPEED * delta
     if p1.y < 0 p1.y = 0
     if p1.y > H - PADDLE_H p1.y = H - PADDLE_H
 
-    // 2. Inteligência Artificial Básica (Jogador 2)
+    // 2. Basic AI for Player 2 (follows the ball)
     targetY = ball.y - PADDLE_H / 2
     diff = targetY - p2.y
-    cpuSpeed = PADDLE_SPEED * 0.85 * delta // CPU um pouco mais lenta que o player
+    cpuSpeed = PADDLE_SPEED * 0.85 * delta // slightly slower than player
     
     if diff > 0 p2.y += Math.min(diff, cpuSpeed)
     if diff < 0 p2.y += Math.max(diff, -cpuSpeed)
@@ -85,11 +93,11 @@ fn updatePhysics(dt) {
     if p2.y < 0 p2.y = 0
     if p2.y > H - PADDLE_H p2.y = H - PADDLE_H
 
-    // 3. Move Bola
+    // 3. Move ball
     ball.x += ball.vx * delta
     ball.y += ball.vy * delta
 
-    // Colisão com Teto e Chão
+    // Collision with top and bottom walls
     if ball.y - BALL_R < 0 {
         ball.y = BALL_R
         ball.vy *= -1
@@ -98,18 +106,18 @@ fn updatePhysics(dt) {
         ball.vy *= -1
     }
 
-    // Colisão com Raquete P1 (Esquerda)
-    if ball.vx < 0 && ball.x - BALL_R < p1.x + PADDLE_W && ball.x + BALL_R > p1.x && ball.y > p1.y && ball.y < p1.y + PADDLE_H {
+    // Collision with Player 1 paddle (left)
+    if ball.vx < 0 and ball.x - BALL_R < p1.x + PADDLE_W and ball.x + BALL_R > p1.x and ball.y > p1.y and ball.y < p1.y + PADDLE_H {
         ball.x = p1.x + PADDLE_W + BALL_R
-        ball.vx *= -1.05 // Aumenta a velocidade da bola em 5% a cada rebatida
+        ball.vx *= -1.05 // increase speed by 5% on each hit
         
-        // Adiciona "Efeito" (Spin) dependendo de onde a bola bate na raquete
+        // Add spin depending on hit position
         hitPos = (ball.y - (p1.y + PADDLE_H / 2)) / (PADDLE_H / 2)
         ball.vy += hitPos * 150 
     }
 
-    // Colisão com Raquete P2 (Direita)
-    if ball.vx > 0 && ball.x + BALL_R > p2.x && ball.x - BALL_R < p2.x + PADDLE_W && ball.y > p2.y && ball.y < p2.y + PADDLE_H {
+    // Collision with Player 2 paddle (right)
+    if ball.vx > 0 and ball.x + BALL_R > p2.x and ball.x - BALL_R < p2.x + PADDLE_W and ball.y > p2.y and ball.y < p2.y + PADDLE_H {
         ball.x = p2.x - BALL_R
         ball.vx *= -1.05
         
@@ -117,20 +125,21 @@ fn updatePhysics(dt) {
         ball.vy += hitPos * 150
     }
 
-    // 4. Pontuação
+    // 4. Scoring system
     if ball.x < 0 {
         score.p2++
         if score.p2 >= MAX_SCORE state = 'gameover'
-        else resetBall(1) // Lança a bola para o jogador 1
+        else resetBall(1) // send ball toward player
     } else if ball.x > W {
         score.p1++
         if score.p1 >= MAX_SCORE state = 'gameover'
-        else resetBall(-1) // Lança a bola para a CPU
+        else resetBall(-1) // send ball toward CPU
     }
 }
 
-// ── Renderização ──────────────────────────────────────────────────────────
+// ── Rendering ─────────────────────────────────────────────────────────────
 
+// Draw UI panel (menus / game over)
 fn drawPanel(title, lines, col) {
     cv.opacity(0.85).fill('#0f172a').rect(W/2 - 120, H/2 - 70, 240, 140, 12)
     cv.opacity(1)
@@ -144,16 +153,17 @@ fn drawPanel(title, lines, col) {
     for i, 0, lines.length - 1 cv.fill(lines[i].c).text(lines[i].t, W/2, H/2 + 10 + i * 26)
 }
 
+// Draw main game scene
 fn drawGame() {
-    cv.clear('#020617') // Fundo escuro azulado
+    cv.clear('#020617') // dark blue background
 
-    // Rede pontilhada central
+    // Center dashed line (net)
     cv.fill('rgba(255,255,255,0.1)')
     for i, 0, (H / 20) - 1 {
         cv.rect(W/2 - 2, i * 20 + 5, 4, 10)
     }
 
-    // Placar estilo retro (com opacidade para ficar no fundo)
+    // Retro-style score (faded)
     cv._.font = 'bold 80px monospace'
     cv._.textAlign = 'center'
     cv._.textBaseline = 'middle'
@@ -162,10 +172,10 @@ fn drawGame() {
     cv.text(score.p2, 3*W/4, 60)
     cv.opacity(1)
 
-    // Raquetes e Bola
-    cv.fill('#00E5FF').rect(p1.x, p1.y, PADDLE_W, PADDLE_H, 4) // Player: Ciano
-    cv.fill('#FF1744').rect(p2.x, p2.y, PADDLE_W, PADDLE_H, 4) // CPU: Vermelho
-    cv.fill('#FFD600').circle(ball.x, ball.y, BALL_R)          // Bola: Amarela
+    // Draw paddles and ball
+    cv.fill('#00E5FF').rect(p1.x, p1.y, PADDLE_W, PADDLE_H, 4) // Player (cyan)
+    cv.fill('#FF1744').rect(p2.x, p2.y, PADDLE_W, PADDLE_H, 4) // CPU (red)
+    cv.fill('#FFD600').circle(ball.x, ball.y, BALL_R)          // Ball (yellow)
 }
 
 // ── Loop ──────────────────────────────────────────────────────────────────
@@ -176,22 +186,25 @@ cv.loop((ts) => {
 
     drawGame()
 
+    // Waiting screen
     if state === 'waiting' {
         drawPanel('PONG NOVA', [
-            { t: 'Pressione Enter', c: '#00E676' },
-            { t: 'Use as Setas p/ Mover', c: '#94a3b8' }
+            { t: 'Press Enter', c: '#00E676' },
+            { t: 'Use Arrow Keys to Move', c: '#94a3b8' }
         ], '#00E5FF')
         return
     }
 
+    // Game over screen
     if state === 'gameover' {
-        winner = score.p1 >= MAX_SCORE ? 'VOCÊ VENCEU!' : 'CPU VENCEU!'
-        drawPanel('FIM DE JOGO', [
+        winner = score.p1 >= MAX_SCORE ? 'YOU WIN!' : 'CPU WINS!'
+        drawPanel('GAME OVER', [
             { t: winner, c: '#ffffff' },
-            { t: 'Enter para reiniciar', c: '#FF1744' }
+            { t: 'Press Enter to Restart', c: '#FF1744' }
         ], '#FFD600')
         return
     }
 
+    // Update physics each frame
     updatePhysics(dt)
 })

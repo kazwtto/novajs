@@ -3,24 +3,31 @@ W = 400
 H = 400
 cv.size(W, H)
 
+// Game board (3x3)
 board = [
     ['', '', ''],
     ['', '', ''],
     ['', '', '']
 ]
+
+// Current turn, winner state, and cell size
 turn = 'X'
 winner = null
 cellSize = W / 3
 
+// Check if there's a winner or a tie
 fn checkWin() {
+    // Check rows and columns
     for i, 0, 2 {
-        if board[i][0] !== '' && board[i][0] === board[i][1] && board[i][1] === board[i][2] return board[i][0]
-        if board[0][i] !== '' && board[0][i] === board[1][i] && board[1][i] === board[2][i] return board[0][i]
+        if board[i][0] !== '' and board[i][0] === board[i][1] and board[i][1] === board[i][2] return board[i][0]
+        if board[0][i] !== '' and board[0][i] === board[1][i] and board[1][i] === board[2][i] return board[0][i]
     }
     
-    if board[0][0] !== '' && board[0][0] === board[1][1] && board[1][1] === board[2][2] return board[0][0]
-    if board[0][2] !== '' && board[0][2] === board[1][1] && board[1][1] === board[2][0] return board[0][2]
+    // Check diagonals
+    if board[0][0] !== '' and board[0][0] === board[1][1] and board[1][1] === board[2][2] return board[0][0]
+    if board[0][2] !== '' and board[0][2] === board[1][1] and board[1][1] === board[2][0] return board[0][2]
     
+    // Check for tie
     tie = true
     for y, 0, 2 {
         for x, 0, 2 {
@@ -32,9 +39,11 @@ fn checkWin() {
     return null
 }
 
+// Simple AI move (win, block, or random)
 fn aiMove() {
     if winner !== null return
     
+    // Try to win or block opponent
     for p, 0, 1 {
         mark = p === 0 ? 'O' : 'X'
         for y, 0, 2 {
@@ -53,6 +62,7 @@ fn aiMove() {
         }
     }
     
+    // Pick random empty cell
     emptyCells = []
     for y, 0, 2 {
         for x, 0, 2 {
@@ -69,7 +79,9 @@ fn aiMove() {
     }
 }
 
-document.addEventListener('mousedown', (e) => {
+// Handle mouse click input
+window.on('mousedown', (e) => {
+    // Restart game if finished
     if winner !== null {
         board = [
             ['', '', ''],
@@ -81,20 +93,25 @@ document.addEventListener('mousedown', (e) => {
         return
     }
     
+    // Only allow player turn
     if turn !== 'X' return
     
+    // Get mouse position
     mx = e.offsetX
     my = e.offsetY
     
+    // Convert to grid position
     x = (mx / cellSize).floor()
     y = (my / cellSize).floor()
     
-    if x >= 0 && x < 3 && y >= 0 && y < 3 {
+    // Place mark if cell is empty
+    if x >= 0 and x < 3 and y >= 0 and y < 3 {
         if board[y][x] === '' {
             board[y][x] = 'X'
             winner = checkWin()
             turn = 'O'
             
+            // AI plays after delay
             if winner === null {
                 setTimeout(aiMove, 250)
             }
@@ -102,16 +119,20 @@ document.addEventListener('mousedown', (e) => {
     }
 })
 
+// Draw the board grid
 fn drawBoard() {
     cv.fill('#2b2b2b').rect(0, 0, W, H)
     
+    // Vertical lines
     cv.fill('#444444').rect(cellSize - 3, 20, 6, H - 40)
     cv.fill('#444444').rect(cellSize * 2 - 3, 20, 6, H - 40)
     
+    // Horizontal lines
     cv.fill('#444444').rect(20, cellSize - 3, W - 40, 6)
     cv.fill('#444444').rect(20, cellSize * 2 - 3, W - 40, 6)
 }
 
+// Draw X and O marks
 fn drawMarks() {
     for y, 0, 2 {
         for x, 0, 2 {
@@ -120,10 +141,13 @@ fn drawMarks() {
             cy = y * cellSize + cellSize / 2
             r = cellSize * 0.25
             
+            // Draw O
             if mark === 'O' {
                 cv.fill('#00bbf9').circle(cx, cy, r)
                 cv.fill('#2b2b2b').circle(cx, cy, r - 8)
             }
+            
+            // Draw X
             if mark === 'X' {
                 cv.save()
                 cv.translate(cx, cy)
@@ -136,11 +160,13 @@ fn drawMarks() {
     }
 }
 
+// Main render loop
 cv.loop((ts) => {
     cv.clear()
     drawBoard()
     drawMarks()
     
+    // Draw end screen
     if winner !== null {
         cv.opacity(0.85).fill('#111111').rect(0, 0, W, H)
         cv.opacity(1)
@@ -150,16 +176,16 @@ cv.loop((ts) => {
         cv._.textBaseline = 'middle'
         
         if winner === 'Tie' {
-            cv.fill('#fee440').text('DEU VELHA!', W / 2, H / 2 - 20)
+            cv.fill('#fee440').text('TIE!', W / 2, H / 2 - 20)
         }
         if winner === 'X' {
-            cv.fill('#f15bb5').text('X VENCEU!', W / 2, H / 2 - 20)
+            cv.fill('#f15bb5').text('X WINS!', W / 2, H / 2 - 20)
         }
         if winner === 'O' {
-            cv.fill('#00bbf9').text('O VENCEU!', W / 2, H / 2 - 20)
+            cv.fill('#00bbf9').text('O WINS!', W / 2, H / 2 - 20)
         }
         
         cv._.font = '18px monospace'
-        cv.fill('#aaaaaa').text('clique para reiniciar', W / 2, H / 2 + 30)
+        cv.fill('#aaaaaa').text('click to restart', W / 2, H / 2 + 30)
     }
 })

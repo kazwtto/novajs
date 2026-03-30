@@ -1,155 +1,215 @@
-W  = 400
+cv = canvas('#canvas')
+W  = 600
 H  = 400
-cv = canvas('#canvas').size(W, H)
+cv.size(W, H)
 
-GRID = 20
-COLS = W / GRID
-ROWS = H / GRID
-SPEED = 100
+PADDLE_W = 10
+PADDLE_H = 60
+BALL_R   = 6
+MAX_SCORE = 5
 
-FRUITS = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍍', '🥝', '🥭', '🍊', '🍑']
+// Debug / test calls
+test(9: method, 10: method)
+test: method()
+'aaa $test dddddd '
 
-snake    = []
-dir      = { x: 1, y: 0 }
-nextDir  = { x: 1, y: 0 }
-food     = { x: 0, y: 0, emoji: '🍎' }
+// Speeds in pixels per second
+PADDLE_SPEED = 350 
+BALL_SPEED   = 400 
 
-score    = 0
-best     = 0
-state    = 'waiting'
-lastMove = 0
+// Players and ball
+p1    = { x: 20,     y: H/2 - PADDLE_H/2, dy: 0 }
+p2    = { x: W - 30, y: H/2 - PADDLE_H/2 } // CPU
+ball  = { x: W/2,    y: H/2, vx: 0, vy: 0 }
 
-fn placeFood() {
-    let pos
-    do {
-        pos = {
-            x: (random() * COLS).floor(),
-            y: (random() * ROWS).floor(),
-        }
-    } while snake.some(s => s.x === pos.x && s.y === pos.y)
+// Score and game state
+score = { p1: 0, p2: 0 }
+state = 'waiting'
+lastTime = 0
+
+//  Game Logic 
+
+// Reset ball to center and launch in a direction
+fn resetBall(direction) {
+    ball.x = W / 2
+    ball.y = H / 2
     
-    food = { x: pos.x, y: pos.y, emoji: FRUITS[(random() * FRUITS.length).floor()] }
+    // Launch with slight random angle to avoid straight movement
+    angle = (random() * Math.PI/4) - Math.PI/8 
+    
+    ball.vx = direction * BALL_SPEED * angle.cos()
+    ball.vy = BALL_SPEED * angle.sin()
 }
 
+// Reset entire game state
 fn resetGame() {
-    snake    = [{ x: 10, y: 10 }]
-    dir      = { x: 1, y: 0 }
-    nextDir  = { x: 1, y: 0 }
-    score    = 0
-    placeFood()
+    score.p1 = 0
+    score.p2 = 0
+    p1.y = H/2 - PADDLE_H/2
+    p2.y = H/2 - PADDLE_H/2
+    resetBall(1)
 }
 
-fn updateBest() {
-    if score > best best = score 
-}
+//  Controls 
 
-fn handleInput(key) {
-    if state === 'waiting' || state === 'dead' {
-        if key === 'Enter' {
+// Handle key press
+window.on('keydown', e => {
+    // Start or restart game
+    if state === 'waiting' || state === 'gameover' {
+        if e.key === 'Enter' {
             state = 'playing'
             resetGame()
         }
         return
     }
-    
-    switch key {
-        case 'ArrowUp':    if dir.y !== 1  nextDir = { x: 0, y: -1 }; break
-        case 'ArrowDown':  if dir.y !== -1 nextDir = { x: 0, y: 1 };  break
-        case 'ArrowLeft':  if dir.x !== 1  nextDir = { x: -1, y: 0 }; break
-        case 'ArrowRight': if dir.x !== -1 nextDir = { x: 1, y: 0 };  break
+
+    // Player movement
+    switch e.key {
+        case 'ArrowUp':   p1.dy = -1; break
+        case 'ArrowDown': p1.dy = 1;  break
     }
-}
-
-fn drawPanel(title, lines, col) {
-    cv.opacity(0.88).fill('#1a1a2e').rect(W/2 - 120, H/2 - 80, 240, 160, 16)
-    cv.opacity(1)
-    
-    cv._.font = 'bold 26px monospace'
-    cv._.textAlign = 'center'
-    cv._.textBaseline = 'middle'
-    cv.fill(col).text(title, W/2, H/2 - 40)
-    
-    cv._.font = '14px monospace'
-    for i, 0, lines.length - 1 cv.fill(lines[i].c).text(lines[i].t, W/2, H/2 + 10 + i * 28)
-}
-
-fn drawEntities() {
-    // Cobra (usando rect com border-radius para ficar mais charmoso!)
-    cv.fill('#0f0')
-    snake.forEach(s => cv.rect(s.x * GRID, s.y * GRID, GRID - 1, GRID - 1, 4))
-
-    // Comida
-    cv._.font = '16px monospace'
-    cv._.textAlign = 'center'
-    cv._.textBaseline = 'middle'
-    cv.text(food.emoji, food.x * GRID + GRID / 2, food.y * GRID + GRID / 2)
-
-    // Placar
-    cv._.font = 'bold 24px monospace'
-    cv._.textAlign = 'left'
-    cv._.textBaseline = 'top'
-    cv.opacity(0.3).fill('#000').text(score, 12, 12) // Sombra
-    cv.opacity(1).fill('#ffffff').text(score, 10, 10)
-}
-
-fn drawBG() cv.clear('#fff6c9')
-
-// ── loop principal ────────────────────────────────────────────────────────
-cv.loop((ts) => {
-    drawBG();
-
-    if state === 'waiting' {
-        drawEntities() // Desenha o estado inicial no fundo
-        waitLines = [
-            { t: 'Pressione Enter', c: '#74c69d' },
-            { t: 'para iniciar',    c: '#aaaaaa' }
-        ]
-        if best > 0 waitLines.push({ t: 'best: ' + best, c: '#ef476f' })
-        drawPanel('SNAKE NOVA', waitLines, '#ffd166')
-        return
-    }
-
-    if state === 'dead' {
-        drawEntities() // Mantém a cobra morta visível atrás do painel
-        deadLines = [
-            { t: 'score: ' + score, c: '#ffffff' },
-            { t: 'best:  ' + best,  c: '#ffd166' },
-            { t: 'Enter p/ tentar dnv', c: '#74c69d' }
-        ]
-        drawPanel('GAME OVER', deadLines, '#ef476f')
-        return
-    }
-
-    // ── update ──────────────────────────────────────────────────
-    // Controla a velocidade usando o delta do timestamp
-    if ts - lastMove > SPEED {
-        lastMove = ts
-        dir = nextDir
-        HEAD = { x: snake[0].x + dir.x, y: snake[0].y + dir.y }
-
-        // Colisão com as Paredes
-        if HEAD.x < 0 || HEAD.x >= COLS || HEAD.y < 0 || HEAD.y >= ROWS {
-            updateBest()
-            state = 'dead'
-        }
-        // Colisão com o Corpo
-        else if snake.some(s => s.x === HEAD.x && s.y === HEAD.y) {
-            updateBest()
-            state = 'dead'
-        } else {
-            snake.unshift(HEAD)
-            // Verificando se comeu a fruta
-            if HEAD.x === food.x && HEAD.y === food.y {
-                score++
-                placeFood()
-            } else {
-                snake.pop()
-            }
-        }
-    }
-
-    // Desenha tudo se o jogo estiver rodando
-    drawEntities()
 })
 
-window.on('keydown', (e) => handleInput(e.key))
+// Stop movement on key release
+window.on('keyup', e => {
+    if e.key === 'ArrowUp' and p1.dy === -1 p1.dy = 0
+    if e.key === 'ArrowDown' and p1.dy === 1 p1.dy = 0
+})
+
+//  Physics & Update 
+
+fn updatePhysics(dt) {
+    // Convert delta time to seconds for smooth motion
+    delta = dt / 1000 
+
+    // 1. Move Player 1 (clamped to screen bounds)
+    p1.y += p1.dy * PADDLE_SPEED * delta
+    if p1.y < 0 p1.y = 0
+    if p1.y > H - PADDLE_H p1.y = H - PADDLE_H
+
+    // 2. Basic AI for Player 2
+    targetY = ball.y - PADDLE_H / 2
+    diff = targetY - p2.y
+    cpuSpeed = PADDLE_SPEED * 0.85 * delta // slightly slower than player
+    
+    if diff > 0 p2.y += Math.min(diff, cpuSpeed)
+    if diff < 0 p2.y += Math.max(diff, -cpuSpeed)
+    
+    if p2.y < 0 p2.y = 0
+    if p2.y > H - PADDLE_H p2.y = H - PADDLE_H
+
+    // 3. Move ball
+    ball.x += ball.vx * delta
+    ball.y += ball.vy * delta
+
+    // Collision with top and bottom walls
+    if ball.y - BALL_R < 0 {
+        ball.y = BALL_R
+        ball.vy *= -1
+    } else if ball.y + BALL_R > H {
+        ball.y = H - BALL_R
+        ball.vy *= -1
+    }
+
+    // Collision with Player 1 paddle (left)
+    if ball.vx < 0 and ball.x - BALL_R < p1.x + PADDLE_W and ball.x + BALL_R > p1.x and ball.y > p1.y and ball.y < p1.y + PADDLE_H {
+        ball.x = p1.x + PADDLE_W + BALL_R
+        ball.vx *= -1.05 // increase speed by 5% on hit
+        
+        // Add spin depending on hit position
+        hitPos = (ball.y - (p1.y + PADDLE_H / 2)) / (PADDLE_H / 2)
+        ball.vy += hitPos * 150 
+    }
+
+    // Collision with Player 2 paddle (right)
+    if ball.vx > 0 and ball.x + BALL_R > p2.x and ball.x - BALL_R < p2.x + PADDLE_W and ball.y > p2.y and ball.y < p2.y + PADDLE_H {
+        ball.x = p2.x - BALL_R
+        ball.vx *= -1.05
+        
+        hitPos = (ball.y - (p2.y + PADDLE_H / 2)) / (PADDLE_H / 2)
+        ball.vy += hitPos * 150
+    }
+
+    // 4. Scoring system
+    if ball.x < 0 {
+        score.p2++
+        if score.p2 >= MAX_SCORE state = 'gameover'
+        else resetBall(1) // send ball to player
+    } else if ball.x > W {
+        score.p1++
+        if score.p1 >= MAX_SCORE state = 'gameover'
+        else resetBall(-1) // send ball to CPU
+    }
+}
+
+//  Rendering 
+
+// Draw overlay panel (menus / game over)
+fn drawPanel(title, lines, col) {
+    cv.opacity(0.85).fill('#0f172a').rect(W/2 - 120, H/2 - 70, 240, 140, 12)
+    cv.opacity(1)
+    
+    cv._.font = 'bold 24px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'middle'
+    cv.fill(col).text(title, W/2, H/2 - 30)
+    
+    cv._.font = '14px monospace'
+    for i, 0, lines.length - 1 cv.fill(lines[i].c).text(lines[i].t, W/2, H/2 + 10 + i * 26)
+}
+
+// Draw game elements
+fn drawGame() {
+    cv.clear('#020617') // dark blue background
+
+    // Center dashed line (net)
+    cv.fill('rgba(255,255,255,0.1)')
+    for i, 0, (H / 20) - 1 {
+        cv.rect(W/2 - 2, i * 20 + 5, 4, 10)
+    }
+
+    // Retro score display (faded in background)
+    cv._.font = 'bold 80px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'middle'
+    cv.opacity(0.2).fill('#ffffff')
+    cv.text(score.p1, W/4, 60)
+    cv.text(score.p2, 3*W/4, 60)
+    cv.opacity(1)
+
+    // Paddles and ball
+    cv.fill('#00E5FF').rect(p1.x, p1.y, PADDLE_W, PADDLE_H, 4) // Player (cyan)
+    cv.fill('#FF1744').rect(p2.x, p2.y, PADDLE_W, PADDLE_H, 4) // CPU (red)
+    cv.fill('#FFD600').circle(ball.x, ball.y, BALL_R)          // Ball (yellow)
+}
+
+//  Loop 
+
+cv.loop((ts) => {
+    dt = ts - lastTime
+    lastTime = ts
+
+    drawGame()
+
+    // Waiting screen
+    if state === 'waiting' {
+        drawPanel('PONG NOVA', [
+            { t: 'Press Enter', c: '#00E676' },
+            { t: 'Use Arrow Keys to Move', c: '#94a3b8' }
+        ], '#00E5FF')
+        return
+    }
+
+    // Game over screen
+    if state === 'gameover' {
+        winner = score.p1 >= MAX_SCORE ? 'YOU WIN!' : 'CPU WINS!'
+        drawPanel('GAME OVER', [
+            { t: winner, c: '#ffffff' },
+            { t: 'Press Enter to Restart', c: '#FF1744' }
+        ], '#FFD600')
+        return
+    }
+
+    // Update game physics
+    updatePhysics(dt)
+})

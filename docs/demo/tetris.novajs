@@ -2,23 +2,23 @@ cv = canvas('#canvas')
 GRID = 20
 COLS = 10
 ROWS = 20
-W = (COLS * GRID) + 120 // 200px para o jogo, 120px para a UI lateral
-H = ROWS * GRID         // 400px
+W = (COLS * GRID) + 120
+H = ROWS * GRID
 cv.size(W, H)
 
-// Cores clássicas do Tetris
+// Classic Tetris colors
 COLORS = [
     null, 
-    '#00E5FF', // 1: I (Ciano)
-    '#2962FF', // 2: J (Azul)
-    '#FF6D00', // 3: L (Laranja)
-    '#FFD600', // 4: O (Amarelo)
-    '#00E676', // 5: S (Verde)
-    '#D500F9', // 6: T (Roxo)
-    '#FF1744'  // 7: Z (Vermelho)
+    '#00E5FF',
+    '#2962FF',
+    '#FF6D00',
+    '#FFD600',
+    '#00E676',
+    '#D500F9',
+    '#FF1744' 
 ]
 
-// Matrizes de cada peça (com padding para rotacionar perfeitamente)
+// Matrix for each piece (with padding for perfect rotation)
 SHAPES = [
     [],
     [[0,0,0,0], [1,1,1,1], [0,0,0,0], [0,0,0,0]], // I
@@ -37,10 +37,10 @@ score  = 0
 best   = 0
 
 dropCounter  = 0
-dropInterval = 800 // Inicia caindo a cada 800ms
+dropInterval = 800 // Starts dropping every 800ms
 lastTime     = 0
 
-// ── Lógica do Jogo ────────────────────────────────────────────────────────
+// Game Logic
 
 fn createBoard() {
     board = Array.from({ length: ROWS }, () => Array(COLS).fill(0))
@@ -48,7 +48,7 @@ fn createBoard() {
 
 fn spawn() {
     type = (random() * 7).floor() + 1
-    // Cópia profunda da matriz para não alterar a original
+    // Deep copy of the matrix to avoid modifying the original
     active.matrix = JSON.parse(JSON.stringify(SHAPES[type]))
     active.pos.y = 0
     active.pos.x = (COLS / 2).floor() - (active.matrix.length / 2).floor()
@@ -62,7 +62,7 @@ fn collide(b, p) {
     for y, 0, m.length - 1 {
         for x, 0, m[y].length - 1 {
             if m[y][x] !== 0 {
-                // Checa limites e se o bloco do tabuleiro já está ocupado
+                // Check boundaries and if the board cell is already occupied
                 if !b[y + o.y] || b[y + o.y][x + o.x] !== 0 {
                     return true
                 }
@@ -83,18 +83,18 @@ fn merge() {
 }
 
 fn rotate() {
-    // Transpõe a matriz e inverte as linhas para rotacionar 90º
+    // Transpose the matrix and reverse rows to rotate 90°
     m = active.matrix
     res = m[0].map((_, i) => m.map(row => row[i]).reverse())
     active.matrix = res
     
-    // Wall-kick básico (empurra a peça se rotacionar perto da parede)
+    // Basic wall-kick (push piece if rotating near wall)
     offset = 1
     while collide(board, active) {
         active.pos.x += offset
         offset = -(offset + (offset > 0 ? 1 : -1))
         if offset > m[0].length {
-            // Desfaz a rotação se não couber de jeito nenhum
+            // Undo rotation if it doesn't fit at all
             active.matrix = m
             return
         }
@@ -102,7 +102,7 @@ fn rotate() {
 }
 
 fn sweep() {
-    // Remove linhas cheias e adiciona novas vazias no topo
+    // Remove full lines and add empty ones at the top
     newBoard = board.filter(row => row.some(cell => cell === 0))
     linesCleared = ROWS - newBoard.length
     
@@ -110,7 +110,7 @@ fn sweep() {
         for i, 0, linesCleared - 1 newBoard.unshift(Array(COLS).fill(0))
         board = newBoard
         score += linesCleared * 100
-        // Aumenta a velocidade conforme a pontuação sobe (mínimo de 100ms)
+        // Increase speed as score goes up (minimum 100ms)
         dropInterval = Math.max(100, 800 - (score / 10))
         if score > best best = score
     }
@@ -123,7 +123,7 @@ fn resetGame() {
     spawn()
 }
 
-// ── Controles ─────────────────────────────────────────────────────────────
+// Controls
 
 window.on('keydown', e => {
     if state !== 'playing' {
@@ -148,7 +148,7 @@ window.on('keydown', e => {
         case 'ArrowUp':
             rotate()
             break
-        case ' ': // Espaço para Hard Drop
+        case ' ': // Space for Hard Drop
             while !collide(board, active) active.pos.y++
             active.pos.y--
             merge()
@@ -159,14 +159,14 @@ window.on('keydown', e => {
     }
 })
 
-// ── Renderização ──────────────────────────────────────────────────────────
+// Rendering
 
 fn drawBlock(x, y, colorId) {
     if colorId === 0 return
     px = x * GRID
     py = y * GRID
     
-    // Desenha o bloco com cantos arredondados e um leve brilho
+    // Draw block with rounded corners and slight highlight
     cv.fill(COLORS[colorId]).rect(px, py, GRID, GRID, 3)
     cv.fill('rgba(255,255,255,0.25)').rect(px + 2, py + 2, GRID - 4, GRID / 4, 2)
 }
@@ -180,9 +180,9 @@ fn drawMatrix(matrix, offsetX, offsetY) {
 }
 
 fn drawUI() {
-    // Área lateral para score
+    // Side panel for score
     cv.fill('#111116').rect(COLS * GRID, 0, 120, H)
-    cv.fill('#2A2A35').rect(COLS * GRID, 0, 2, H) // Divisória
+    cv.fill('#2A2A35').rect(COLS * GRID, 0, 2, H) // Divider
     
     cv._.font = '12px monospace'
     cv._.textAlign = 'center'
@@ -199,7 +199,7 @@ fn drawUI() {
     cv._.font = 'bold 18px monospace'
     cv.fill('#FFD600').text(best, centerX, 120)
     
-    // Controles no painel lateral
+    // Controls in side panel
     cv._.font = '10px monospace'
     cv.fill('#555555')
     
@@ -224,7 +224,7 @@ fn drawPanel(title, lines, col) {
 
 fn drawBG() cv.clear('#08080C')
 
-// ── Loop ──────────────────────────────────────────────────────────────────
+// Loop
 
 cv.loop((ts) => {
     dt = ts - lastTime
@@ -236,8 +236,8 @@ cv.loop((ts) => {
         createBoard()
         drawUI()
         drawPanel('TETRIS NOVA', [
-            { t: 'Pressione Enter', c: '#00E676' },
-            { t: 'para jogar', c: '#aaaaaa' }
+            { t: 'Press Enter', c: '#00E676' },
+            { t: 'to play', c: '#aaaaaa' }
         ], '#00E5FF')
         return
     }
@@ -247,12 +247,12 @@ cv.loop((ts) => {
         drawUI()
         drawPanel('GAME OVER', [
             { t: 'Score: ' + score, c: '#ffffff' },
-            { t: 'Enter para reiniciar', c: '#FF1744' }
+            { t: 'Press Enter to restart', c: '#FF1744' }
         ], '#FF6D00')
         return
     }
 
-    // Gravidade
+    // Gravity
     dropCounter += dt
     if dropCounter > dropInterval {
         active.pos.y++
@@ -265,7 +265,7 @@ cv.loop((ts) => {
         dropCounter = 0
     }
 
-    // Desenha Tabuleiro, Peça Ativa e UI
+    // Draw Board, Active Piece and UI
     drawMatrix(board, 0, 0)
     drawMatrix(active.matrix, active.pos.x, active.pos.y)
     drawUI()
