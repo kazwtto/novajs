@@ -1,0 +1,264 @@
+%YAML 1.2
+---
+name: Nova
+version: 2
+file_extensions:
+    - njs
+    - nova
+    - novajs
+scope: source.nova
+
+variables:
+    ident: '[A-Za-z_$][\w$]*'
+    qident: '[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*'
+    keywords: '\b(?:let|const|var|if|else|for|while|do|return|break|continue|func|function|fn|class|new|this|super|true|false|null|undefined|import|export|default|from|as|try|catch|finally|throw|typeof|instanceof|in|of|delete|void|async|await|yield|switch|case|print|not|and|or|equal|isNot|greaterThan|lessThan|greaterEqual|lessEqual|notEqual|range|dom|canvas|is)\b'
+    builtins: '\b(?:random|randomInt|clamp|lerp|norm|deg2rad|rad2deg|dist|dist3|sign|frac|mod|smoothstep|smootherstep|mix|gcd|lcm|isPrime|factorial|fibonacci|log2|log10|loge|sqrt|abs|file|fileAsync|parseInt|parseFloat|isNaN|isFinite|JSON|Math|Object|Array|String|Number|Boolean|Promise|Error|TypeError|console)\b'
+    types: '\b(?:string|number|boolean|any|void|never|unknown|object|symbol|bigint|null|undefined|int|float|double|char|byte|short|long)\b'
+    modifiers: '\b(?:public|private|protected|static|readonly|override|async)\b'
+
+contexts:
+    main:
+        # Line comments
+        - match: '//.*$'
+          scope: comment.line.double-slash.nova
+
+        # Block comments
+        - match: '/\*'
+          scope: punctuation.definition.comment.nova
+          push: comment_block
+
+        # Template strings (backtick) - only ${} interpolation
+        - match: '`'
+          scope: punctuation.definition.string.begin.nova
+          push: string_template
+
+        # Double-quoted strings - $var, $var.method, ${} interpolation
+        - match: '"'
+          scope: punctuation.definition.string.begin.nova
+          push: string_double
+
+        # Single-quoted strings - $var, $var.method, ${} interpolation
+        - match: "'"
+          scope: punctuation.definition.string.begin.nova
+          push: string_single
+
+        # Numeric key: method( — must come before plain numeric literal rule
+        - match: '(\d+)(\s*)(:)(\s*)({{ident}})(?=\s*(?:<[^>\n]*>\s*)?\()'
+          captures:
+              1: constant.numeric.nova
+              2: text.whitespace.nova
+              3: punctuation.separator.key-value.nova
+              4: text.whitespace.nova
+              5: entity.name.function.method.nova
+
+        # Numeric literals
+        - match: '\b(?:0x[\da-fA-F]+|\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\b'
+          scope: constant.numeric.nova
+
+        # Keywords
+        - match: '{{keywords}}'
+          scope: keyword.control.nova
+
+        # Built-in functions
+        - match: '{{builtins}}'
+          scope: support.function.nova
+
+        # Type keywords
+        - match: '{{types}}'
+          scope: storage.type.nova
+
+        # Modifiers
+        - match: '{{modifiers}}'
+          scope: storage.modifier.nova
+
+        # Declaration keywords (standalone)
+        - match: '\b(?:class|interface|enum|namespace|module|function|fn|func|extends|implements)\b'
+          scope: keyword.declaration.nova
+
+        # Class/interface/enum name after declaration keyword
+        - match: '\b(?:class|interface|enum|namespace|module)\b(\s+)({{ident}})'
+          captures:
+              1: text.whitespace.nova
+              2: entity.name.type.nova
+
+        # Function name after function keyword
+        - match: '\b(?:function|fn|func)\b(\s+)({{ident}})'
+          captures:
+              1: text.whitespace.nova
+              2: entity.name.function.nova
+
+        # Inherited class name
+        - match: '\b(?:extends|implements)\b(\s+)({{qident}})'
+          captures:
+              1: text.whitespace.nova
+              2: entity.other.inherited-class.nova
+
+        # Method calls: object.method(
+        - match: '([A-Za-z_$][\w$]*)(\.)([A-Za-z_$][\w$]*)(?=\s*(?:<[^>\n]*>\s*)?\()'
+          captures:
+              1: variable.other.object.nova
+              2: punctuation.accessor.dot.nova
+              3: entity.name.function.method.nova
+
+        # Function calls
+        - match: '\b(?:async\s+)?({{ident}})(?=\s*(?:<[^>\n]*>\s*)?\()'
+          scope: entity.name.function.nova
+
+        # Ident key: method( — must come before plain ident key rule
+        - match: '({{ident}})(\s*)(:)(\s*)({{ident}})(?=\s*(?:<[^>\n]*>\s*)?\()'
+          captures:
+              1: variable.other.property.nova
+              2: text.whitespace.nova
+              3: punctuation.separator.key-value.nova
+              4: text.whitespace.nova
+              5: entity.name.function.method.nova
+
+        # Object/dict key: plain value (string key)
+        - match: '({{ident}})(\s*)(:)(?!\s*(?:\/\/|\/\*))'
+          captures:
+              1: variable.other.property.nova
+              2: text.whitespace.nova
+              3: punctuation.separator.key-value.nova
+
+        # Type annotation colon (after ) or ident at end of param, not inside object)
+        # Only triggers after closing paren or in known type positions
+        - match: '(?<=\))\s*(:)\s*'
+          captures:
+              1: punctuation.separator.type.nova
+          push: type_expression
+
+        # Operators
+        - match: '=>|===|!==|==|!=|<=|>=|\?\.\|\?\.?|\+\+|--|\*\*|&&|\|\||[+\-*/%&|^~<>!]=?|[=?:]'
+          scope: keyword.operator.nova
+
+        # Punctuation
+        - match: '[(){}\[\],;.]'
+          scope: punctuation.nova
+
+        # Identifiers
+        - match: '{{ident}}'
+          scope: variable.other.nova
+
+    # Type annotation context — only entered after ) : patterns
+    type_expression:
+        - meta_scope: meta.type.annotation.nova
+
+        - match: '(?=[,;=)\]}]|=>|$)'
+          pop: true
+
+        - match: '\|'
+          scope: keyword.operator.union.nova
+
+        - match: '&'
+          scope: keyword.operator.intersection.nova
+
+        - match: '[<>\[\],?]'
+          scope: punctuation.nova
+
+        - match: '\b(?:readonly|keyof|typeof|infer|extends|in)\b'
+          scope: keyword.other.nova
+
+        - match: '{{types}}'
+          scope: storage.type.nova
+
+        - match: '{{qident}}'
+          scope: entity.name.type.nova
+
+        - match: '{{ident}}'
+          scope: storage.type.nova
+
+        - match: '\s+'
+          scope: text.whitespace.nova
+
+    comment_block:
+        - match: '\*/'
+          scope: punctuation.definition.comment.nova
+          pop: true
+        - match: '[^*]+'
+          scope: comment.block.nova
+        - match: '\*(?!/)'
+          scope: comment.block.nova
+
+    # Double-quoted string: supports $var, $var.method, ${expr}
+    string_double:
+        - meta_scope: string.quoted.double.nova
+        - match: '"'
+          scope: punctuation.definition.string.end.nova
+          pop: true
+        - match: '\\.'
+          scope: constant.character.escape.nova
+        - match: '\$\{'
+          scope: punctuation.definition.template-expression.begin.nova
+          push: interpolation_block
+        - match: '\$([A-Za-z_$][\w$]*)(?:\.([A-Za-z_$][\w$]*))*'
+          captures:
+              0: variable.other.interpolated.nova
+        - match: '[^"\\$]+'
+          scope: string.quoted.double.nova
+
+    # Single-quoted string: supports $var, $var.method, ${expr}
+    string_single:
+        - meta_scope: string.quoted.single.nova
+        - match: "'"
+          scope: punctuation.definition.string.end.nova
+          pop: true
+        - match: '\\.'
+          scope: constant.character.escape.nova
+        - match: '\$\{'
+          scope: punctuation.definition.template-expression.begin.nova
+          push: interpolation_block
+        - match: '\$([A-Za-z_$][\w$]*)(?:\.([A-Za-z_$][\w$]*))*'
+          captures:
+              0: variable.other.interpolated.nova
+        - match: "[^'\\\\$]+"
+          scope: string.quoted.single.nova
+
+    # Template string (backtick): only ${expr} interpolation
+    string_template:
+        - meta_scope: string.quoted.template.nova
+        - match: '`'
+          scope: punctuation.definition.string.end.nova
+          pop: true
+        - match: '\\.'
+          scope: constant.character.escape.nova
+        - match: '\$\{'
+          scope: punctuation.definition.template-expression.begin.nova
+          push: interpolation_block
+        - match: '[^`\\$]+'
+          scope: string.quoted.template.nova
+
+    # ${...} interpolation block — shared by all string types
+    interpolation_block:
+        - match: '\}'
+          scope: punctuation.definition.template-expression.end.nova
+          pop: true
+        # Nested braces
+        - match: '\{'
+          push: interpolation_nested
+        # Method calls inside interpolation
+        - match: '([A-Za-z_$][\w$]*)(\.)([A-Za-z_$][\w$]*)(?=\s*\()'
+          captures:
+              1: variable.other.object.nova
+              2: punctuation.accessor.dot.nova
+              3: entity.name.function.method.nova
+        - match: '({{ident}})(?=\s*\()'
+          scope: entity.name.function.nova
+        - match: '{{keywords}}'
+          scope: keyword.control.nova
+        - match: '{{types}}'
+          scope: storage.type.nova
+        - match: '\b(?:0x[\da-fA-F]+|\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\b'
+          scope: constant.numeric.nova
+        - match: '{{ident}}'
+          scope: variable.other.nova
+        - match: '=>|===|!==|==|!=|<=|>=|\+\+|--|\*\*|&&|\|\||[+\-*/%&|^~<>!]=?|[=?]'
+          scope: keyword.operator.nova
+        - match: '[.,;]'
+          scope: punctuation.nova
+
+    interpolation_nested:
+        - match: '\}'
+          pop: true
+        - match: '\{'
+          push: interpolation_nested
+        - include: main

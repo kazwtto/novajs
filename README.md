@@ -1,31 +1,32 @@
 # NOVAjs
 
-N.O.V.A (Not Optimized, Very Awful) é uma linguagem de programação que transpila para JavaScript. 
+N.O.V.A (Not Optimized, Very Awful) is a programming language that transpiles to JavaScript. 
 
-Como programdor que tem como unica ferramenta o celular, me veio a necessidade uma linguagem facil de escrever para ser usada em projetos pessoais (por isso, seu nome era LazyJS originalmente), mas no fim, ela se tornou uma prova de conceito, naqual eu adicionava qualquer coisa que passava minha cabeça.
+As a programmer whose only tool is a phone, I felt the need for an easy-to-write language to use in personal projects (which is why its original name was LazyJS), but in the end, it became a proof of concept where I added whatever crossed my mind.
 
+I don't recommend using it in real projects, but I won't stop you either. Have fun!
 
-Não recomendo usar em projetos reais, mas também não impeço. Divirta-se!
+You can check out the full documentation [here](https://novajs.netlify.app/) and test it [here](https://novajs.netlify.app/).
 
 ---
 
-## Instalação
+## Installation
 
 ```html
 <script src="path/to/nova-lang.js"></script>
 
 <script type="text/novajs">
-  print("I Hate JS!")
+    print("I Hate JS!")
 </script>
 ```
 
-O runtime detecta e executa automaticamente. 
+The runtime automatically detects and executes it. 
 
 ---
 
-## A ideia geral
+## The General Idea
 
-NOVA lê seu código, entende (na maioria das vezes), e gera JavaScript padrão assim como TypeScript (mas sem os beneficios e mais amaldiçoado).
+NOVA reads your code, understands it (most of the time), and generates standard JavaScript just like TypeScript (but without the benefits and way more cursed).
 
 ```typescript
 name = "world"
@@ -33,13 +34,13 @@ if name == "world" print("Hello, " + name + "!")
 else print("Goodbye, World")
 ```
 
-Sem ponto e vírgula obrigatório. Sem parênteses obrigatórios no `if`. Sem `const` obrigatório. NOVA confia em você. Talvez demais.
+No mandatory semicolons. No mandatory parentheses in `if` statements. No mandatory `const`. NOVA trusts you. Maybe too much.
 
 ---
 
-## Variáveis
+## Variables
 
-Esqueça `let`, `const` e `var`. Mas você ainda pode usar, se quiser!
+Forget `let`, `const`, and `var`. But you can still use them if you want!
 
 ```typescript
 let x = 10
@@ -49,20 +50,20 @@ MAX_SPEED = 300     // ALLCAPS becomes const automatically
 let name is "Ana"   // 'is' and '=' are interchangeable. No idea why you'd use this, but you can.
 ```
 
-Tipos são opcionais — se você colocar e violar em runtime, NOVA grita educadamente:
+Types are optional — if you set them and violate them at runtime, NOVA politely screams:
 
 ```typescript
 let age: number = 25
 age = "twenty five"  // [NOVA] Type error: variable "age" expects number but got string
 ```
 
-`any` desativa a checagem. É o equivalente a colocar um band-aid num navio afundando.
+`any` disables checking. It's the equivalent of putting a band-aid on a sinking ship.
 
 ---
 
-## Operadores
+## Operators
 
-`==` vai pra `===`. Sempre. Porque `0 == ""` sendo `true` é um crime contra a humanidade.
+`==` becomes `===`. Always. Because `0 == ""` being `true` is a crime against humanity.
 
 ```typescript
 x == y     // ===  (always strict)
@@ -70,16 +71,15 @@ x ?= y     // ==   (loose, use wisely)
 x and y    // &&
 x or y     // ||
 not x      // !
-x ^ y      // **  (looks nicer)
-x × y      // *   (U+00D7, because why not?)
+x ^ y      // ** (looks nicer)
+x × y      // * (U+00D7, because why not?)
 ```
 
-`and` e `or` existem porque, de alguma era, me deixa mais confortavél usa-los. 
-Lembre-se, eu programo pelo celular, então evitar trocar a aba do teclado virtual é uma benção!
+`and` and `or` exist because, for some reason, they make me feel more comfortable. Remember, I code on a phone, so avoiding switching virtual keyboard tabs is a blessing!
 
-### Sobrecarga de Operadores
+### Operator Overloading
 
-`+`, `-`, `*` e `/` se comportam diferente dependendo dos tipos. Combinações que não fazem sentido lançam `TypeError`.
+`+`, `-`, `*`, and `/` behave differently depending on the types. Nonsensical combinations throw a `TypeError`.
 
 ```typescript
 // +  adds, concatenates, or inserts — depends on the types
@@ -92,7 +92,7 @@ Lembre-se, eu programo pelo celular, então evitar trocar a aba do teclado virtu
 [1, null, 2] - null      // [1, 2]
 {a:1, b:2} - ["a"]       // {b:2}
 
-// *  multiplies, repeats, or scales
+// * multiplies, repeats, or scales
 "ha" * 3          // "hahaha"
 2 * [1, 2, 3]     // [2, 4, 6]
 {a:2, b:4} * 3    // {a:6, b:12}
@@ -105,49 +105,47 @@ Lembre-se, eu programo pelo celular, então evitar trocar a aba do teclado virtu
 
 ---
 
-## Funções
+## Functions
 
-Três keywords porque uma não seria suficiente: `func`, `function`, `fn`. Escolha a sua favorita e seja consistente (ou não).
-`def` não foi incluso porque não gosto de Python. Sinta-se livre para me julgar.
+Three keywords because one wouldn't be enough: `func`, `function`, `fn`. Choose your favorite and be consistent (or don't).
+`def` was not included because I don't like Python. Feel free to judge me.
 
 ```typescript
 func add(a, b) {
-  return a + b
+    return a + b
 }
 
 fn double(x) x * 2       // one-liner, no return needed
 
 fn greet(name = "world") {
-  "Hello, " + name        // last expression is returned automatically
+    "Hello, " + name        // last expression is returned automatically
 }
 
 fn createPoint(x, y) { x: x, y: y }  // object literal body — NOVA is smart enough to tell the difference
 ```
 
-Parâmetros tipados são checados em runtime:
+Typed parameters are checked at runtime:
 
 ```typescript
 func add(a: number, b: number) {
-  a + b
+    a + b
 }
 
 add(1, "two")  // [NOVA] Type error: variable "b" expects number but got string
 ```
 
-
-Arrow functions também funcionam normalmente:
+Arrow functions also work normally:
 
 ```typescript
 let double = x => x * 2
 let add    = (a, b) => a + b
 let fetch  = async (url) => {
-  res = await fetch(url)
-  await res.json()
+    res = await fetch(url)
+    await res.json()
 }
 ```
 
-
-E você também pode adicionar tipagem nas funções!
+And you can also add types to functions!
 
 ```typescript
 fn double(x: number): number x * 2            // one-liner
@@ -161,7 +159,7 @@ fn log(msg): void { print(msg) }              // void
 
 ## Arrays
 
-Além do normal, arrays aceitam índices decimais para inserção posicional — sem `.splice()`:
+On top of the usual stuff, arrays accept decimal indices for positional insertion — no `.splice()` needed:
 
 ```typescript
 arr = [1, 2]
@@ -171,34 +169,34 @@ print(arr)      // [1, 3, 2]
 arr[0.5]        // null  (reading with a decimal index always returns null)
 ```
 
-O decimal indica onde inserir: `arr[1.5] = x` coloca `x` entre o índice 1 e 2.
+The decimal indicates where to insert: `arr[1.5] = x` puts `x` between index 1 and 2.
 
 ---
 
 ## Loops
 
-NOVA tem loops demais. Por quê? Porque alguém achou que seria uma boa ideia reinventar a roda. E porque deu pra fazer.
-Mas não tenha medo, os classicos ainda estão disponivéis!
+NOVA has too many loops. Why? Because someone thought it'd be a good idea to reinvent the wheel. And because I could.
+But don't be afraid, the classics are still available!
 
 ```typescript
 // starts at 0, goes to 10
 for i, 10 {
-  print(i)
+    print(i)
 }
 
 // custom start and end
 for i, 1, 5 {
-  print(i)   // 1, 2, 3, 4, 5
+    print(i)   // 1, 2, 3, 4, 5
 }
 
 // custom step
 for i: 2, 0, 10 {
-  print(i)   // 0, 2, 4, 6, 8, 10
+    print(i)   // 0, 2, 4, 6, 8, 10
 }
 
 // multiplicative step
 for i: *2, 1, 100 {
-  print(i)   // 1, 2, 4, 8, 16, 32, 64
+    print(i)   // 1, 2, 4, 8, 16, 32, 64
 }
 
 // range style (exclusive upper bound, Python-style)
@@ -212,22 +210,22 @@ for key in object  { print(key) }
 
 // and the old fashioned way, if you miss the pain
 for i = 0; i < 10; i++ {
-  print(i)
+    print(i)
 }
 ```
 
-Os classicos `while` e `do` também estão disponivéis.
+The classic `while` and `do` are also available.
 
 ---
 
-## Sintaxe de Método com `:`
+## Method Syntax with `:`
 
-`:` é um alias pra `.` em chamadas de método. 
-Não faço a menor ideia por que você usaria isso. Mas pode.
+`:` is an alias for `.` in method calls. 
+I have absolutely no idea why you'd use this. But you can.
 
 ```typescript
 arr: push(42)                                        // arr.push(42)
-arr: filter(x => x > 2): map(x => x * 10)           // chaining
+arr: filter(x => x > 2): map(x => x * 10)            // chaining
 
 list(42: push)                                       // list.push(42)
 stack("a": push, "b": push, "c": push)               // stack.push("a"); stack.push("b"); stack.push("c")
@@ -237,7 +235,6 @@ stack("a": push, "b": push, "c": push)               // stack.push("a"); stack.p
 
 ## `print`
 
-Mais que `console.log`:
 
 ```typescript
 print("hello")                  // console.log
@@ -248,9 +245,9 @@ print("a": log, "b": warn)      // separate calls, one line
 
 ---
 
-## DOM e Canvas
+## DOM and Canvas
 
-NOVA tem `dom` e `canvas` built-in, porque `document.querySelector` toda hora cansa e jQuery é bom demais para ser usado em conjunto com essa atrocidade:
+NOVA has built-in `dom` and `canvas`, because writing `document.querySelector` all the time gets tiring and jQuery is way too good to be used alongside this atrocity:
 
 ```typescript
 btn = dom.get("#btn")
@@ -261,43 +258,43 @@ cv.size(800, 600)
 cv.fill("#87CEEB").rect(0, 0, 800, 600)
 cv.fill("#FFD700").circle(100, 300, 20)
 cv.loop(ts => {
-  cv.clear()
-  // draw here
+    cv.clear()
+    // draw here
 })
 ```
 
-Canvas ganhou um destaque especial porque faço jogos e com essa linguagem e não sou fã de bibliotecas.
+Canvas got a special spotlight because I make games in this language and I'm not a fan of libraries.
 
 ---
 
-## Extras que existem
+## Extras that Exist
 
-- **Métodos em strings**: `.upper()`, `.lower()`, `.reverse()`, `.words()`, e outros
-- **Métodos em arrays**: `.first()`, `.last()`, `.shuffle()`, `.chunk()`, `.unique()`, e outros
-- **Métodos em objetos**: `.keys()`, `.values()`, `.pick()`, `.omit()`, `.invert()`, e outros
-- **Matemática global**: `clamp`, `lerp`, `dist`, `random`, `randomInt`, `smoothstep`, e outros — sem `Math.`
-- **`file()` / `fileAsync()`**: carrega JSON, CSV ou texto direto
-- **Tipos opcionais** com checagem em runtime
-- **`try` sem `catch`**: porque às vezes você só quer ignorar o erro e seguir em frente
-
----
-
-## Como funciona
-
-1. Você escreve NOVA
-2. O Lexer tokeniza
-3. O Transpiler gera JavaScript
-4. O browser executa
-5. Você fica feliz (ou não, porque bugs são comuns)
-
-Se algo der errado entre os passos 3 e 4, o erro aparece no console com `[NOVA]` na frente — para você saber exatamente quem culpar.
+- **String methods**: `.upper()`, `.lower()`, `.reverse()`, `.words()`, and others
+- **Array methods**: `.first()`, `.last()`, `.shuffle()`, `.chunk()`, `.unique()`, and others
+- **Object methods**: `.keys()`, `.values()`, `.pick()`, `.omit()`, `.invert()`, and others
+- **Global math**: `clamp`, `lerp`, `dist`, `random`, `randomInt`, `smoothstep`, and others — no `Math.` needed
+- **`file()` / `fileAsync()`**: loads JSON, CSV, or text directly
+- **Optional types** with runtime checking
+- **`try` without `catch`**: because sometimes you just want to ignore the error and move on
 
 ---
 
-## Licença
+## How it works
 
-Faça o que quiser.
+1. You write NOVA
+2. The Lexer tokenizes it
+3. The Transpiler generates JavaScript
+4. The browser executes it
+5. You get happy (or not, because bugs are common)
+
+If something goes wrong between steps 3 and 4, the error appears in the console prefixed with `[NOVA]` — so you know exactly who to blame.
 
 ---
 
-*NOVAjs — porque JavaScript já existe e não está amaldiçoado o suficiente.*
+## License
+
+Do whatever you want.
+
+---
+
+*NOVAjs — because JavaScript already exists and isn't cursed enough.*

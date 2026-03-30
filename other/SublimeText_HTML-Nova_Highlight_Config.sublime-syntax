@@ -1,0 +1,49 @@
+%YAML 1.2
+---
+name: HTML + Nova
+version: 2
+extends: Packages/HTML/HTML.sublime-syntax
+scope: text.html.nova
+file_extensions:
+    - html
+    - htm
+
+variables:
+    nova_mime_type: |-
+        (?xi:
+            (?:text|application)/(?:novajs|nova|njs)
+          | novajs | nova | njs | js
+        )
+
+contexts:
+    script-type-decider:
+        - meta_prepend: true
+        - match: (?={{nova_mime_type}}{{unquoted_attribute_break}}|'{{nova_mime_type}}'|"{{nova_mime_type}}")
+          set:
+              - script-nova
+              - tag-type-attribute-meta
+              - tag-generic-attribute-value
+
+    script-nova:
+        - meta_include_prototype: false
+        - meta_scope: meta.tag.script.begin.html
+        - include: merge-conflict-markers
+        - match: '>'
+          scope: punctuation.definition.tag.end.html
+          set: script-nova-content
+        - include: script-common
+
+    script-nova-content:
+        - meta_include_prototype: false
+        - match: '{{script_content_begin}}'
+          captures:
+              1: comment.block.html punctuation.definition.comment.begin.html
+          pop: 1
+          embed: Packages/User/Nova.sublime-syntax
+          embed_scope: source.nova.embedded.html
+          escape: '{{script_content_end}}'
+          escape_captures:
+              1: source.nova.embedded.html
+              2: comment.block.html punctuation.definition.comment.end.html
+              3: source.nova.embedded.html
+              4: comment.block.html punctuation.definition.comment.end.html

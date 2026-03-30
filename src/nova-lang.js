@@ -417,6 +417,92 @@ class Transpiler {
   //   null                          — no annotation found
   //   string                        — primitive type name e.g. 'number'
   //   { __shape: true, fields: [...] } — object shape type
+  // Skip a return type annotation after ')' in function declarations.
+  // Less restrictive than skipTypeAnnotation — no scope guard needed here
+  // since we know we're after the param list.
+  skipReturnTypeAnnotation() {
+    if (!this.matchType(TT.COLON)) return null;
+    const next = this.cur(1);
+    // Only recognize known type keywords/names as return type.
+    // This prevents consuming the start of a one-liner expression like
+    //   fn double(x): number x * 2
+    // where 'x' after 'number' is the expression, not part of the type.
+    const TYPE_KW = new Set(['null','undefined','function','func','fn','any','never','void',
+                              'object','obj','number','num','int','float','string','str','text',
+                              'boolean','bool','array']);
+    const isKnownType = (tok) =>
+      (tok.type === TT.KEYWORD && TYPE_KW.has(tok.value)) ||
+      (tok.type === TT.IDENT   && TYPE_KW.has(tok.value.toLowerCase())) ||
+      tok.type === TT.NULL || tok.type === TT.UNDEF;
+
+    if (!isKnownType(next)) return null;
+
+    const savedPos    = this.pos;
+    const savedOutLen = this.out.length;
+    this.advance(); // consume ':'
+
+    if (this.matchType(TT.LBRACE)) return this._parseObjectShapeType();
+
+    let typeParts = [];
+    while (this.cur().type !== TT.EOF) {
+      const t = this.cur();
+      // Only consume tokens that are definitively part of a type expression:
+      //   - known type names (single token)
+      //   - | for union
+      //   - ? for nullable
+      //   - [] for array suffix
+      // Stop immediately at anything else (IDENT that's not a type keyword,
+      // operators, numbers, strings — these are the start of the expression body)
+      const isTypeTok =
+        isKnownType(t) ||
+        t.type === TT.OR                               ||   // ||
+        (t.type === TT.IDENT && t.value === '|')       ||   // | (single pipe)
+        t.type === TT.QUESTION ||   // ?
+        t.type === TT.LBRACKET ||   // [
+        t.type === TT.RBRACKET;     // ]
+      if (!isTypeTok) break;
+      typeParts.push(String(t.value ?? ''));
+      this.advance();
+    }
+
+    const raw = typeParts.join('').trim();
+    if (!raw) return null;
+    return this._normalizeReturnType(raw);
+  }
+
+  _normalizeReturnType(raw) {
+    if (!raw) return null;
+    const t = raw.toLowerCase().replace(/\?$/, '').trim();
+    const nullable = raw.endsWith('?');
+    const suffix = nullable ? '?' : '';
+    // union types — pass through as-is (lowercased)
+    if (t.includes('|')) {
+      return t.split('|').map(p => {
+        const n = p.trim();
+        if (n === 'number' || n === 'num' || n === 'int' || n === 'float') return 'number';
+        if (n === 'string' || n === 'str' || n === 'text') return 'string';
+        if (n === 'boolean' || n === 'bool') return 'boolean';
+        if (n === 'array') return 'array';
+        if (n === 'object' || n === 'obj') return 'object';
+        if (n === 'null') return 'null';
+        if (n === 'undefined') return 'undefined';
+        if (n === 'any') return 'any';
+        return n;
+      }).join('|');
+    }
+    if (t === 'void') return 'void';
+    if (t === 'any' || t === '') return null;
+    if (t === 'number' || t === 'num' || t === 'int' || t === 'float') return 'number' + suffix;
+    if (t === 'string' || t === 'str' || t === 'text') return 'string' + suffix;
+    if (t === 'boolean' || t === 'bool') return 'boolean' + suffix;
+    if (t === 'array') return 'array' + suffix;
+    if (t === 'object' || t === 'obj') return 'object' + suffix;
+    if (t === 'null') return 'null';
+    if (t === 'undefined') return 'undefined';
+    if (t === 'function' || t === 'func' || t === 'fn') return 'function' + suffix;
+    return null; // unknown type — no enforcement
+  }
+
   skipTypeAnnotation() {
     if (!this.matchType(TT.COLON)) return null;
     const next = this.cur(1);
@@ -475,6 +561,10 @@ class Transpiler {
       TT.EQ, TT.SEMI, TT.COMMA, TT.NEWLINE, TT.EOF,
       TT.RPAREN, TT.LBRACE, TT.RBRACE, TT.RBRACKET,
       TT.KEYWORD, // e.g. 'is' used as assignment after type annotation
+      // one-liner return type: fn foo(): number 80  — expression follows
+      TT.NUM, TT.STR, TT.BOOL, TT.NULL, TT.UNDEF,
+      TT.IDENT, TT.LBRACKET, TT.NOT, TT.MINUS, TT.PLUS,
+      TT.LPAREN, TT.TMPL,
     ]);
     if (!validAfterType.has(afterType)) {
       // Rollback
@@ -926,7 +1016,7 @@ class Transpiler {
     const typedParams = this.parseParams();
     this.eat(TT.RPAREN);
     this.emit(')');
-    this.skipTypeAnnotation(); // optional return type annotation (not enforced)
+    const returnType = this.skipReturnTypeAnnotation(); // optional return type annotation
     this.emit(' ');
     this.skipNewlines();
 
@@ -940,16 +1030,19 @@ class Transpiler {
       const saved = this.out.length;
       this.parseExpr();
       const expr = this.out.splice(saved).join('');
+      const wrappedExpr = returnType
+        ? `__novaReturnCheck__(${JSON.stringify(name || '<fn>')}, ${JSON.stringify(returnType)}, ${expr})`
+        : expr;
       if (paramChecks) {
-        this.emit(`{ ${paramChecks} return ${expr}; }`);
+        this.emit(`{ ${paramChecks} return ${wrappedExpr}; }`);
       } else {
-        this.emit(`{ return ${expr}; }`);
+        this.emit(`{ return ${wrappedExpr}; }`);
       }
       return;
     }
 
     // Block body
-    this.parseFuncBlock(paramChecks);
+    this.parseFuncBlock(paramChecks, name, returnType);
   }
 
   // Peek ahead (from current pos, which is AT the '{') to decide if
@@ -975,7 +1068,7 @@ class Transpiler {
   // Parse a function body block { ... }.
   // If the last statement is a bare expression (not return/if/for/…), it becomes `return expr`.
   // Tracks whether any explicit `return` was already emitted in this block level.
-  parseFuncBlock(paramChecks = '') {
+  parseFuncBlock(paramChecks = '', fnName = null, returnType = null) {
     // Special case: if the body looks like { key: val, ... } (object literal),
     // emit it as an implicit return of that object rather than parsing as a block.
     if (this._looksLikeObjectLiteral()) {
@@ -994,6 +1087,12 @@ class Transpiler {
     this.indent++;
     this.scopePush();
     this.skipNewlines();
+
+    // Track current function's return type for explicit return statements
+    const prevReturnType = this._currentReturnType ?? null;
+    const prevReturnName = this._currentFnName ?? null;
+    this._currentReturnType = returnType;
+    this._currentFnName = fnName;
 
     // Emit parameter type checks at the top of the function body
     if (paramChecks) {
@@ -1049,9 +1148,22 @@ class Transpiler {
       //   out[...]           = more expr tokens
       //   out[last]          = ';'        (from semi())
       // We insert 'return ' at exprStartIdx (right after the indent string).
-      this.out.splice(lastExpr.exprStartIdx, 0, 'return ');
+      if (returnType) {
+        // Wrap the expression in __novaReturnCheck__
+        // Find the semicolon at the end and replace the expr with wrapped version
+        const exprTokens = this.out.splice(lastExpr.exprStartIdx);
+        // Remove trailing semicolon
+        const hasSemi = exprTokens[exprTokens.length - 1] === ';';
+        if (hasSemi) exprTokens.pop();
+        const exprStr = exprTokens.join('');
+        this.out.push(`return __novaReturnCheck__(${JSON.stringify(fnName || '<fn>')}, ${JSON.stringify(returnType)}, ${exprStr});`);
+      } else {
+        this.out.splice(lastExpr.exprStartIdx, 0, 'return ');
+      }
     }
 
+    this._currentReturnType = prevReturnType;
+    this._currentFnName = prevReturnName;
     this.indent--;
     this.scopePop();
     this.nl();
@@ -1177,7 +1289,7 @@ class Transpiler {
       this.parseParams();
       this.eat(TT.RPAREN);
       this.emit(') ');
-      this.skipTypeAnnotation(); // optional return type
+      this.skipReturnTypeAnnotation(); // optional return type
       this.skipNewlines();
       this.parseBlock();
       return;
@@ -1210,8 +1322,15 @@ class Transpiler {
 
   parseReturn() {
     this.eat(TT.KEYWORD, 'return');
-    this.emit('return');
-    if (!this.isLineEnd()) { this.emit(' '); this.parseExpr(); }
+    if (!this.isLineEnd() && this._currentReturnType) {
+      const saved = this.out.length;
+      this.parseExpr();
+      const expr = this.out.splice(saved).join('');
+      this.emit(`return __novaReturnCheck__(${JSON.stringify(this._currentFnName || '<fn>')}, ${JSON.stringify(this._currentReturnType)}, ${expr})`);
+    } else {
+      this.emit('return');
+      if (!this.isLineEnd()) { this.emit(' '); this.parseExpr(); }
+    }
     this.semi();
   }
 
@@ -1265,6 +1384,16 @@ class Transpiler {
     this.parseStmt();
   }
 
+  // Parse a case expression — like parseExpr but stops at ':' (the case separator)
+  // This prevents 'case "foo": x = 1' from being parsed as 'case {"foo": x} = 1'
+  parseCaseExpr() {
+    // Temporarily override parseObjectLit to not trigger on STR/NUM followed by COLON
+    // Strategy: parse only up to ternary level, but block object literal parsing at primary level
+    this._inCaseExpr = true;
+    this.parseTernary();
+    this._inCaseExpr = false;
+  }
+
   parseSwitch() {
     this.eat(TT.KEYWORD, 'switch');
     this.emit('switch (');
@@ -1281,7 +1410,7 @@ class Transpiler {
     while (!this.matchType(TT.RBRACE) && this.cur().type !== TT.EOF) {
       this.skipNewlines();
       if (this.matchKw('case')) {
-        this.advance(); this.nl(); this.emit('case '); this.parseExpr(); this.eat(TT.COLON); this.emit(':');
+        this.advance(); this.nl(); this.emit('case '); this.parseCaseExpr(); this.eat(TT.COLON); this.emit(':');
       } else if (this.matchKw('default')) {
         this.advance(); this.nl(); this.emit('default:'); if (this.matchType(TT.COLON)) this.advance();
       } else {
@@ -1608,18 +1737,6 @@ class Transpiler {
       const lhsTokens = this.out.slice(lhsStartIdx);
       const lhsStr = lhsTokens.join('');
 
-      // Intercept __novaArrGet__(arr, idx) = val → __novaArrSet__(arr, idx, val)
-      const arrGetMatch = lhsStr.match(/^__novaArrGet__\((.+),\s*(.+)\)$/s);
-      if (arrGetMatch && (t.type === TT.EQ || isIsAssign)) {
-        this.out.splice(lhsStartIdx);
-        this.advance(); // consume = or 'is'
-        const valStart = this.out.length;
-        this.parseAssign();
-        const valStr = this.out.splice(valStart).join('');
-        this.emit(`__novaArrSet__(${arrGetMatch[1]}, ${arrGetMatch[2]}, ${valStr})`);
-        return;
-      }
-
       const op = this.advance();
       // 'is' always emits '='
       this.emit(` ${isIsAssign ? '=' : op.value} `);
@@ -1840,7 +1957,14 @@ class Transpiler {
       else if (this.matchType(TT.COLON)) {
         const next = this.cur(1);
         const afterNext = this.cur(2);
-        if ((next.type === TT.IDENT || next.type === TT.KEYWORD) && afterNext.type === TT.LPAREN) {
+        const CTRL_KW = new Set(['if','else','for','while','do','return','break','continue',
+          'switch','case','default','throw','try','catch','finally',
+          'function','func','fn','class','new','import','export']);
+        const isValidMethod =
+          (next.type === TT.IDENT ||
+           (next.type === TT.KEYWORD && !CTRL_KW.has(next.value))) &&
+          afterNext.type === TT.LPAREN;
+        if (isValidMethod) {
           this.advance();
           const method = this.advance().value;
           this.emit('.' + method);
@@ -1853,14 +1977,35 @@ class Transpiler {
         }
       }
       else if (this.matchType(TT.LBRACKET)) {
-        const savedObjStart = this._objExprStart;
         this.advance();
-        const idxStart = this.out.length;
-        this.parseExpr();
-        const idxStr = this.out.splice(idxStart).join('');
-        const objStr = this.out.splice(savedObjStart).join('');
-        this.eat(TT.RBRACKET);
-        this.emit(`__novaArrGet__(${objStr}, ${idxStr})`);
+        // Detect float literal index: arr[0.5]
+        const isFloatLiteral = this.cur().type === TT.NUM &&
+          String(this.cur().value).includes('.') &&
+          !Number.isInteger(Number(this.cur().value));
+        if (isFloatLiteral) {
+          const idxVal = this.advance().value;
+          this.eat(TT.RBRACKET);
+          // Check if followed by assignment
+          const isAssign = this.cur().type === TT.EQ ||
+            (this.cur().type === TT.KEYWORD && this.cur().value === 'is');
+          if (isAssign) {
+            // arr[0.5] = val  →  __novaArrSet__(arr, 0.5, val)
+            this.advance(); // consume = or is
+            const objStr = this.out.splice(this._objExprStart).join('');
+            const valStart = this.out.length;
+            this.parseAssign();
+            const valStr = this.out.splice(valStart).join('');
+            this.emit(`__novaArrSet__(${objStr}, ${idxVal}, ${valStr})`);
+          } else {
+            // arr[0.5]  →  null (float read always returns null)
+            this.out.splice(this._objExprStart);
+            this.emit('null');
+          }
+        } else {
+          this.emit('[');
+          this.parseExpr();
+          this.eat(TT.RBRACKET); this.emit(']');
+        }
         this._objExprStart = this.out.length;
       }
       else if (this.matchType(TT.LPAREN)) {
@@ -2019,7 +2164,24 @@ class Transpiler {
         if (last === '...') { params[params.length - 1] = '...' + p.value; }
         else { params.push(p.value); }
         if (this.matchType(TT.EQ)) throw new Error('bail'); // default params bail
-        if (this.matchType(TT.COLON)) throw new Error('bail'); // object destructure bail
+        // Type annotation on arrow param: (x: number) => ... — skip type silently
+        if (this.matchType(TT.COLON)) {
+          this.advance(); // consume ':'
+          // consume type tokens until , or )
+          while (this.cur().type !== TT.EOF &&
+                 this.cur().type !== TT.COMMA &&
+                 this.cur().type !== TT.RPAREN) {
+            const tt = this.cur().type;
+            if (tt === TT.IDENT || tt === TT.KEYWORD || tt === TT.OR ||
+                tt === TT.LT || tt === TT.GT || tt === TT.LBRACKET ||
+                tt === TT.RBRACKET || tt === TT.QUESTION || tt === TT.AND ||
+                tt === TT.NULL || tt === TT.UNDEF) {
+              this.advance();
+            } else {
+              break;
+            }
+          }
+        }
         if (this.matchType(TT.COMMA)) this.advance();
       }
       if (this.cur().type !== TT.RPAREN) throw new Error('bail');
@@ -2432,6 +2594,44 @@ function __novaTypeCheck__(name, expectedType, value) {
     }
     return value;
   }
+  return value;
+}
+
+function __novaReturnCheck__(fnName, expectedType, value) {
+  if (expectedType === 'void') {
+    // void: warn if something was returned, but don't throw
+    return value;
+  }
+  // null-safe: type ending in '?' accepts null/undefined
+  const nullable = expectedType.endsWith('?');
+  const baseType = nullable ? expectedType.slice(0, -1) : expectedType;
+  if (nullable && (value === null || value === undefined)) return value;
+
+  // union: "number|null" etc.
+  if (baseType.includes('|')) {
+    const accepted = baseType.split('|').map(t => t.trim());
+    const actual = value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
+    if (accepted.includes(actual) || accepted.includes('any')) return value;
+    throw new TypeError(\`[NOVA] Return type error: function "\${fnName}" expects \${expectedType} but got \${actual}\`);
+  }
+
+  if (baseType === 'any' || baseType === '') return value;
+
+  let actual;
+  if (value === null)          actual = 'null';
+  else if (Array.isArray(value)) actual = 'array';
+  else                           actual = typeof value;
+
+  if (baseType === 'array') {
+    if (!Array.isArray(value))
+      throw new TypeError(\`[NOVA] Return type error: function "\${fnName}" expects array but got \${actual}\`);
+    return value;
+  }
+
+  const primitives = new Set(['number','string','boolean','object','function','undefined']);
+  if (primitives.has(baseType) && actual !== baseType)
+    throw new TypeError(\`[NOVA] Return type error: function "\${fnName}" expects \${expectedType} but got \${actual}\`);
+
   return value;
 }
 
@@ -3189,105 +3389,57 @@ Object.defineProperties(String.prototype, {
 // ── number prototype extensions ──────────────────────────────
 Object.defineProperties(Number.prototype, {
   // (3.7).floor() → 3
-  floor: { get() { return () => Math.floor(this); }, configurable: true },
+  floor:  { get() { return () => Math.floor(this); }, configurable: true },
   // (3.2).ceil() → 4
-  ceil: { get() { return () => Math.ceil(this); }, configurable: true },
-  // (3.7).trunc() → 3
-  trunc: { get() { return () => Math.trunc(this); }, configurable: true },
+  ceil:   { get() { return () => Math.ceil(this); }, configurable: true },
   // (3.567).round(2) → 3.57
-  round: { get() { return (decimals=0) => { const f = Math.pow(10, decimals); return Math.round(this * f) / f; }; }, configurable: true },
-  // (5).abs()
-  abs: { get() { return () => Math.abs(this); }, configurable: true },
-  // (2).pow(8) → 256
-  pow: { get() { return (exp) => Math.pow(this, exp); }, configurable: true },
-  // (16).sqrt() → 4
-  sqrt: { get() { return () => Math.sqrt(this); }, configurable: true },
-  // (27).cbrt() → 3
-  cbrt: { get() { return () => Math.cbrt(this); }, configurable: true },
-  // (5).sign()
-  sign: { get() { return () => Math.sign(this); }, configurable: true },
-  // (2).exp() → e²
-  exp: { get() { return () => Math.exp(this); }, configurable: true },
-  // (2).expm1() → e² - 1
-  expm1: { get() { return () => Math.expm1(this); }, configurable: true },
-  // (10).log() → ln(10)
-  log: { get() { return () => Math.log(this); }, configurable: true },
-  // (10).log10() → log10(10)
-  log10: { get() { return () => Math.log10(this); }, configurable: true },
-  // (8).log2() → log2(8)
-  log2: { get() { return () => Math.log2(this); }, configurable: true },
-  // (1.5).log1p() → ln(1.5)
-  log1p: { get() { return () => Math.log1p(this); }, configurable: true },
-  // (45).deg2rad()
-  deg2rad: { get() { return () => this * Math.PI / 180; }, configurable: true },
-  // (Math.PI).rad2deg()
-  rad2deg: { get() { return () => this * 180 / Math.PI; }, configurable: true },
-  // (0.5).sin()
-  sin: { get() { return () => Math.sin(this); }, configurable: true },
-  // (0.5).cos()
-  cos: { get() { return () => Math.cos(this); }, configurable: true },
-  // (0.5).tan()
-  tan: { get() { return () => Math.tan(this); }, configurable: true },
-  // (0.5).asin()
-  asin: { get() { return () => Math.asin(this); }, configurable: true },
-  // (0.5).acos()
-  acos: { get() { return () => Math.acos(this); }, configurable: true },
-  // (1).atan()
-  atan: { get() { return () => Math.atan(this); }, configurable: true },
-  // (1).sinh()
-  sinh: { get() { return () => Math.sinh(this); }, configurable: true },
-  // (1).cosh()
-  cosh: { get() { return () => Math.cosh(this); }, configurable: true },
-  // (1).tanh()
-  tanh: { get() { return () => Math.tanh(this); }, configurable: true },
-  // (0.5).asinh()
-  asinh: { get() { return () => Math.asinh(this); }, configurable: true },
-  // (1).acosh()
-  acosh: { get() { return () => Math.acosh(this); }, configurable: true },
-  // (0.5).atanh()
-  atanh: { get() { return () => Math.atanh(this); }, configurable: true },
-  // (3.2).clamp(0,1)
-  clamp: { get() { return (min, max) => Math.min(Math.max(this, min), max); }, configurable: true },
-  // (5).between(1, 10) → true
-  between: { get() { return (min, max) => this >= min && this <= max; }, configurable: true },
-  // (5).isInt()
-  isInt: { get() { return () => Number.isInteger(this.valueOf()); }, configurable: true },
-  // (NaN).isNaN()
-  isNaN: { get() { return () => isNaN(this.valueOf()); }, configurable: true },
-  // (5).isFinite()
-  isFinite: { get() { return () => Number.isFinite(this.valueOf()); }, configurable: true },
+  round:  { get() { return (decimals=0) => {
+    const f = Math.pow(10, decimals);
+    return Math.round(this * f) / f;
+  }}, configurable: true },
   // (42).string() → "42"
   string: { get() { return () => String(this.valueOf()); }, configurable: true },
+  // (0.5).clamp(0,1)
+  clamp:  { get() { return (min, max) => Math.min(Math.max(this, min), max); }, configurable: true },
+  // (3).abs()
+  abs:    { get() { return () => Math.abs(this); }, configurable: true },
+  // (2).pow(8) → 256
+  pow:    { get() { return (exp) => Math.pow(this, exp); }, configurable: true },
+  // (4).sqrt()
+  sqrt:   { get() { return () => Math.sqrt(this); }, configurable: true },
+  // (1).lerp(10, 0.5) → 5.5
+  lerp:   { get() { return (to, t) => this + (to - this) * t; }, configurable: true },
+  // (45).deg2rad()
+  deg2rad:{ get() { return () => this * Math.PI / 180; }, configurable: true },
+  // (Math.PI).rad2deg()
+  rad2deg:{ get() { return () => this * 180 / Math.PI; }, configurable: true },
+  // (5).sign()
+  sign:   { get() { return () => Math.sign(this); }, configurable: true },
+  // (5).between(1, 10) → true
+  between:{ get() { return (min, max) => this >= min && this <= max; }, configurable: true },
   // (255).hex() → "ff"
-  hex: { get() { return () => Math.round(this).toString(16); }, configurable: true },
-  // (255).hex(2) → "ff" (com padding)
-  hexPad: { get() { return (digits) => Math.round(this).toString(16).padStart(digits, '0'); }, configurable: true },
-  // (255).bin() → "11111111"
-  bin: { get() { return () => Math.round(this).toString(2); }, configurable: true },
-  // (255).bin(8) → "11111111"
-  binPad: { get() { return (digits) => Math.round(this).toString(2).padStart(digits, '0'); }, configurable: true },
+  hex:    { get() { return () => Math.round(this).toString(16); }, configurable: true },
+  // (255).bin()
+  bin:    { get() { return () => Math.round(this).toString(2); }, configurable: true },
+  // (5).isInt()
+  isInt:  { get() { return () => Number.isInteger(this.valueOf()); }, configurable: true },
+  // (NaN).isNaN()
+  isNaN:  { get() { return () => isNaN(this.valueOf()); }, configurable: true },
   // (1000).format() → "1,000"
   format: { get() { return (locale='en-US', opts={}) => this.valueOf().toLocaleString(locale, opts); }, configurable: true },
-  // (1).lerp(10, 0.5) → 5.5
-  lerp: { get() { return (to, t) => this + (to - this) * t; }, configurable: true },
-  // (5).map(0,10,0,100) → 50
-  map: { get() { return (inMin, inMax, outMin, outMax) => (this - inMin) * (outMax - outMin) / (inMax - inMin) + outMin; }, configurable: true },
-  // (5).limit(0,10)
-  limit: { get() { return (min, max) => Math.min(Math.max(this, min), max); }, configurable: true },
-  // (3.7).fract() → 0.7
-  fract: { get() { return () => this - Math.floor(this); }, configurable: true },
-  // (5).even() → false
-  even: { get() { return () => this % 2 === 0; }, configurable: true },
-  // (5).odd() → true
-  odd: { get() { return () => Math.abs(this) % 2 === 1; }, configurable: true },
-  // (5).factorial() → 120
-  factorial: { get() { return () => { let n = Math.floor(Math.abs(this)); let result = 1; for (let i = 2; i <= n; i++) result *= i; return result; }; }, configurable: true },
-  // (5).gcd(15) → 5
-  gcd: { get() { return (n) => { let a = Math.abs(this); let b = Math.abs(n); while (b) { let t = b; b = a % b; a = t; } return a; }; }, configurable: true },
-  // (5).max(10) → 10 (retorna o maior)
-  max: { get() { return (n) => Math.max(this, n); }, configurable: true },
-  // (5).min(10) → 5 (retorna o menor)
-  min: { get() { return (n) => Math.min(this, n); }, configurable: true },
+  // trig
+  sin:    { get() { return () => Math.sin(this); }, configurable: true },
+  cos:    { get() { return () => Math.cos(this); }, configurable: true },
+  tan:    { get() { return () => Math.tan(this); }, configurable: true },
+  asin:   { get() { return () => Math.asin(this); }, configurable: true },
+  acos:   { get() { return () => Math.acos(this); }, configurable: true },
+  atan:   { get() { return () => Math.atan(this); }, configurable: true },
+  // misc
+  exp:    { get() { return () => Math.exp(this); }, configurable: true },
+  log:    { get() { return () => Math.log(this); }, configurable: true },
+  log2:   { get() { return () => Math.log2(this); }, configurable: true },
+  log10:  { get() { return () => Math.log10(this); }, configurable: true },
+  abs:    { get() { return () => Math.abs(this); }, configurable: true },
 });
 
 // ── array prototype extensions ────────────────────────────────
@@ -3648,19 +3800,11 @@ async function load(url) {
  * Auto-execute all <script type="text/nova"> blocks in the page.
  */
 function autoRun() {
-   const scripts = Array.from(
-    document.querySelectorAll('script[type="text/nova"], script[type="text/novajs"]')
+  execute(
+    Array.from(document.querySelectorAll('script[type="text/nova"], script[type="text/novajs"]'))
+      .map(el => el.textContent)
+      .join('\n')
   );
-
-  return Promise.all(
-    scripts.map(function (el) {
-      return el.src
-        ? fetch(el.src).then(function (res) { return res.text(); })
-        : Promise.resolve(el.textContent);
-    })
-  ).then(function (contents) {
-    execute(contents.join('\n'));
-  });
 }
 
 // ── exports ──────────────────────────────────────────────────
