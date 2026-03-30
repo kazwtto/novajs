@@ -1,0 +1,266 @@
+cv = canvas('#canvas')
+W  = 400
+H  = 600
+cv.size(W, H)
+
+// ── Constantes ────────────────────────────────────────────────────────────
+GRAVITY    = 0.45
+JUMP       = -8.5
+PIPE_W     = 52
+PIPE_GAP   = 145
+PIPE_SPEED = 2.4
+BIRD_X     = 80
+BIRD_R     = 14
+
+// ── Estado ────────────────────────────────────────────────────────────────
+bird  = { y: H / 2, vy: 0, angle: 0 }
+pipes = []
+score = 0
+best  = 0
+frame = 0
+state = 'waiting' // 'waiting', 'playing', 'dead'
+
+// Fundo estrelado (gerado uma vez)
+stars = Array.from({ length: 80 }, (_, i) => ({ 
+    x: random(W), 
+    y: random(H * 0.7), 
+    r: random(0.3, 1.8), 
+    a: random() 
+}))
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+fn clamp(val, min, max) Math.max(min, Math.min(max, val))
+fn minY() 80
+fn maxY() H - 80 - PIPE_GAP - 60
+
+fn newPipe() { x: W + 10, topH: random(minY(), maxY()).floor(), scored: false }
+fn newBird() { y: H / 2, vy: 0, angle: 0 }
+
+fn spawnPipe() pipes.push(newPipe())
+
+fn resetGame() {
+    bird  = newBird()
+    pipes = []
+    score = 0
+    frame = 0
+    spawnPipe()
+}
+
+fn jump() {
+    if state === 'waiting' {
+        state = 'playing'
+        resetGame()
+        bird.vy = JUMP
+        return
+    }
+    if state === 'dead' {
+        state = 'waiting'
+        return
+    }
+    bird.vy = JUMP
+}
+
+// ── Controles ─────────────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+    if ['Space', 'ArrowUp', 'Enter'].includes(e.code) jump()
+})
+document.addEventListener('mousedown', jump)
+document.addEventListener('touchstart', (e) => { e.preventDefault(); jump() }, { passive: false })
+
+// ── Renderização ──────────────────────────────────────────────────────────
+fn drawBg() {
+    grad = cv.linearGradient(0, 0, 0, H, { '0': '#0f3460', '1': '#16213e' })
+    cv.fill(grad).rect(0, 0, W, H)
+}
+
+fn drawStars(t) {
+    for i, 0, stars.length - 1 {
+        s  = stars[i]
+        al = 0.3 + 0.7 * (t * 0.001 + s.a * 10).sin().abs()
+        cv.opacity(al).fill('#ffffff').circle(s.x, s.y, s.r)
+    }
+    cv.opacity(1)
+}
+
+fn drawGround() {
+    groundY = H - 60
+    cv.fill('#2d6a4f').rect(0, groundY, W, 60)
+    cv.fill('#1b4332').rect(0, groundY, W, 4)
+    for i, 0, 10 {
+        gx = (i * 42 + frame * 1.5) % (W + 40) - 20
+        cv.fill('#2d6a4f').poly(gx, groundY - 8, gx - 8, groundY + 8, gx + 8, groundY + 8)
+    }
+}
+
+fn drawPipe(p) {
+    botY = p.topH + PIPE_GAP
+    botH = H - 60 - botY
+    
+    // Cano Superior
+    cv.fill('#52b788').rect(p.x, 0, PIPE_W, p.topH)
+    cv.fill('#40916c').rect(p.x, 0, 6, p.topH)
+    cv.fill('#74c69d').rect(p.x - 4, p.topH - 18, PIPE_W + 8, 18, 3) // Borda
+    cv.fill('#52b788').rect(p.x - 4, p.topH - 18, PIPE_W + 8, 4)
+    
+    // Cano Inferior
+    cv.fill('#52b788').rect(p.x, botY, PIPE_W, botH)
+    cv.fill('#40916c').rect(p.x, botY, 6, botH)
+    cv.fill('#74c69d').rect(p.x - 4, botY, PIPE_W + 8, 18, 3) // Borda
+    cv.fill('#52b788').rect(p.x - 4, botY + 14, PIPE_W + 8, 4)
+}
+
+fn drawBird(y, angle, flap) {
+    cv.save()
+    cv.translate(BIRD_X, y)
+    cv.rotate(angle) // Usando o rotate simplificado (que converte p/ radianos internamente)
+    
+    // Sombra (leve)
+    cv.opacity(0.15).fill('#000').ellipse(0, BIRD_R + 4, BIRD_R * 0.8, 4)
+    cv.opacity(1)
+    
+    // Bater das asas
+    wingY = (flap * 0.3).sin() * 5
+    cv.fill('#ef476f').ellipse(-4, wingY + 3, 10, 6, -0.3)
+    
+    // Corpo
+    cv.fill('#ffd166').circle(0, 0, BIRD_R)
+    cv.fill('#ffeaa7').ellipse(3, 4, 8, 6)
+    
+    // Olho
+    cv.fill('#ffffff').circle(6, -4, 5)
+    cv.fill('#073b4c').circle(7, -4, 2.5)
+    
+    // Bico
+    cv.fill('#f4a261')
+    cv.begin().move(10, -1).to(18, 2).to(10, 5).close().fillPath()
+    
+    cv.restore()
+}
+
+fn drawScore() {
+    cv._.font = 'bold 42px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'top'
+    cv.opacity(0.3).fill('#000').text(score, W/2 + 2, 22)
+    cv.opacity(1).fill('#ffffff').text(score, W/2, 20)
+    
+    if score > 0 {
+        cv._.font = '14px monospace'
+        cv.opacity(0.6).fill('#ffd166').text('BEST ' + best, W/2, 66)
+        cv.opacity(1)
+    }
+}
+
+fn drawPanel(title, lines, col) {
+    cv.opacity(0.88).fill('#0f3460').rect(W/2 - 120, H/2 - 100, 240, 200, 16)
+    cv.opacity(1)
+    
+    cv._.font = 'bold 26px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'middle'
+    cv.fill(col).text(title, W/2, H/2 - 55)
+    
+    cv._.font = '14px monospace'
+    for i, 0, lines.length - 1 {
+        cv.fill(lines[i].c).text(lines[i].t, W/2, H/2 - 10 + i * 28)
+    }
+}
+
+// ── Lógica de Colisão ─────────────────────────────────────────────────────
+fn inGap(bTop, bBot, topH) bTop >= topH && bBot <= topH + PIPE_GAP
+
+fn checkCollision(p) {
+    bLeft  = BIRD_X - BIRD_R + 4
+    bRight = BIRD_X + BIRD_R - 4
+    bTop   = bird.y - BIRD_R + 4
+    bBot   = bird.y + BIRD_R - 4
+    inX    = bRight > p.x + 4 && bLeft < p.x + PIPE_W - 4
+    
+    if inX && !inGap(bTop, bBot, p.topH) return true
+    false
+}
+
+fn updateBest() {
+    if score > best best = score 
+}
+
+// ── Loop Principal ────────────────────────────────────────────────────────
+cv.loop((ts) => {
+    cv.clear()
+    drawBg()
+    drawStars(ts)
+
+    if state === 'waiting' {
+        idleY = H/2 + (ts * 0.003).sin() * 12
+        drawPipe({ x: W + 10, topH: 200, scored: false })
+        drawGround()
+        drawBird(idleY, 0, ts)
+        
+        waitLines = [
+            { t: 'click / space', c: '#74c69d' },
+            { t: 'to start', c: '#aaaaaa' }
+        ]
+        if best > 0 waitLines.push({ t: 'best: ' + best, c: '#ef476f' })
+        drawPanel('FLAPPY NOVA', waitLines, '#ffd166')
+        return
+    }
+
+    if state === 'dead' {
+        for i, 0, pipes.length - 1 drawPipe(pipes[i])
+        drawGround()
+        drawBird(bird.y, 90, 0) // Pássaro caído com bico para baixo
+        drawScore()
+        
+        deadLines = [
+            { t: 'score: ' + score, c: '#ffffff' },
+            { t: 'best:  ' + best,  c: '#ffd166' },
+            { t: 'tap to continue', c: '#74c69d' }
+        ]
+        drawPanel('GAME OVER', deadLines, '#ef476f')
+        return
+    }
+
+    // ── Update do Jogo ──────────────────────────────────────────────────
+    frame++
+    bird.vy    += GRAVITY
+    bird.y     += bird.vy
+    
+    // Calcula o ângulo em graus para a sua função de rotação
+    bird.angle  = clamp(bird.vy * 4, -25, 90)
+
+    // Spawna canos
+    if frame % 90 === 0 spawnPipe()
+
+    // Move canos e checa pontuação
+    for i, 0, pipes.length - 1 {
+        pipes[i].x -= PIPE_SPEED
+        if !pipes[i].scored && pipes[i].x + PIPE_W < BIRD_X {
+            pipes[i].scored = true
+            score++
+            updateBest()
+        }
+    }
+
+    // Remove canos que saíram da tela
+    pipes = pipes.filter(p => p.x + PIPE_W > -10)
+
+    // Colisão com o Teto/Chão
+    if bird.y + BIRD_R >= H - 60 || bird.y - BIRD_R <= 0 {
+        updateBest()
+        state = 'dead'
+    }
+
+    // Colisão com os canos
+    for i, 0, pipes.length - 1 {
+        if checkCollision(pipes[i]) {
+            updateBest()
+            state = 'dead'
+        }
+    }
+
+    // Desenha tudo da cena principal
+    for i, 0, pipes.length - 1 drawPipe(pipes[i])
+    drawGround()
+    drawBird(bird.y, bird.angle, frame)
+    drawScore()
+})

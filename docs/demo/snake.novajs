@@ -1,0 +1,155 @@
+W  = 400
+H  = 400
+cv = canvas('#canvas').size(W, H)
+
+GRID = 20
+COLS = W / GRID
+ROWS = H / GRID
+SPEED = 100
+
+FRUITS = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍍', '🥝', '🥭', '🍊', '🍑']
+
+snake    = []
+dir      = { x: 1, y: 0 }
+nextDir  = { x: 1, y: 0 }
+food     = { x: 0, y: 0, emoji: '🍎' }
+
+score    = 0
+best     = 0
+state    = 'waiting'
+lastMove = 0
+
+fn placeFood() {
+    let pos
+    do {
+        pos = {
+            x: (random() * COLS).floor(),
+            y: (random() * ROWS).floor(),
+        }
+    } while snake.some(s => s.x === pos.x && s.y === pos.y)
+    
+    food = { x: pos.x, y: pos.y, emoji: FRUITS[(random() * FRUITS.length).floor()] }
+}
+
+fn resetGame() {
+    snake    = [{ x: 10, y: 10 }]
+    dir      = { x: 1, y: 0 }
+    nextDir  = { x: 1, y: 0 }
+    score    = 0
+    placeFood()
+}
+
+fn updateBest() {
+    if score > best best = score 
+}
+
+fn handleInput(key) {
+    if state === 'waiting' || state === 'dead' {
+        if key === 'Enter' {
+            state = 'playing'
+            resetGame()
+        }
+        return
+    }
+    
+    switch key {
+        case 'ArrowUp':    if dir.y !== 1  nextDir = { x: 0, y: -1 }; break
+        case 'ArrowDown':  if dir.y !== -1 nextDir = { x: 0, y: 1 };  break
+        case 'ArrowLeft':  if dir.x !== 1  nextDir = { x: -1, y: 0 }; break
+        case 'ArrowRight': if dir.x !== -1 nextDir = { x: 1, y: 0 };  break
+    }
+}
+
+fn drawPanel(title, lines, col) {
+    cv.opacity(0.88).fill('#1a1a2e').rect(W/2 - 120, H/2 - 80, 240, 160, 16)
+    cv.opacity(1)
+    
+    cv._.font = 'bold 26px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'middle'
+    cv.fill(col).text(title, W/2, H/2 - 40)
+    
+    cv._.font = '14px monospace'
+    for i, 0, lines.length - 1 cv.fill(lines[i].c).text(lines[i].t, W/2, H/2 + 10 + i * 28)
+}
+
+fn drawEntities() {
+    // Cobra (usando rect com border-radius para ficar mais charmoso!)
+    cv.fill('#0f0')
+    snake.forEach(s => cv.rect(s.x * GRID, s.y * GRID, GRID - 1, GRID - 1, 4))
+
+    // Comida
+    cv._.font = '16px monospace'
+    cv._.textAlign = 'center'
+    cv._.textBaseline = 'middle'
+    cv.text(food.emoji, food.x * GRID + GRID / 2, food.y * GRID + GRID / 2)
+
+    // Placar
+    cv._.font = 'bold 24px monospace'
+    cv._.textAlign = 'left'
+    cv._.textBaseline = 'top'
+    cv.opacity(0.3).fill('#000').text(score, 12, 12) // Sombra
+    cv.opacity(1).fill('#ffffff').text(score, 10, 10)
+}
+
+fn drawBG() cv.clear('#fff6c9')
+
+// ── loop principal ────────────────────────────────────────────────────────
+cv.loop((ts) => {
+    drawBG();
+
+    if state === 'waiting' {
+        drawEntities() // Desenha o estado inicial no fundo
+        waitLines = [
+            { t: 'Pressione Enter', c: '#74c69d' },
+            { t: 'para iniciar',    c: '#aaaaaa' }
+        ]
+        if best > 0 waitLines.push({ t: 'best: ' + best, c: '#ef476f' })
+        drawPanel('SNAKE NOVA', waitLines, '#ffd166')
+        return
+    }
+
+    if state === 'dead' {
+        drawEntities() // Mantém a cobra morta visível atrás do painel
+        deadLines = [
+            { t: 'score: ' + score, c: '#ffffff' },
+            { t: 'best:  ' + best,  c: '#ffd166' },
+            { t: 'Enter p/ tentar dnv', c: '#74c69d' }
+        ]
+        drawPanel('GAME OVER', deadLines, '#ef476f')
+        return
+    }
+
+    // ── update ──────────────────────────────────────────────────
+    // Controla a velocidade usando o delta do timestamp
+    if ts - lastMove > SPEED {
+        lastMove = ts
+        dir = nextDir
+        HEAD = { x: snake[0].x + dir.x, y: snake[0].y + dir.y }
+
+        // Colisão com as Paredes
+        if HEAD.x < 0 || HEAD.x >= COLS || HEAD.y < 0 || HEAD.y >= ROWS {
+            updateBest()
+            state = 'dead'
+        }
+        // Colisão com o Corpo
+        else if snake.some(s => s.x === HEAD.x && s.y === HEAD.y) {
+            updateBest()
+            state = 'dead'
+        } else {
+            snake.unshift(HEAD)
+            // Verificando se comeu a fruta
+            if HEAD.x === food.x && HEAD.y === food.y {
+                score++
+                placeFood()
+            } else {
+                snake.pop()
+            }
+        }
+    }
+
+    // Desenha tudo se o jogo estiver rodando
+    drawEntities()
+})
+
+window.on('keydown', (e) => handleInput(e.key))

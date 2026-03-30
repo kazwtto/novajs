@@ -1,0 +1,22 @@
+{
+    "name": "nova-js",
+    "version": "1.0.0",
+    "description": "NOVAjs — a WEIRDO JS-based language that transpiles to JavaScript.",
+    "main": "nova-lang.js",
+    "bin": {
+        "nova": "./bin/nova-cli.js"
+    },
+    "files": [
+        "src",
+        "bin"
+    ],
+    "scripts": {
+        "test": "node nova-cli.js \"print('Hello World')\""
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "keywords": ["novajs", "nova", "language", "transpiler", "javascript"],
+    "license": "MIT",
+    "author": "kazwtto"
+}
