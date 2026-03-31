@@ -2251,8 +2251,8 @@ let stop = c.loop((time, frame) =&gt; {
                 </div>
 
                 <!-- ─── ARCADE ─── -->
-                <dialog id="modal" class="section game-frame">
-                    <button id="close-btn" class="close-btn">FECHAR [X]</button>
+                <dialog id="modal" class="section game-modal">
+                    <button id="close-btn" class="close-btn"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff" stroke-width="35.839999999999996"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#ffffff" d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"></path></g></svg></button>
                     <iframe id="game-frame"></iframe>
                 </dialog>
 
@@ -2672,7 +2672,7 @@ let stop = c.loop((time, frame) =&gt; {
                 });
             })();
         </script>
-        <script src="https://files.catbox.moe/wdwjgd.js"></script>
+        <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"></script>
         <script type="text/novajs">
             MENUBTN = dom.get('#menuBtn');
             SIDEBAR = dom.get('#sidebar');
@@ -2704,7 +2704,6 @@ let stop = c.loop((time, frame) =&gt; {
 
             ANCHORS.forEach(a => observer.observe(a.el));
 
-            // Close sidebar on nav click (mobile)
             dom.getAll('.nav-link').forEach(link => {
                 link.on('click', () => {
                     [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
@@ -2724,7 +2723,7 @@ let stop = c.loop((time, frame) =&gt; {
                         <body>
                             <canvas id="canvas"></canvas>
 
-                            <script src="https://files.catbox.moe/wdwjgd.js"><\/script>
+                            <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"><\/script>
                             <script type="text/novajs">${codeContent}<\/script>
                             <script>
                                 function resizeCanvas() {
@@ -2742,14 +2741,12 @@ let stop = c.loop((time, frame) =&gt; {
 
             CARDS.forEach(card => {
                 card.on('click', async () => {
-                    gameId = card.getAttribute('data-game');
+                    gameId = card.attr('data-game');
                     codeContent = await (await fetch("./demo/${gameId}.novajs")).text();
-                    alert(codeContent)
                 
                     blob = new Blob([createGameHTML(gameId, codeContent)], { type: 'text/html' });
-                    url = URL.createObjectURL(blob);
 
-                    FRAME.src = url;
+                    FRAME.src = URL.createObjectURL(blob);
                     FRAME.onload = () => {
                         cv = FRAME.el.contentWindow.document.getElementById('canvas');
                         FRAME.style({
@@ -2765,7 +2762,6 @@ let stop = c.loop((time, frame) =&gt; {
                 MODAL.close();
                 FRAME.src = "";
             });
-
         </script>
     </body>
 </html>
