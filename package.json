@@ -16,7 +16,17 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "keywords": ["novajs", "nova", "language", "transpiler", "javascript"],
+    "keywords": [
+        "novajs",
+        "nova",
+        "language",
+        "transpiler",
+        "javascript"
+    ],
     "license": "MIT",
-    "author": "kazwtto"
+    "author": "kazwtto",
+    "devDependencies": {
+        "@swc/cli": "^0.8.0",
+        "@swc/core": "^1.15.21"
+    }
 }
