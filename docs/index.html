@@ -2267,38 +2267,36 @@ let stop = c.loop((time, frame) =&gt; {
                     <div class="card-grid games">
                         <button class="card" data-game="flappy">
                             <div class="card-title">🐦 FLAPPY BIRD</div>
-                            <div class="card-desc">Clique para jogar</div>
+                            <div class="card-desc">Click to play</div>
                         </button>
                         
                         <button class="card" data-game="snake">
                             <div class="card-title">🐍 SNAKE</div>
-                            <div class="card-desc">Clique para jogar</div>
+                            <div class="card-desc">Click to play</div>
                         </button>
                         
                         <button class="card" data-game="tetris">
                             <div class="card-title">🟦 TETRIS</div>
-                            <div class="card-desc">Clique para jogar</div>
+                            <div class="card-desc">Click to play</div>
                         </button>
                         
                         <button class="card" data-game="tictactoe">
                             <div class="card-title">🔢 TIC-TAC-TOE</div>
-                            <div class="card-desc">Clique para jogar</div>
+                            <div class="card-desc">Click to play</div>
                         </button>
                         
                         <button class="card" data-game="pong">
                             <div class="card-title">🏓 PONG!</div>
-                            <div class="card-desc">Clique para jogar</div>
+                            <div class="card-desc">Click to play</div>
                         </button>
                     </div>
                 </div>
 
-                        <footer>
-            <span>Nova Lang Documentation</span>
-            <span>Built with Nova &amp; HTML &nbsp;·&nbsp; v1.0</span>
-        </footer>
+                <footer>
+                    <span>NOVAjs Documentation</span>
+                    <span>Built with NOVAjs &amp; HTML &nbsp;·&nbsp; v1.0</span>
+                </footer>
             </main>
-
-
         </div>
 
 
@@ -2672,7 +2670,7 @@ let stop = c.loop((time, frame) =&gt; {
                 });
             })();
         </script>
-        <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/kazwtto/novajs@main/src/nova.min.js"></script>
         <script type="text/novajs">
             MENUBTN = dom.get('#menuBtn');
             SIDEBAR = dom.get('#sidebar');
@@ -2708,7 +2706,7 @@ let stop = c.loop((time, frame) =&gt; {
                 link.on('click', () => {
                     [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
                 });
-              });
+            });
 
             fn createGameHTML(gameId, codeContent) {
                 return `
@@ -2717,13 +2715,14 @@ let stop = c.loop((time, frame) =&gt; {
                         <head>
                             <style>
                                 * { margin: 0; padding: 0; overflow: hidden }
-                                canvas { display: block; }
+                                canvas { display: block; image-rendering: pixelated; }
+                                body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px); pointer-events: none; z-index: 999; }
                             </style>
                         </head>
                         <body>
                             <canvas id="canvas"></canvas>
 
-                            <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"><\/script>
+                            <script src="https://cdn.jsdelivr.net/gh/kazwtto/novajs@main/src/nova.min.js"><\/script>
                             <script type="text/novajs">${codeContent}<\/script>
                             <script>
                                 function resizeCanvas() {
@@ -2739,6 +2738,7 @@ let stop = c.loop((time, frame) =&gt; {
                         </html>`.trim();
             }
 
+            
             CARDS.forEach(card => {
                 card.on('click', async () => {
                     gameId = card.attr('data-game');
