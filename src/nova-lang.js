@@ -2085,13 +2085,16 @@ class Transpiler {
             this.parseParams(); this.eat(TT.RPAREN); this.emit(') ');
             this.skipNewlines(); this.parseBlock();
           } else {
-            // async arrow
+            // async arrow: async (params) => body  or  async param => body
             this.emit('async (');
             if (this.matchType(TT.LPAREN)) { this.advance(); this.parseParams(); this.eat(TT.RPAREN); }
             else this.emit(this.advance().value);
             this.emit(') => ');
+            // consume the '=>' token from the stream (it was already emitted above)
+            if (this.matchType(TT.ARROW)) this.advance();
+            this.skipNewlines();
             if (this.matchType(TT.LBRACE)) this.parseBlock();
-            else { this.skipNewlines(); this.parseExpr(); }
+            else this.parseExpr();
           }
           return;
         }

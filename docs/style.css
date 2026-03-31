@@ -602,20 +602,18 @@ hr {
 
 /* ── FOOTER ── */
 footer {
-    margin-left: var(--sidebar-w);
     padding: 32px 64px;
     border-top: 1px solid var(--border);
     font-size: 12.5px;
     color: var(--muted);
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
     gap: 16px;
     flex-wrap: wrap;
 }
-footer span {
-    margin-left: auto;
-    font-family: var(--font-mono);
-}
+
 
 /* ── OVERLAY ── */
 .overlay {

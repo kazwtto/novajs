@@ -2291,13 +2291,17 @@ let stop = c.loop((time, frame) =&gt; {
                         </button>
                     </div>
                 </div>
-            </main>
-        </div>
 
-        <footer>
+                        <footer>
             <span>Nova Lang Documentation</span>
             <span>Built with Nova &amp; HTML &nbsp;·&nbsp; v1.0</span>
         </footer>
+            </main>
+
+
+        </div>
+
+
 
         <script>
             (function highlightNova() {
@@ -2668,48 +2672,42 @@ let stop = c.loop((time, frame) =&gt; {
                 });
             })();
         </script>
-        <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"></script>
+        <script src="https://files.catbox.moe/wdwjgd.js"></script>
         <script type="text/novajs">
-            CARDS    = dom.get('.card');
-            MODAL    = dom.get('#modal');
-            CLOSEBTN = dom.get('#close-btn');
-            FRAME    = dom.get('#game-frame');
-
-
             MENUBTN = dom.get('#menuBtn');
             SIDEBAR = dom.get('#sidebar');
             OVERLAY = dom.get('#overlay');
 
+            CARDS    = dom.getAll('.card');
+            MODAL    = dom.get('#modal');
+            CLOSEBTN = dom.get('#close-btn');
+            FRAME    = dom.get('#game-frame');
+
             MENUBTN.on('click', () => {
-                SIDEBAR.class.toggle('open');
-                OVERLAY.class.toggle('open');
+                [SIDEBAR, OVERLAY].forEach(x => x.class.toggle('open'));
             });
 
             OVERLAY.on('click', () => {
-                SIDEBAR.class.remove('open');
-                OVERLAY.class.remove('open');
+                [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
             });
 
-            // ── NativeJS Active nav highlight on scroll ───────────────────────────
-            const anchors = document.querySelectorAll('.section-anchor');
-            const navLinks = document.querySelectorAll('.nav-link');
+            ANCHORS = dom.getAll('.section-anchor');
+            NAV_LINKS = dom.getAll('.nav-link');
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const id = entry.target.id;
-                        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+                        NAV_LINKS.forEach(link => link.class.toggle('active', link.attr('href') === '#$entry.target.id'));
                     }
                   });
             }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 });
 
-            anchors.forEach(a => observer.observe(a));
+            ANCHORS.forEach(a => observer.observe(a.el));
 
             // Close sidebar on nav click (mobile)
             dom.getAll('.nav-link').forEach(link => {
                 link.on('click', () => {
-                    SIDEBAR.class.remove('open');
-                    OVERLAY.class.remove('open');
+                    [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
                 });
               });
 
@@ -2726,7 +2724,7 @@ let stop = c.loop((time, frame) =&gt; {
                         <body>
                             <canvas id="canvas"></canvas>
 
-                            <script src="https://raw.githubusercontent.com/kazwtto/novajs/refs/heads/main/src/nova.min.js"><\/script>
+                            <script src="https://files.catbox.moe/wdwjgd.js"><\/script>
                             <script type="text/novajs">${codeContent}<\/script>
                             <script>
                                 function resizeCanvas() {
@@ -2745,17 +2743,19 @@ let stop = c.loop((time, frame) =&gt; {
             CARDS.forEach(card => {
                 card.on('click', async () => {
                     gameId = card.getAttribute('data-game');
-                    codeContent = await (await fetch(`./demo/${gameId}.novajs`)).text();
+                    codeContent = await (await fetch("./demo/${gameId}.novajs")).text();
+                    alert(codeContent)
                 
                     blob = new Blob([createGameHTML(gameId, codeContent)], { type: 'text/html' });
                     url = URL.createObjectURL(blob);
 
                     FRAME.src = url;
                     FRAME.onload = () => {
-                        cv = FRAME.contentWindow.document.getElementById('canvas');
-
-                        FRAME.style.width = cv.width + 'px';
-                        FRAME.style.height = cv.height  + 'px';
+                        cv = FRAME.el.contentWindow.document.getElementById('canvas');
+                        FRAME.style({
+                            width: '${cv.width}px',
+                            height: '${cv.height}px'
+                        })
                     };
                     MODAL.showModal();
                 });
