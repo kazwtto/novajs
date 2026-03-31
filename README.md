@@ -8,6 +8,9 @@ I don't recommend using it in real projects, but I won't stop you either. Have f
 
 You can check out the full documentation [here](https://novajs.netlify.app/) and test it [here](https://novajs.netlify.app/).
 
+
+The language code was optimized by Claude Sonnet 4.6, so it's not as bad as it originally was. but it's still awful.
+
 ---
 
 ## Installation

@@ -21,7 +21,8 @@
         "nova",
         "language",
         "transpiler",
-        "javascript"
+        "javascript",
+        "programming-language"
     ],
     "license": "MIT",
     "author": "kazwtto",
