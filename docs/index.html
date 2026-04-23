@@ -10,8 +10,9 @@
         <link rel="stylesheet" href="style.css" />
         <script>
             const langs = navigator.languages || [navigator.language || navigator.userLanguage];
-            const isPT = langs.some(l => l.toLowerCase().startsWith('pt'));
-                fetch('/pt/index.html')
+            if (!langs.some(l => l.toLowerCase().startsWith('pt'))) return;
+
+            fetch('/pt/index.html')
                 .then(r => r.text())
                 .then(html => {
                     document.open();

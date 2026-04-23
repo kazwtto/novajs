@@ -187,7 +187,7 @@
         <header>
             <div class="playground-subheader">
                 <a href="#" class="header-logo"> <img src="icon.png" /> NOVAjs </a>
-                <div class="header-tagline">
+                <div class="header-tagline" data-text="1">
                     Try any code if you want
                 </div>
             </div>
@@ -199,7 +199,7 @@
                         <span class="slider"></span>
                     </label>
                 </label>
-                <button id="run-btn">RUN</button>
+                <button id="run-btn" data-text="2">RUN</button>
             </div>
         </header>
 
@@ -220,7 +220,7 @@ dom.body.append(el);</div>
             </div>
             <div id="output-section">
                 <div id="tabs">
-                    <div class="tab active" data-target="preview">PREVIEW</div>
+                    <div class="tab active" data-target="preview" data-text="3">PREVIEW</div>
                     <div class="tab" data-target="console">CONSOLE</div>
                 </div>
                 <div id="output-container">
@@ -231,6 +231,22 @@ dom.body.append(el);</div>
         </div>
 
         <script>
+            const text = {
+                pt: {
+                    1: "Tente qualquer codigo que quiser",
+                    2: "Rodar",
+                    3: "VIZUALIZAR"
+                }
+            };
+
+            const langs = navigator.languages || [navigator.language || navigator.userLanguage];
+            const lang_code = langs.map(l => l.toLowerCase().slice(0, 2)).find(l => text[l]) || "pt";
+
+            document.body.querySelectorAll("[data-text]").forEach(el => {
+                const key = el.getAttribute("data-text");
+                el.textContent = text[lang_code]?.[key] ?? el.textContent;
+            });
+
             const editor = ace.edit("code");
             //editor.setTheme("ace/theme/chrome"); 
             editor.setOptions({
@@ -240,7 +256,7 @@ dom.body.append(el);</div>
                 useWorker: false 
             });
             
-ace.config.loadModule("ace/mode/typescript", function (ts) {
+            ace.config.loadModule("ace/mode/typescript", function (ts) {
                 const oop = ace.require("ace/lib/oop");
                 const TextHighlightRules = ace.require("ace/mode/text_highlight_rules").TextHighlightRules;
             

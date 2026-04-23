@@ -13,7 +13,7 @@
         <header>
             <a href="#" class="header-logo"> <img src="icon.png" /> NOVAjs </a>
             <div class="header-tagline">
-                A clean language that transpiles to JavaScript
+                Uma linguagem estranha que transpila para JavaScript.
             </div>
             <div class="header-right">
                 <span class="version-badge">v1.0</span>
@@ -59,7 +59,7 @@
                         ><span class="dot"></span>Fluxo de Controle</a
                     >
                     <a href="#loops" class="nav-link"
-                        ><span class="dot"></span>Laços</a
+                        ><span class="dot"></span>Loops</a
                     >
                     <a href="#classes" class="nav-link"
                         ><span class="dot"></span>Classes</a
@@ -153,7 +153,7 @@
                             <a href="#types">Tipos</a>
                             <a href="#strings">Strings</a>
                             <a href="#functions">Funções</a>
-                            <a href="#loops">Laços</a>
+                            <a href="#loops">Loops</a>
                             <a href="#classes">Classes</a>
                             <a href="#print">print</a>
                             <a href="#string-methods">Métodos de String</a>
@@ -244,12 +244,12 @@ class Cachorro extends Animal {
                 </p>
 
                 <pre><code>let x = 10
-                const PI = 3.14
-                TAMANHO_MAXIMO = 100       // → const TAMANHO_MAXIMO = 100
+const PI = 3.14
+TAMANHO_MAXIMO = 100       // → const TAMANHO_MAXIMO = 100
 
-                // A palavra-chave 'is' funciona como atribuição
-                let pontuacao is 0
-                pontuacao is 42</code></pre>
+// A palavra-chave 'is' funciona como atribuição
+let pontuacao is 0
+pontuacao is 42</code></pre>
 
                 <h3>Declaração implícita</h3>
                 <p>
@@ -578,7 +578,7 @@ let seguro    = valor ?? "padrão"</code></pre>
 
 <pre><code>// operações com string
 print("hello world" - 6)          // "hello"
-print("ha" * 3)                    // "hahaha"
+print("ha" * 3)                   // "hahaha"
 print("a-b-c" / "-")              // ["a","b","c"]
 
 // operações com array
@@ -588,7 +588,7 @@ print([1,null,2,null] - null)     // [1,2]
 
 // operações com object
 print({a:1,b:2} + {c:3})          // {a:1,b:2,c:3}
-print({a:1,b:2,c:3} - ["a","c"]) // {b:2}
+print({a:1,b:2,c:3} - ["a","c"])  // {b:2}
 print({a:2,b:4} * 2)              // {a:4,b:8}</code></pre>
 </div>
 
@@ -667,11 +667,11 @@ func criarUsuario(nome, idade) { nome: nome, idade: idade }</code></pre>
 <p>
     Suporta um sistema de tipos flexível e expressivo com sintaxe concisa de função, permitindo anotações opcionais, tipos anuláveis e uniões, e retornos implícitos para um código mais limpo.
 </p>
-<pre><code>fn dobrar(x: number): number x * 2            // uma linha
-fn adicionar(a, b): number { a + b }                // bloco, retorno implícito
+<pre><code>fn dobrar(x: number): number x * 2      // uma linha
+fn adicionar(a, b): number { a + b }               // bloco, retorno implícito
 fn encontrar(id): string? { id == 1 ? "x" : null } // anulável
-fn analisar(s): number|null { s.number() }       // união
-fn registrar(msg): void { print(msg) }              // void</code></pre>
+fn analisar(s): number|null { s.number() }         // união
+fn registrar(msg): void { print(msg) }             // void</code></pre>
 </div>
 
                 <!-- ─── COLON METHOD SYNTAX ─── -->
@@ -704,9 +704,9 @@ lista("item": push)         // lista.push("item")</code></pre>
 // pilha.push("a"); pilha.push("b"); pilha.push("c")</code></pre>
 
 <p>Funciona com <code>this</code> e acesso a propriedades:</p>
-<pre><code>this.partes(item: push)     // this.partes.push(item)
+<pre><code>this.partes(item: push)       // this.partes.push(item)
 c: incrementar()             // c.incrementar()
-dom.get("#app"): esconder()    // dom.get("#app").esconder()</code></pre>
+dom.get("#app"): esconder()  // dom.get("#app").esconder()</code></pre>
 </div>
 
                 <!-- ─── CONTROL FLOW ─── -->
@@ -743,28 +743,28 @@ let rotulo = x &gt; 0 ? "pos" : "não-pos"</code></pre>
                 <!-- ─── LOOPS ─── -->
                 <span class="section-anchor" id="loops"></span>
                 <div class="section">
-                    <h2><span class="h2-icon"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.00 52.00" enable-background="new 0 0 52 52" xml:space="preserve" stroke="currentColor" stroke-width="0.624"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.7280000000000001"></g><g id="SVGRepo_iconCarrier"> <path d="M47.2,32.6c0,0.1,0,0.1-0.1,0.2c-0.3,0.9-0.5,1.8-0.9,2.6c-0.4,0.9-0.8,1.9-1.3,2.7c-1,1.8-2.2,3.4-3.6,4.8 c-1.4,1.4-3,2.7-4.7,3.7c-1.7,1-3.6,1.9-5.6,2.4c-2,0.6-4.1,0.8-6.2,0.8C12.3,50,2,39.7,2,27.1S12.3,4.2,24.9,4.2 c4.3,0,8.3,1.2,11.7,3.2c0,0,0,0,0,0c1.7,1,3.2,2.2,4.5,3.5c0.4,0.3,0.7,0.6,1,1c0.8,0.6,1.3,0.2,1.3-0.8V3.6C43.4,2.8,44.2,2,45,2 h3.2c0.9,0,1.6,0.8,1.7,1.6v19.6c0,0.8-0.6,1.4-1.4,1.4H28.9c-0.9,0-1.5-0.6-1.5-1.5v-3.3c0-0.9,0.8-1.6,1.6-1.6h7.5 c0.6,0,1.2-0.2,1.4-0.5c-2.9-4-7.6-6.6-13-6.6c-8.9,0-16,7.2-16,16s7.2,16,16,16c7,0,12.9-4.4,15.1-10.6c0,0,0.3-1.4,1.4-1.4 c1.1,0,3.8,0,4.6,0c0.7,0,1.3,0.5,1.3,1.2C47.2,32.4,47.2,32.5,47.2,32.6z"></path> </g></svg></span> Laços</h2>
+                    <h2><span class="h2-icon"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.00 52.00" enable-background="new 0 0 52 52" xml:space="preserve" stroke="currentColor" stroke-width="0.624"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.7280000000000001"></g><g id="SVGRepo_iconCarrier"> <path d="M47.2,32.6c0,0.1,0,0.1-0.1,0.2c-0.3,0.9-0.5,1.8-0.9,2.6c-0.4,0.9-0.8,1.9-1.3,2.7c-1,1.8-2.2,3.4-3.6,4.8 c-1.4,1.4-3,2.7-4.7,3.7c-1.7,1-3.6,1.9-5.6,2.4c-2,0.6-4.1,0.8-6.2,0.8C12.3,50,2,39.7,2,27.1S12.3,4.2,24.9,4.2 c4.3,0,8.3,1.2,11.7,3.2c0,0,0,0,0,0c1.7,1,3.2,2.2,4.5,3.5c0.4,0.3,0.7,0.6,1,1c0.8,0.6,1.3,0.2,1.3-0.8V3.6C43.4,2.8,44.2,2,45,2 h3.2c0.9,0,1.6,0.8,1.7,1.6v19.6c0,0.8-0.6,1.4-1.4,1.4H28.9c-0.9,0-1.5-0.6-1.5-1.5v-3.3c0-0.9,0.8-1.6,1.6-1.6h7.5 c0.6,0,1.2-0.2,1.4-0.5c-2.9-4-7.6-6.6-13-6.6c-8.9,0-16,7.2-16,16s7.2,16,16,16c7,0,12.9-4.4,15.1-10.6c0,0,0.3-1.4,1.4-1.4 c1.1,0,3.8,0,4.6,0c0.7,0,1.3,0.5,1.3,1.2C47.2,32.4,47.2,32.5,47.2,32.6z"></path> </g></svg></span> Loops</h2>
 <p>
     Nova tem várias sintaxes de laço. Todas são expressões
     da palavra-chave padrão <code>for</code> com diferentes
     formas.
 </p>
 
-<h3>for i, fim — conta de 0</h3>
+<h3>for [var], fim — conta a partir de 0</h3>
 <pre><code>for i, 5 {
   print(i)   // 0 1 2 3 4
 }</code></pre>
 
-<h3>for i, inicio, fim — intervalo com direção automática</h3>
+<h3>for [var], inicio, fim — intervalo com direção automática</h3>
 <pre><code>for i, 1, 6  { print(i) }   // 1 2 3 4 5 6
 for i, 5, 1  { print(i) }   // 5 4 3 2 1</code></pre>
 
-<h3>for i range(...) — estilo Python</h3>
+<h3>for [var] range(...) — estilo Python</h3>
 <pre><code>for i range(10)       { }   // 0..9
 for i range(2, 8)    { }   // 2..7
 for i range(0, 10, 2) { }  // 0 2 4 6 8</code></pre>
 
-<h3>for i: passo, inicio, fim — passo personalizado</h3>
+<h3>for [var]: passo, inicio, fim — passo personalizado</h3>
 <pre><code>for i: 2, 0, 10 { print(i) }   // 0 2 4 6 8 10
 for i:*2, 1, 32  { print(i) }   // 1 2 4 8 16 32 (multiplicativo)</code></pre>
 
@@ -903,12 +903,12 @@ export default class MinhaClasse { }</code></pre>
 
 <h3>Básico</h3>
 <pre><code>print("Olá, mundo!")           // console.log
-print(a, b, c)                   // múltiplos argumentos</code></pre>
+print(a, b, c)                // múltiplos argumentos</code></pre>
 
 <h3>Modificador de método inline</h3>
 <pre><code>print("aviso": warn)            // console.warn
-print("erro": error)             // console.error
-print(dados: table)               // console.table
+print("erro": error)           // console.error
+print(dados: table)            // console.table
 
 // Múltiplos argumentos com métodos diferentes
 print("avise isto": warn, "e isto": error)
@@ -1183,7 +1183,7 @@ print("123".number() + 1)       // 124</code></pre>
 
 <pre><code>let numeros = [3, 1, 4, 1, 5, 9]
 
-print(numeros.sum())                  // 23
+print(numeros.sum())                 // 23
 print(numeros.unique())              // [3,1,4,5,9]
 print(numeros.chunk(2))              // [[3,1],[4,1],[5,9]]
 print(numeros.shuffle().first())     // elemento aleatório
@@ -1531,9 +1531,9 @@ print((5).map(0,10,0,100))     // 50</code></pre>
     </div>
 </div>
 
-<pre><code>print(random())            // ex.: 0.742
-print(random(10))          // ex.: 7.3
-print(randomInt(1, 6))    // rolagem de dado: 1..6
+<pre><code>print(random())                // ex.: 0.742
+print(random(10))               // ex.: 7.3
+print(randomInt(1, 6))          // rolagem de dado: 1..6
 print(random(["a", "b", "c"]))  // escolha aleatória</code></pre>
 </div>
 
@@ -1650,13 +1650,13 @@ print(o.pick(["a","b"]))                  // { a:1, b:2 }
 print(o.omit(["c"]))                      // { a:1, b:2 }
 print(o.invert())                         // { 1:"a", 2:"b", 3:"c" }
 
-print(o.map(([k,v]) =&gt; [k, v * 10]))     // { a:10, b:20, c:30 }
-print(o.filter(([k,v]) =&gt; v &gt; 1))        // { b:2, c:3 }
-print(o.find(([k,v]) =&gt; v == 2))         // ["b", 2]
-print(o.some(([k,v]) =&gt; v &gt; 2))          // verdadeiro
-print(o.every(([k,v]) =&gt; v &gt; 0))         // verdadeiro
-print(o.reduce((acc,[k,v]) =&gt; acc+v, 0)) // 6
-o.each(([k,v]) =&gt; print(k, v))           // itera</code></pre>
+print(o.map(([k,v]) =&gt; [k, v * 10]))      // { a:10, b:20, c:30 }
+print(o.filter(([k,v]) =&gt; v &gt; 1))         // { b:2, c:3 }
+print(o.find(([k,v]) =&gt; v == 2))          // ["b", 2]
+print(o.some(([k,v]) =&gt; v &gt; 2))           // verdadeiro
+print(o.every(([k,v]) =&gt; v &gt; 0))          // verdadeiro
+print(o.reduce((acc,[k,v]) =&gt; acc+v, 0))  // 6
+o.each(([k,v]) =&gt; print(k, v))            // itera</code></pre>
 </div>
 
                 <hr />
@@ -1810,9 +1810,9 @@ el.class.add("ativo", "visivel")
 el.class.remove("escondido")
 el.class.toggle("aberto")
 el.class.has("ativo")       // → booleano
-el.class.list()               // → ["ativo","visivel"]
-el.class("nova-classe")         // substitui todas as classes
-print("$el.class")             // lê className como string</code></pre>
+el.class.list()             // → ["ativo","visivel"]
+el.class("nova-classe")     // substitui todas as classes
+print("$el.class")          // lê className como string</code></pre>
 
     <h3>Conteúdo</h3>
     <div class="method-list">
