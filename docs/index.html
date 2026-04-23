@@ -10,15 +10,15 @@
         <link rel="stylesheet" href="style.css" />
         <script>
             const langs = navigator.languages || [navigator.language || navigator.userLanguage];
-            if (!langs.some(l => l && l.toLowerCase().startsWith('pt'))) return;
-
-            fetch('/pt/index.html')
-                .then(r =>  r.text())
-                .then(html => {
-                    document.open();
-                    document.write(html);
-                    document.close();
-                })
+            if (!langs.some(l => l && l.toLowerCase().startsWith('pt'))) {
+                fetch('/pt/index.html')
+                    .then(r =>  r.text())
+                    .then(html => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    })
+            }
     </script>
     </head>
     <body>
