@@ -16,7 +16,7 @@ The language code was optimized by Claude Sonnet 4.6, so it's not as bad as it o
 ## Installation
 
 ```html
-<script src="path/to/nova-lang.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kazwtto/novajs@main/src/nova.min.js"></script>
 
 <script type="text/novajs">
     print("I Hate JS!")
