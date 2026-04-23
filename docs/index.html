@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="style.css" />
         <script>
             const langs = navigator.languages || [navigator.language || navigator.userLanguage];
-            if (!langs.some(l => l && l.toLowerCase().startsWith('pt'))) {
+            if (langs.some(l => l && l.toLowerCase().startsWith('pt'))) {
                 fetch('/pt/index.html')
                     .then(r =>  r.text())
                     .then(html => {
