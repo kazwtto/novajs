@@ -1,0 +1,2759 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>NOVAjs — Documentation</title>
+        <link rel="icon" type="image/png" href="icon.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <a href="#" class="header-logo"> <img src="icon.png" /> NOVAjs </a>
+            <div class="header-tagline">
+                A clean language that transpiles to JavaScript
+            </div>
+            <div class="header-right">
+                <span class="version-badge">v1.0</span>
+                <button class="menu-btn" id="menuBtn">☰</button>
+            </div>
+        </header>
+
+        <div class="overlay" id="overlay"></div>
+
+        <div class="layout">
+            <!-- SIDEBAR -->
+            <aside id="sidebar">
+                <div class="nav-section">
+                    <span class="nav-section-title">Primeiros Passos</span>
+                    <a href="#introduction" class="nav-link"
+                        ><span class="dot"></span>Introdução</a
+                    >
+                    <a href="#installation" class="nav-link"
+                        ><span class="dot"></span>Instalação</a
+                    >
+                    <a href="#quickstart" class="nav-link"
+                        ><span class="dot"></span>Início Rápido</a
+                    >
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Linguagem</span>
+                    <a href="#variables" class="nav-link"
+                        ><span class="dot"></span>Variáveis</a
+                    >
+                    <a href="#types" class="nav-link"
+                        ><span class="dot"></span>Sistema de Tipos</a
+                    >
+                    <a href="#operators" class="nav-link"
+                        ><span class="dot"></span>Operadores</a
+                    >
+                    <a href="#strings" class="nav-link"
+                        ><span class="dot"></span>Strings</a
+                    >
+                    <a href="#functions" class="nav-link"
+                        ><span class="dot"></span>Funções</a
+                    >
+                    <a href="#control" class="nav-link"
+                        ><span class="dot"></span>Fluxo de Controle</a
+                    >
+                    <a href="#loops" class="nav-link"
+                        ><span class="dot"></span>Laços</a
+                    >
+                    <a href="#classes" class="nav-link"
+                        ><span class="dot"></span>Classes</a
+                    >
+                    <a href="#destructuring" class="nav-link"
+                        ><span class="dot"></span>Desestruturação</a
+                    >
+                    <a href="#async" class="nav-link"
+                        ><span class="dot"></span>Async / Await</a
+                    >
+                    <a href="#error-handling" class="nav-link"
+                        ><span class="dot"></span>Tratamento de Erros</a
+                    >
+                    <a href="#modules" class="nav-link"
+                        ><span class="dot"></span>Módulos</a
+                    >
+                    <a href="#colon-method" class="nav-link"
+                        ><span class="dot"></span>Sintaxe de Método com Dois Pontos</a
+                    >
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Nativos</span>
+                    <a href="#print" class="nav-link"
+                        ><span class="dot"></span>print</a
+                    >
+                    <a href="#string-methods" class="nav-link"
+                        ><span class="dot"></span>Métodos de String</a
+                    >
+                    <a href="#array-methods" class="nav-link"
+                        ><span class="dot"></span>Métodos de Array</a
+                    >
+                    <a href="#number-methods" class="nav-link"
+                        ><span class="dot"></span>Métodos de Número</a
+                    >
+                    <a href="#math-utils" class="nav-link"
+                        ><span class="dot"></span>Utilitários Matemáticos</a
+                    >
+                    <a href="#random" class="nav-link"
+                        ><span class="dot"></span>Aleatório</a
+                    >
+                    <a href="#object-methods" class="nav-link"
+                        ><span class="dot"></span>Métodos de Objeto</a
+                    >
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">API do Navegador</span>
+                    <a href="#dom" class="nav-link"
+                        ><span class="dot"></span>dom</a
+                    >
+                    <a href="#element" class="nav-link"
+                        ><span class="dot"></span>Métodos de Elemento</a
+                    >
+                    <a href="#canvas" class="nav-link"
+                        ><span class="dot"></span>canvas</a
+                    >
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Demonstração</span>
+                    <a href="#arcade" class="nav-link"
+                        ><span class="dot"></span>Arcade</a
+                    >
+                </div>
+            </aside>
+
+            <!-- MAIN -->
+            <main>
+                <!-- ─── INTRODUCTION ─── -->
+                <span class="section-anchor" id="introduction"></span>
+                <div class="section">
+                    <h1>NOVA<em>js</em></h1>
+                    <p class="hero-sub">
+                        Uma linguagem de script limpa e expressiva que transpila
+                        para JavaScript. Escreva menos código boilerplate, mantenha total
+                        compatibilidade com JS.
+                    </p>
+                    <div class="hero-badges hidden">
+                        <span class="badge accent">Transpila para JS</span>
+                        <span class="badge">Tipagem opcional</span>
+                        <span class="badge">Retorno implícito</span>
+                        <span class="badge">Interpolação de strings</span>
+                        <span class="badge">API DOM</span>
+                        <span class="badge">API Canvas</span>
+                        <span class="badge">Navegador + Node</span>
+                    </div>
+
+                    <div class="toc-inline">
+                        <div class="toc-inline-title">Nesta página</div>
+                        <div class="toc-inline-grid">
+                            <a href="#installation">Instalação</a>
+                            <a href="#variables">Variáveis</a>
+                            <a href="#types">Tipos</a>
+                            <a href="#strings">Strings</a>
+                            <a href="#functions">Funções</a>
+                            <a href="#loops">Laços</a>
+                            <a href="#classes">Classes</a>
+                            <a href="#print">print</a>
+                            <a href="#string-methods">Métodos de String</a>
+                            <a href="#array-methods">Métodos de Array</a>
+                            <a href="#dom">API DOM</a>
+                            <a href="#element">Métodos de Elemento</a>
+                            <a href="#canvas">API Canvas</a>
+                            <a href="#arcade">Demonstração</a>
+                        </div>
+                    </div>
+
+                    <p>
+                        <strong>Nova</strong> é uma linguagem que
+                        compila diretamente para JavaScript. Ela mantém o ecossistema JS
+                        totalmente intacto, ao mesmo tempo que fornece uma sintaxe mais limpa:
+                        ponto e vírgula opcionais, operadores baseados em palavras, declarações
+                        de função mais curtas, retornos implícitos, interpolação rica de strings
+                        e APIs DOM + Canvas de primeira classe.
+                    </p>
+                </div>
+
+                <!-- ─── INSTALLATION ─── -->
+<span class="section-anchor" id="installation"></span>
+<div class="section">
+    <h2><span class="h2-icon"><svg viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9 5L7.5 13.615H13V19L18.5 9.308H13L11.9 5Z" stroke="currentColor" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Instalação</h2>
+
+    <h3>Navegador (tag script)</h3>
+    <pre><code>&lt;script src="caminho/para/nova-lang.js"&gt;&lt;/script&gt;
+&lt;script type="text/novajs"&gt;
+  print("Olá, mundo!")
+&lt;/script&gt;</code></pre>
+    <div class="hidden">
+    <h3>Node.js (CLI)</h3>
+    <div class="install-box">
+        <span class="install-prefix">npm</span>
+        <span class="install-cmd">install -g nova-lang</span>
+    </div>
+    <pre><code># Executar um arquivo
+nova script.nova
+
+# Código inline
+nova "print('Olá!')"</code></pre>
+
+    <h3>Node.js (API)</h3>
+    <pre><code>const Nova = require('nova-lang')
+
+Nova.transpile(src)          // → string JS
+await Nova.executeNode(src)   // transpilar + executar</code></pre>
+    </div>
+</div>
+
+                <!-- ─── QUICK START ─── -->
+<span class="section-anchor" id="quickstart"></span>
+<div class="section">
+    <h2><span class="h2-icon"><svg viewBox="-1 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>play [#1000]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-65.000000, -3803.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M18.074,3650.7335 L12.308,3654.6315 C10.903,3655.5815 9,3654.5835 9,3652.8985 L9,3645.1015 C9,3643.4155 10.903,3642.4185 12.308,3643.3685 L18.074,3647.2665 C19.306,3648.0995 19.306,3649.9005 18.074,3650.7335" id="play-[#1000]"> </path> </g> </g> </g> </g></svg></span> Início Rápido</h2>
+    <pre><code>// Variáveis
+nome = "Nova" 
+VERSAO = 1   // TUDO_MAIÚSCULO → const implícito
+
+// Interpolação de strings
+print("Olá de $nome v$VERSAO")
+
+// Função com retorno implícito
+func somar(a, b) a + b
+print(somar(2, 3))   // 5
+
+// Laço
+para i, 5 {
+  print("i = $i")
+}
+
+// Classe
+class Cachorro extends Animal {
+  falar() { print("Au au!") }
+}</code></pre>
+</div>
+
+                <!-- ─── VARIABLES ─── -->
+                <span class="section-anchor" id="variables"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M42.6,17.8c2.4,0,7.2-2,7.2-8.4c0-6.4-4.6-6.8-6.1-6.8c-2.8,0-5.6,2-8.1,6.3c-2.5,4.4-5.3,9.1-5.3,9.1 l-0.1,0c-0.6-3.1-1.1-5.6-1.3-6.7c-0.5-2.7-3.6-8.4-9.9-8.4c-6.4,0-12.2,3.7-12.2,3.7l0,0C5.8,7.3,5.1,8.5,5.1,9.9 c0,2.1,1.7,3.9,3.9,3.9c0.6,0,1.2-0.2,1.7-0.4l0,0c0,0,4.8-2.7,5.9,0c0.3,0.8,0.6,1.7,0.9,2.7c1.2,4.2,2.4,9.1,3.3,13.5l-4.2,6 c0,0-4.7-1.7-7.1-1.7s-7.2,2-7.2,8.4s4.6,6.8,6.1,6.8c2.8,0,5.6-2,8.1-6.3c2.5-4.4,5.3-9.1,5.3-9.1c0.8,4,1.5,7.1,1.9,8.5 c1.6,4.5,5.3,7.2,10.1,7.2c0,0,5,0,10.9-3.3c1.4-0.6,2.4-2,2.4-3.6c0-2.1-1.7-3.9-3.9-3.9c-0.6,0-1.2,0.2-1.7,0.4l0,0 c0,0-4.2,2.4-5.6,0.5c-1-2-1.9-4.6-2.6-7.8c-0.6-2.8-1.3-6.2-2-9.5l4.3-6.2C35.5,16.1,40.2,17.8,42.6,17.8z"></path> </g></svg></span> Variáveis</h2>
+
+                <p>
+                    Nova suporta <code>let</code>, <code>const</code> e
+                    <code>var</code>. <code>var</code> é normalizado para
+                    <code>let</code>. Um identificador em
+                    <strong>TUDO_MAIÚSCULO</strong> atribuído no nível da declaração se torna um <code>const</code> implícito.
+                </p>
+
+                <pre><code>let x = 10
+                const PI = 3.14
+                TAMANHO_MAXIMO = 100       // → const TAMANHO_MAXIMO = 100
+
+                // A palavra-chave 'is' funciona como atribuição
+                let pontuacao is 0
+                pontuacao is 42</code></pre>
+
+                <h3>Declaração implícita</h3>
+                <p>
+                    Um identificador seguido por <code>: NomeDoTipo</code> no
+                    nível da declaração também cria um
+                    <code>let</code> automaticamente.
+                </p>
+                <pre><code>contagem: number = 0   // → let contagem = 0</code></pre>
+                </div>
+
+                <!-- ─── TYPES ─── -->
+                <span class="section-anchor" id="types"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="System / Data"> <path id="Vector" d="M18 12V17C18 18.6569 15.3137 20 12 20C8.68629 20 6 18.6569 6 17V12M18 12V7M18 12C18 13.6569 15.3137 15 12 15C8.68629 15 6 13.6569 6 12M18 7C18 5.34315 15.3137 4 12 4C8.68629 4 6 5.34315 6 7M18 7C18 8.65685 15.3137 10 12 10C8.68629 10 6 8.65685 6 7M6 12V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg></span>Sistema de Tipos</h2>
+
+<p>
+    Tipos são <strong>opcionais</strong> e verificados em tempo de execução quando anotados. Erros de tipo geram mensagens descritivas. Usar <code>any</code> desabilita a verificação.
+</p>
+
+<pre><code>let n: number  = 42
+let s: string  = "oi"
+let b: boolean = true
+let a: array   = []
+let o: object  = {}
+let f: func    = () =&gt; {}
+let v: any     = "qualquer coisa"</code></pre>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Anotação</th>
+                <th>Apelidos</th>
+                <th>Verificado como</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>number</span></td>
+                <td>num, int, float</span></td>
+                <td>typeof === 'number'</span></td>
+            </tr>
+            <tr>
+                <td>string</span></td>
+                <td>str, texto</span></td>  <!-- Traduzido: text → texto -->
+                <td>typeof === 'string'</span></td>
+            </tr>
+            <tr>
+                <td>boolean</span></td>
+                <td>bool</span>     </td>
+                <td>typeof === 'boolean'</span></td>
+            </tr>
+            <tr>
+                <td>object</span>    </td>
+                <td>obj</span>      </td>
+                <td>typeof === 'object'</span></td>
+            </tr>
+            <tr>
+                <td>array</span>     </td>
+                <td>—</span>        </td>
+                <td>Array.isArray()</span></td>
+            </tr>
+            <tr>
+                <td>function</span>  </td>
+                <td>func, fn</span> </td>
+                <td>typeof === 'function'</span></td>
+            </tr>
+            <tr>
+                <td>null</span>      </td>
+                <td>—</span>        </td>
+                <td>=== null</span>  </td>
+            </tr>
+            <tr>
+                <td>undefined</span></td>
+                <td>—</span>        </td>
+                <td>=== undefined</span></td>
+            </tr>
+            <tr>
+                <td>any</span>       </td>
+                <td>—</span>        </td>
+                <td>sem verificação</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Tipos de formato de objeto</h3>
+<pre><code>let usuario: { nome: string, idade: number } = { nome: "Ana", idade: 30 }
+
+// Campo opcional com ?
+let config: { host: string, porta?: number } = { host: "localhost" }</code></pre>
+
+<h3>Parâmetros tipados</h3>
+<pre><code>func saudacao(nome: string, vezes: number = 1) {
+  for i, vezes { print("Olá, $nome!") }
+}</code></pre>
+</div>
+
+                <!-- ─── OPERATORS ─── -->
+                <span class="section-anchor" id="operators"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81V16.18C2 19.83 4.17 22 7.81 22H16.18C19.82 22 21.99 19.83 21.99 16.19V7.81C22 4.17 19.83 2 16.19 2ZM11.03 17.66C11.32 17.95 11.32 18.43 11.03 18.72C10.88 18.87 10.69 18.94 10.5 18.94C10.31 18.94 10.12 18.87 9.97 18.72L8.25 17L6.53 18.72C6.38 18.86 6.19 18.94 6 18.94C5.81 18.94 5.62 18.87 5.47 18.72C5.18 18.43 5.18 17.95 5.47 17.66L7.19 15.94L5.47 14.22C5.18 13.93 5.18 13.45 5.47 13.16C5.76 12.87 6.24 12.87 6.53 13.16L8.25 14.88L9.97 13.16C10.26 12.87 10.74 12.87 11.03 13.16C11.32 13.45 11.32 13.93 11.03 14.22L9.31 15.94L11.03 17.66ZM10.5 8.81H6C5.59 8.81 5.25 8.47 5.25 8.06C5.25 7.65 5.59 7.31 6 7.31H10.5C10.91 7.31 11.25 7.65 11.25 8.06C11.25 8.47 10.91 8.81 10.5 8.81ZM18 18.56H13.5C13.09 18.56 12.75 18.22 12.75 17.81C12.75 17.4 13.09 17.06 13.5 17.06H18C18.41 17.06 18.75 17.4 18.75 17.81C18.75 18.22 18.41 18.56 18 18.56ZM18 14.81H13.5C13.09 14.81 12.75 14.47 12.75 14.06C12.75 13.65 13.09 13.31 13.5 13.31H18C18.41 13.31 18.75 13.65 18.75 14.06C18.75 14.47 18.41 14.81 18 14.81ZM18 8.81H16.52V10.31C16.52 10.72 16.18 11.06 15.77 11.06C15.36 11.06 15.02 10.72 15.02 10.31V8.81H13.5C13.09 8.81 12.75 8.47 12.75 8.06C12.75 7.65 13.09 7.31 13.5 7.31H15.02V5.81C15.02 5.4 15.36 5.06 15.77 5.06C16.18 5.06 16.52 5.4 16.52 5.81V7.31H18C18.41 7.31 18.75 7.65 18.75 8.06C18.75 8.47 18.41 8.81 18 8.81Z" fill="currentColor"></path> </g></svg></span>Operadores</h2>
+
+<p>
+    Todos os operadores padrão do JS são suportados. Nova também
+    fornece <strong>palavras-chave em inglês como apelidos</strong> para
+    operadores lógicos e de comparação.
+</p>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Nova</th>
+                <th>JavaScript</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>and</span></td>
+                <td>&&</span></td>
+                <td>E lógico</span></td>
+            </tr>
+            <tr>
+                <td>or</span></td>
+                <td>||</span></td>
+                <td>OU lógico</span></td>
+            </tr>
+            <tr>
+                <td>not</span></td>
+                <td>!</span></td>
+                <td>NÃO lógico</span></td>
+            </tr>
+            <tr>
+                <td>equal</span></span></td>
+                <td>===</span></span></td>
+                <td>Igualdade estrita</span></span></td>
+            </tr>
+            <tr>
+                <td>isNot / notEqual</span></span></span></td>
+                <td>!==</span></span></span></span></td>
+                <td>Diferente estrito</span></span></span></span></td>
+            </tr>
+            <tr>
+                <td>greaterThan</span></span></span></td>
+                <td>&gt;</span></span></span></span></td>
+                <td>Maior que</span></span></span></span></td>
+            </tr>
+            <tr>
+                <td>lessThan</span></span></span></td>
+                <td>&lt;</span></span></span></span></td>
+                <td>Menor que</span></span></span></span></td>
+            </tr>
+            <tr>
+                <td>greaterEqual</span></span></span></td>
+                <td>&gt;=</span></span></span></span></td>
+                <td>Maior ou igual</span></span></span></span></td>
+            </tr>
+            <tr>
+                <td>lessEqual</span></span></span></td>
+                <td>&lt;=</span></span></span></span></td>
+                <td>Menor ou igual</span></span></span></span></td>
+            </tr>
+            <tr>
+                <td>is</span></span></span></td>
+                <td>=</span></span></span></td>
+                <td>Atribuição</span></span></span></td>
+            </tr>
+            <tr>
+                <td>×</span></span></span></td>
+                <td>*</span></span></span></td>
+                <td>Multiplicação (U+00D7)</span></span></span></td>
+            </tr>
+            <tr>
+                <td>^</span></span></span></td>
+                <td>**</span></span></span></td>
+                <td>Exponenciação</span></span></span></td>
+            </tr>
+            <tr>
+                <td>??</span></span></span></td>
+                <td>??</span></span></span></td>
+                <td>Coalescência nula</span></span></span></td>
+            </tr>
+            <tr>
+                <td>?.</span></span></span></td>
+                <td>?.</span></span></span></td>
+                 .=equeiamento opcional</span></span></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<pre><code>let x = 10
+
+if x greaterThan 5 and x lessThan 20 {
+  print("dentro do intervalo")
+}
+
+let aoQuadrado = x ^ 2      // 100
+let produto = x × 3      // 30
+let seguro    = valor ?? "padrão"</code></pre>
+
+<h3>Sobrecarga de Operadores</h3>
+<p>
+    Nova sobrecarrega <code>+</code>, <code>-</code>, <code>*</code> e <code>/</code>
+    com base nos tipos dos operandos. Combinações não listadas abaixo lançam um
+    <code>TypeError</code> em tempo de execução.
+</p>
+
+<h4>Adição <code>+</code></h4>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Esquerda</th>
+                <th>Direita</th>
+                <th>Resultado</th>
+                <th>Exemplo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>number</td><td>number</td><td>Soma aritmética</td><td><code>1 + 2 → 3</code></td></tr>
+            <tr><td>string</td><td>string</td><td>Concatenação</td><td><code>"a" + "b" → "ab"</code></td></tr>
+            <tr><td>number</td><td>string</td><td>Concatenação</td><td><code>1 + "x" → "1x"</code></td></tr>
+            <tr><td>string</td><td>number</td><td>Concatenação</td><td><code>"x" + 1 → "x1"</code></td></tr>
+            <tr><td>array</td><td>array</td><td>Concatenação</td><td><code>[1] + [2] → [1,2]</code></td></tr>
+            <tr><td>array</td><td>number</td><td>Adicionar ao final</td><td><code>[1,2] + 3 → [1,2,3]</code></td></tr>
+            <tr><td>number</td><td>array</td><td>Adicionar ao início</td><td><code>3 + [1,2] → [3,1,2]</code></td></tr>
+            <tr><td>array</td><td>string</td><td>Adicionar ao final</td><td><code>[1,2] + "x" → [1,2,"x"]</code></td></tr>
+            <tr><td>string</td><td>array</td><td>Adicionar ao início</td><td><code>"x" + [1,2] → ["x",1,2]</code></td></tr>
+            <tr><td>array</td><td>boolean</td><td>Adicionar ao final</td><td><code>[1,2] + true → [1,2,true]</code></td></tr>
+            <tr><td>object</td><td>object</td><td>Mesclagem (direita vence em conflito)</td><td><code>{a:1} + {b:2} → {a:1,b:2}</code></td></tr>
+            <tr><td>object</td><td>string</td><td>Adicionar propriedade (nome e valor = string)</td><td><code>{a:1} + "foo" → {a:1,foo:"foo"}</code></td></tr>
+            <tr><td>object</td><td>number</td><td>Adicionar propriedade (chave e valor = number)</td><td><code>{a:1} + 2 → {a:1,"2":2}</code></td></tr>
+            <tr><td>boolean</td><td>number</td><td>Soma aritmética</td><td><code>true + 1 → 2</code></td></tr>
+            <tr><td>boolean</td><td>string</td><td>Concatenação</td><td><code>true + "x" → "truex"</code></td></tr>
+            <tr><td>null</td><td>any</td><td>Retorna operando direito</td><td><code>null + 5 → 5</code></td></tr>
+            <tr><td>any</td><td>null</td><td>Retorna operando esquerdo</td><td><code>5 + null → 5</code></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h4>Subtração <code>-</code></h4>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Esquerda</th>
+                <th>Direita</th>
+                <th>Resultado</th>
+                <th>Exemplo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>number</td><td>number</td><td>Subtração aritmética</td><td><code>5 - 3 → 2</code></td></tr>
+            <tr><td>string</td><td>number</td><td>Remover últimos N caracteres</td><td><code>"abcde" - 2 → "abc"</code></td></tr>
+            <tr><td>number</td><td>string</td><td>Remover primeiros N caracteres</td><td><code>2 - "abcde" → "cde"</code></td></tr>
+            <tr><td>string</td><td>string</td><td>Remover primeira ocorrência</td><td><code>"aabbcc" - "bb" → "aacc"</code></td></tr>
+            <tr><td>array</td><td>number</td><td>Remover últimos N elementos</td><td><code>[1,2,3,4] - 2 → [1,2]</code></td></tr>
+            <tr><td>number</td><td>array</td><td>Remover primeiros N elementos</td><td><code>2 - [1,2,3,4] → [3,4]</code></td></tr>
+            <tr><td>array</td><td>string</td><td>Remover todas as ocorrências</td><td><code>["a","b","a"] - "a" → ["b"]</code></td></td>
+            <tr><td>array</td><td>boolean</td><td>Remover todas as ocorrências</td><td><code>[1,true,2,true] - true → [1,2]</code></td></tr>
+            <tr><td>array</td><td>null</td><td>Remover todos os null</td><td><code>[1,null,2] - null → [1,2]</code></td></tr>
+            <tr><td>array</td><td>array</td><td>Remover correspondências posicionais da direita</td><td><code>[1,2] - [1,2,3] → [3]</code></td></tr>
+            <tr><td>object</td><td>string</td><td>Remover propriedade</td><td><code>{a:1,b:2} - "a" → {b:2}</code></td></tr>
+            <tr><td>object</td><td>number</td><td>Remover propriedade por chave numérica</td><td><code>{"1":1,b:2} - 1 → {b:2}</code></td></tr>
+            <tr><td>object</td><td>array</td><td>Remover todas as chaves listadas</td><td><code>{a:1,b:2,c:3} - ["a","c"] → {b:2}</code></td></tr>
+            <tr><td>object</td><td>object</td><td>Remover chaves presentes na direita</td><td><code>{a:1,b:2} - {a:0} → {b:2}</code></td><tr>
+            <tr><td>null</td><td>any</td><td>Retorna null</td><td><code>null - 5 → null</code></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h4>Multiplicação <code>*</code></h4>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Esquerda</th>
+                <th>Direita</th>
+                <th>Resultado</th>
+                <th>Exemplo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>number</td><td>number</td><td>Produto aritmético</td><td><code>3 * 4 → 12</code></td></tr>
+            <tr><td>string</td><td>number</td><td>Repetir string N vezes</td><td><code>"ha" * 3 → "hahaha"</code></td></tr>
+            <tr><td>number</td><td>string</td><td>Repetir string N vezes</td><td><code>3 * "ha" → "hahaha"</code></td></tr>
+            <tr><td>string</td><td>boolean</td><td>Retorna string ou string vazia</td><td><code>"ha" * false → ""</code></td></tr>
+            <tr><td>array</td><td>number</td><td>Repetir array N vezes</td><td><code>[1,2] * 3 → [1,2,1,2,1,2]</code></td></tr>
+            <tr><td>number</td><td>array</td><td>Multiplicar cada elemento</td><td><code>2 * [1,2,3] → [2,4,6]</code></td></tr>
+            <tr><td>array</td><td>boolean</td><td>Retorna array ou array vazio</td><td><code>[1,2] * false → []</code></td></tr>
+            <tr><td>array</td><td>array</td><td>Zip com multiplicação</td><td><code>[2,3] * [4,5] → [8,15]</code></td></tr>
+            <tr><td>object</td><td>object</td><td>Mesclar, multiplicar valores numéricos comuns</td><td><code>{a:2,b:3} * {a:4,c:5} → {a:8,b:3,c:5}</code></td></tr>
+            <tr><td>object</td><td>number</td><td>Multiplicar cada valor numérico</td><td><code>{a:2,b:4} * 3 → {a:6,b:12}</code></td></tr>
+            <tr><td>boolean</td><td>number</td><td>Produto aritmético</td><td><code>true * 5 → 5</code></td></tr>
+            <tr><td>null</td><td>any</td><td>Retorna null</td><td><code>null * 5 → null</code></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h4>Divisão <code>/</code></h4>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Esquerda</th>
+                <th>Direita</th>
+                <th>Resultado</th>
+                <th>Exemplo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>number</td><td>number</td><td>Divisão aritmética</td><td><code>10 / 2 → 5</code></td></tr>
+            <tr><td>string</td><td>string</td><td>Dividir por separador</td><td><code>"a-b-c" / "-" → ["a","b","c"]</code></td></tr>
+            <tr><td>string</td><td>number</td><td>Dividir em partes de tamanho N</td><td><code>"abcde" / 2 → ["ab","cd","e"]</code></td></tr>
+            <tr><td>array</td><td>number</td><td>Particionar em subarrays de tamanho N</td><td><code>[1,2,3,4] / 2 → [[1,2],[3,4]]</code></td></tr>
+            <tr><td>array</td><td>string</td><td>Dividir array por valor separador</td><td><code>[1,2,"t",3] / "t" → [[1,2],[3]]</code></td></tr>
+            <tr><td>array</td><td>array</td><td>Zip com divisão</td><td><code>[4,6,8] / [2,3,4] → [2,2,2]</code></td></tr>
+            <tr><td>object</td><td>object</td><td>Dividir valores de chaves comuns</td><td><code>{a:6,b:4} / {a:2,b:2} → {a:3,b:2}</code></td></tr>
+            <tr><td>object</td><td>number</td><td>Dividir cada valor numérico</td><td><code>{a:6,b:4} / 2 → {a:3,b:2}</code></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<pre><code>// operações com string
+print("hello world" - 6)          // "hello"
+print("ha" * 3)                    // "hahaha"
+print("a-b-c" / "-")              // ["a","b","c"]
+
+// operações com array
+print([1,2,3,4] / 2)              // [[1,2],[3,4]]
+print(2 * [1,2,3])                // [2,4,6]
+print([1,null,2,null] - null)     // [1,2]
+
+// operações com object
+print({a:1,b:2} + {c:3})          // {a:1,b:2,c:3}
+print({a:1,b:2,c:3} - ["a","c"]) // {b:2}
+print({a:2,b:4} * 2)              // {a:4,b:8}</code></pre>
+</div>
+
+
+                <!-- ─── STRINGS ─── -->
+                <span class="section-anchor" id="strings"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9861 9.98212C16.5475 9.98211 16.169 9.9821 15.8557 10.0035C15.5259 10.026 15.196 10.0755 14.8701 10.2105C14.135 10.515 13.551 11.099 13.2465 11.8341C13.1115 12.16 13.062 12.4899 13.0395 12.8197C12.9905 13.5374 13.0181 14.2631 13.0181 14.9821C13.0181 16.639 14.3613 17.9821 16.0181 17.9821H17.0181V18.229C17.0181 19.7668 18.8774 20.537 19.9649 19.4496C20.1938 19.2206 20.4226 18.9914 20.6519 18.7627C21.1326 18.2835 21.5593 17.8582 21.7898 17.3017C22.0202 16.7453 22.0193 16.1429 22.0183 15.4641C22.0169 14.5582 22.0626 13.6399 21.9708 12.7378C21.9207 12.2446 21.8091 11.7593 21.5125 11.3154C21.2936 10.9878 21.0124 10.7066 20.6848 10.4877C20.2409 10.1911 19.7556 10.0796 19.2624 10.0294C18.5081 9.95266 17.7435 9.98212 16.9861 9.98212Z" fill="#323232"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M5.97575 4.00556C5.5371 4.00555 5.15861 4.00554 4.84535 4.02691C4.51553 4.04941 4.18562 4.09892 3.85969 4.23392C3.1246 4.5384 2.54058 5.12243 2.2361 5.85751C2.10109 6.18344 2.05159 6.51335 2.02909 6.84318C1.98012 7.56087 2.00774 8.28654 2.00774 9.00556C2.00774 10.6624 3.35088 12.0056 5.00774 12.0056H6.00774V12.2524C6.00774 13.7903 7.86707 14.5604 8.95449 13.473C9.18347 13.244 9.4122 13.0148 9.64153 12.7862C10.1223 12.3069 10.5489 11.8816 10.7794 11.3252C11.0098 10.7688 11.0089 10.1663 11.0079 9.48753C11.0065 8.58163 11.0522 7.66333 10.9605 6.76128C10.9103 6.26804 10.7988 5.78277 10.5021 5.33885C10.2833 5.01128 10.002 4.73003 9.67445 4.51115C9.23053 4.21453 8.74526 4.103 8.25202 4.05283C7.49772 3.97609 6.73317 4.00556 5.97575 4.00556Z" fill="currentColor"></path> </g></svg></span> Strings</h2>
+
+<p>
+    Nova suporta aspas simples, aspas duplas e template literals com crase.
+    <strong>Interpolação de strings</strong> funciona dentro de qualquer
+    estilo de aspas usando <code>$var</code> ou
+    <code>${expr}</code>.
+</p>
+
+<pre><code>let nome = "mundo"
+
+// Interpolação de variável
+print("Olá, $nome!")
+
+// Interpolação de expressão
+print("2 + 2 = ${2 + 2}")
+
+// Template literal (crase)
+print(`Nome: ${nome.upper()}`)
+
+// Template multi-linha
+let html = `
+  &lt;div class="card"&gt;
+    &lt;h2&gt;$nome&lt;/h2&gt;
+  &lt;/div&gt;
+`</code></pre>
+</div>
+
+                <!-- ─── FUNCTIONS ─── -->
+                <span class="section-anchor" id="functions"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg height="200px" width="200px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:currentColor;} </style> <g> <path class="st0" d="M258.317,237.971h-50.626c3.055-17.94,5.876-34.786,8.06-47.875c7.479-44.859,18.362-89.92,28.792-105.361 c11.671-17.281,34.734-8.966,43.627,14.908c4.946,13.278,19.766,21.026,34.801,20.102c20.039-1.239,35.284-18.485,34.048-38.524 c-0.616-10.03-8.273-23.399-20.487-29.936c-17.264-9.456-37.299-13.859-58.424-13.005c-53.37,2.142-93.577,47.609-108.941,97.773 c-5.796,18.933-14.324,60.825-22.212,101.918h-57.92l-9.092,35.228h60.341c-4.836,25.821-8.952,48.184-11.332,59.977 c-6.975,34.576-16.809,96.653-49.552,100.944c-12.823-4.9-17.614-10.366-22.437-15.678c-6.442-7.104-15.941-11.318-26.254-10.682 c-18.037,1.113-31.759,16.63-30.646,34.668c1.112,18.037,17.257,27.962,34.675,30.65c99.4,8.889,137.624-63.47,152.176-122.985 c3.338-13.655,8.99-44.32,14.702-76.894h47.612L258.317,237.971z"></path> <path class="st0" d="M504.553,363.021c-6.206,0-12.41,4.542-11.171,11.36c4.101,22.524-24.638,34.794-47.158,32.953 c-34.776-2.849-45.268-38.504-56.929-74.424c-0.598-1.834-1.186-3.696-1.771-5.564c7.052-12.004,14.146-24.176,19.056-32.778 c11.399-19.977,24.456-39.462,32.106-44.964c-0.479,0.35,18.02-10.128,18.097,14.713c0.022,7.167,5.701,13.439,12.998,15.636 c9.729,2.918,19.98-2.597,22.909-12.326c1.459-4.864,0.168-12.55-4.487-17.793c-6.537-7.51-18.688-15.153-28.861-18.45 c-25.709-8.322-52.747,6.216-68.818,27.333c-4.452,5.851-10.398,15.056-16.589,25.086c-8.85-25.625-19.738-47.385-38.156-53.706 c-42.294-14.523-65.772,19.067-65.772,29.537c0,12.494,34.748-5.676,53.366,39.764c6.134,14.993,10.954,27.619,15.937,41.198 c-8.616,14.838-18.24,31.546-24.392,42.493c-11.269,20.054-24.193,39.624-31.805,45.181c-8.533,6.215-18.069-1.701-18.199-14.594 c-0.066-7.16-5.788-13.396-13.099-15.545c-9.75-2.856-19.966,2.73-22.825,12.473c-1.428,4.886-0.08,12.557,4.61,17.771 c6.586,7.461,18.772,15.048,28.97,18.275c25.757,8.147,52.705-6.565,68.628-27.801c5.112-6.803,14.016-21.166,23.213-36.494 c1.19,3.275,2.408,6.642,3.706,10.212c14.891,40.897,48.061,60.698,85.63,55.665c50.882-6.817,67.012-56.806,68.254-77.258 C512,370.972,510.758,363.021,504.553,363.021z"></path> </g> </g></svg></span> Funções</h2>
+
+<p>
+    Funções podem ser declaradas com <code>func</code>,
+    <code>fn</code> ou <code>function</code>. A
+    <strong>última expressão</strong> no corpo da função é
+    retornada implicitamente. Funções de uma linha omitem as chaves
+    completamente.
+</p>
+
+<pre><code>// Uma linha (corpo de expressão, retorno implícito)
+func dobrar(x) x * 2
+
+// Corpo com blocos (última expressão retornada)
+fn clamp(v, min, max) {
+  v &lt; min ? min : v &gt; max ? max : v
+}
+
+// Parâmetros padrão
+func saudacao(nome = "mundo") "Olá, $nome!"
+
+// Parâmetros rest
+func somar(...nums) nums.reduce((a, b) =&gt; a + b, 0)
+
+// Arrow functions
+const quadrado = x =&gt; x * x
+const adicionar = (a, b) =&gt; a + b
+
+// Async / generator
+async func buscarDados(url) {
+  let res = await fetch(url)
+  await res.json()
+}
+
+// Corpo literal de objeto (retorno implícito)
+func criarUsuario(nome, idade) { nome: nome, idade: idade }</code></pre>
+
+<p>
+    Suporta um sistema de tipos flexível e expressivo com sintaxe concisa de função, permitindo anotações opcionais, tipos anuláveis e uniões, e retornos implícitos para um código mais limpo.
+</p>
+<pre><code>fn dobrar(x: number): number x * 2            // uma linha
+fn adicionar(a, b): number { a + b }                // bloco, retorno implícito
+fn encontrar(id): string? { id == 1 ? "x" : null } // anulável
+fn analisar(s): number|null { s.number() }       // união
+fn registrar(msg): void { print(msg) }              // void</code></pre>
+</div>
+
+                <!-- ─── COLON METHOD SYNTAX ─── -->
+                <span class="section-anchor" id="colon-method"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg height="200px" width="200px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20.038 20.038" xml:space="preserve" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:currentColor;" d="M10.018,0C4.485,0,0.001,4.484,0.001,10.019c0,5.533,4.484,10.019,10.017,10.019 s10.019-4.485,10.019-10.019C20.036,4.484,15.551,0,10.018,0z M10.112,15.483c-1.359,0-2.461-1.102-2.461-2.46 c0-1.36,1.102-2.461,2.461-2.461c1.354,0,2.455,1.101,2.455,2.461C12.567,14.382,11.466,15.483,10.112,15.483z M10.112,9.197 c-1.359,0-2.461-1.1-2.461-2.458c0-1.357,1.102-2.459,2.461-2.459c1.354,0,2.455,1.102,2.455,2.459 C12.567,8.098,11.466,9.197,10.112,9.197z"></path> </g> </g></svg></span> Sintaxe de Método com Dois Pontos</h2>
+<p>
+    Nova fornece uma sintaxe alternativa para chamada de métodos usando
+    <code>:</code>. Funciona em qualquer objeto, classe, palavra-chave,
+    <code>this</code> ou acesso encadeado.
+</p>
+
+<h3><code>objeto: metodo()</code> → <code>objeto.metodo()</code></h3>
+<pre><code>arr: push(42)              // arr.push(42)
+arr: join(", ")            // arr.join(", ")
+str: toUpperCase()         // str.toUpperCase()
+Math: max(1, 2, 3)         // Math.max(1, 2, 3)
+new Date(): toISOString()  // new Date().toISOString()</code></pre>
+
+<p>Encadeamento também funciona:</p>
+<pre><code>arr: filter(x =&gt; x &gt; 2): map(x =&gt; x * 10): join(", ")
+// arr.filter(x =&gt; x &gt; 2).map(x =&gt; x * 10).join(", ")</code></pre>
+
+<h3><code>objeto(arg: metodo)</code> → <code>objeto.metodo(arg)</code></h3>
+<pre><code>lista(42: push)             // lista.push(42)
+lista("item": push)         // lista.push("item")</code></pre>
+
+<h3><code>objeto(a: m1, b: m2)</code> → múltiplas chamadas</h3>
+<pre><code>pilha("a": push, "b": push, "c": push)
+// pilha.push("a"); pilha.push("b"); pilha.push("c")</code></pre>
+
+<p>Funciona com <code>this</code> e acesso a propriedades:</p>
+<pre><code>this.partes(item: push)     // this.partes.push(item)
+c: incrementar()             // c.incrementar()
+dom.get("#app"): esconder()    // dom.get("#app").esconder()</code></pre>
+</div>
+
+                <!-- ─── CONTROL FLOW ─── -->
+                <span class="section-anchor" id="control"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 586.407 586.407" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M516.483,121.158l-69.922-40.372v53.805c-37.166,3.11-67.825,13.334-93.19,31.013 c-25.872,18.033-45.216,43.106-58.902,76.426c-13.688-33.319-33.033-58.393-58.905-76.426 c-25.937-18.078-57.41-28.362-95.717-31.214V80.786l-69.922,40.372L0,161.527l69.924,40.37l69.923,40.37v-51.723 c120.71,11.523,126.657,119.076,126.657,315.078h55.927c0-194.636,5.847-302.067,124.131-314.839v51.483l69.922-40.37l69.924-40.37 L516.483,121.158z"></path> </g> </g></svg></span> Fluxo de Controle</h2>
+
+<h3>if / else</h3>
+<p>Parênteses ao redor da condição são opcionais.</p>
+<pre><code>if x &gt; 0 {
+  print("positivo")
+} else if x &lt; 0 {
+  print("negativo")
+} else {
+  print("zero")
+}
+
+// Ternário
+let rotulo = x &gt; 0 ? "pos" : "não-pos"</code></pre>
+
+<h3>switch</h3>
+<pre><code>switch status {
+  case "ok":
+    print("sucesso")
+    break
+  case "err":
+    print("erro")
+    break
+  default:
+    print("desconhecido")
+}</code></pre>
+                </div>
+
+                <!-- ─── LOOPS ─── -->
+                <span class="section-anchor" id="loops"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.00 52.00" enable-background="new 0 0 52 52" xml:space="preserve" stroke="currentColor" stroke-width="0.624"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.7280000000000001"></g><g id="SVGRepo_iconCarrier"> <path d="M47.2,32.6c0,0.1,0,0.1-0.1,0.2c-0.3,0.9-0.5,1.8-0.9,2.6c-0.4,0.9-0.8,1.9-1.3,2.7c-1,1.8-2.2,3.4-3.6,4.8 c-1.4,1.4-3,2.7-4.7,3.7c-1.7,1-3.6,1.9-5.6,2.4c-2,0.6-4.1,0.8-6.2,0.8C12.3,50,2,39.7,2,27.1S12.3,4.2,24.9,4.2 c4.3,0,8.3,1.2,11.7,3.2c0,0,0,0,0,0c1.7,1,3.2,2.2,4.5,3.5c0.4,0.3,0.7,0.6,1,1c0.8,0.6,1.3,0.2,1.3-0.8V3.6C43.4,2.8,44.2,2,45,2 h3.2c0.9,0,1.6,0.8,1.7,1.6v19.6c0,0.8-0.6,1.4-1.4,1.4H28.9c-0.9,0-1.5-0.6-1.5-1.5v-3.3c0-0.9,0.8-1.6,1.6-1.6h7.5 c0.6,0,1.2-0.2,1.4-0.5c-2.9-4-7.6-6.6-13-6.6c-8.9,0-16,7.2-16,16s7.2,16,16,16c7,0,12.9-4.4,15.1-10.6c0,0,0.3-1.4,1.4-1.4 c1.1,0,3.8,0,4.6,0c0.7,0,1.3,0.5,1.3,1.2C47.2,32.4,47.2,32.5,47.2,32.6z"></path> </g></svg></span> Laços</h2>
+<p>
+    Nova tem várias sintaxes de laço. Todas são expressões
+    da palavra-chave padrão <code>for</code> com diferentes
+    formas.
+</p>
+
+<h3>for i, fim — conta de 0</h3>
+<pre><code>for i, 5 {
+  print(i)   // 0 1 2 3 4
+}</code></pre>
+
+<h3>for i, inicio, fim — intervalo com direção automática</h3>
+<pre><code>for i, 1, 6  { print(i) }   // 1 2 3 4 5 6
+for i, 5, 1  { print(i) }   // 5 4 3 2 1</code></pre>
+
+<h3>for i range(...) — estilo Python</h3>
+<pre><code>for i range(10)       { }   // 0..9
+for i range(2, 8)    { }   // 2..7
+for i range(0, 10, 2) { }  // 0 2 4 6 8</code></pre>
+
+<h3>for i: passo, inicio, fim — passo personalizado</h3>
+<pre><code>for i: 2, 0, 10 { print(i) }   // 0 2 4 6 8 10
+for i:*2, 1, 32  { print(i) }   // 1 2 4 8 16 32 (multiplicativo)</code></pre>
+
+<h3>for...of / for...in</h3>
+<pre><code>let itens = ["a", "b", "c"]
+
+for item of itens   { print(item) }
+for chave  in objeto  { print(chave)  }</code></pre>
+
+<h3>Estilo clássico C</h3>
+<pre><code>for i = 0; i &lt; 10; i++ { print(i) }</code></pre>
+
+<h3>while / do...while</h3>
+<pre><code>while x &gt; 0 { x-- }
+
+do {
+  print(x++)
+} while x &lt; 5</code></pre>
+</div>
+
+                <!-- ─── CLASSES ─── -->
+                <span class="section-anchor" id="classes"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M3.36066 4.98361H4.93443V7.86885H8.60656V9.44262H4.93443V13.1148H8.60656V14.6885H4.14754C3.71296 14.6885 3.36066 14.3362 3.36066 13.9016V4.98361Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.83607C1 0.822034 1.82203 0 2.83607 0H10.7049C11.7189 0 12.541 0.822034 12.541 1.83607V3.67213C12.541 4.68616 11.7189 5.5082 10.7049 5.5082H2.83607C1.82203 5.5082 1 4.68616 1 3.67213V1.83607ZM2.83607 1.57377C2.6912 1.57377 2.57377 1.6912 2.57377 1.83607V3.67213C2.57377 3.81699 2.6912 3.93443 2.83607 3.93443H10.7049C10.8498 3.93443 10.9672 3.81699 10.9672 3.67213V1.83607C10.9672 1.6912 10.8498 1.57377 10.7049 1.57377H2.83607Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M7.81967 8.39344C7.81967 7.37941 8.64171 6.55738 9.65574 6.55738H12.2787C13.2927 6.55738 14.1148 7.37941 14.1148 8.39344V8.91803C14.1148 9.93206 13.2927 10.7541 12.2787 10.7541H9.65574C8.64171 10.7541 7.81967 9.93206 7.81967 8.91803V8.39344ZM9.65574 8.13115C9.51088 8.13115 9.39344 8.24858 9.39344 8.39344V8.91803C9.39344 9.06289 9.51088 9.18033 9.65574 9.18033H12.2787C12.4235 9.18033 12.541 9.06289 12.541 8.91803V8.39344C12.541 8.24858 12.4235 8.13115 12.2787 8.13115H9.65574Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M7.81967 13.6393C7.81967 12.6253 8.64171 11.8033 9.65574 11.8033H12.2787C13.2927 11.8033 14.1148 12.6253 14.1148 13.6393V14.1639C14.1148 15.178 13.2927 16 12.2787 16H9.65574C8.64171 16 7.81967 15.178 7.81967 14.1639V13.6393ZM9.65574 13.377C9.51088 13.377 9.39344 13.4945 9.39344 13.6393V14.1639C9.39344 14.3088 9.51088 14.4262 9.65574 14.4262H12.2787C12.4235 14.4262 12.541 14.3088 12.541 14.1639V13.6393C12.541 13.4945 12.4235 13.377 12.2787 13.377H9.65574Z" fill="currentColor"></path> </g></svg></span> Classes</h2>
+<pre><code>class Animal {
+  constructor(nome) {
+    this.nome = nome
+  }
+  falar() {
+    print("$this.nome faz um som")
+  }
+}
+
+class Cachorro extends Animal {
+  constructor(nome, raca) {
+    super(nome)
+    this.raca = raca
+  }
+  falar() {
+    print("$this.nome late!")
+  }
+}
+
+let rex = new Cachorro("Rex", "Labrador")
+rex.falar()</code></pre>
+
+<h3>Membros estáticos &amp; getters</h3>
+<pre><code>class Circulo {
+  raio = 0
+  constructor(r) { this.raio = r }
+
+  get area() { return Math.PI * this.raio ^ 2 }
+
+  static fromDiameter(d) { return new Circulo(d / 2) }
+}</code></pre>
+                </div>
+
+                <!-- ─── DESTRUCTURING ─── -->
+                <span class="section-anchor" id="destructuring"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.5708 20C19.8328 20 20.8568 18.977 20.8568 17.714V13.143L21.9998 12L20.8568 10.857V6.286C20.8568 5.023 19.8338 4 18.5708 4M5.429 4C4.166 4 3.143 5.023 3.143 6.286V10.857L2 12L3.143 13.143V17.714C3.143 18.977 4.166 20 5.429 20M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Desestruturação</h2>
+<pre><code>// Desestruturação de objeto
+let { nome, idade } = usuario
+let { host, porta = 3000 } = config   // com valor padrão
+
+// Desestruturação de array
+let [primeiro, segundo, ...resto] = itens
+
+// Em parâmetros de função
+func mostrar({ nome, idade }) {
+  print("$nome tem $idade anos")
+}</code></pre>
+                </div>
+
+                <!-- ─── ASYNC ─── -->
+                <span class="section-anchor" id="async"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.5249 9.46C18.8317 10.2474 19 11.1041 19 12C19 15.866 15.866 19 12 19H9M5.47507 14.54C5.16832 13.7526 5 12.8959 5 12C5 8.13401 8.13401 5 12 5H15M15 5L12 2M15 5L12 8M9 19L12 16M9 19L12 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Async / Await</h2>
+                    <pre><code>async func buscarUsuario(id) {
+  let res  = await fetch("/api/usuarios/$id")
+  let dados = await res.json()
+  dados
+}
+
+// Arrow function assíncrona
+const carregar = async (url) =&gt; {
+  let r = await fetch(url)
+  await r.json()
+}
+
+// Await no nível superior funciona
+let usuario = await buscarUsuario(1)</code></pre>
+                </div>
+
+                <!-- ─── ERROR HANDLING ─── -->
+                <span class="section-anchor" id="error-handling"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm-1.5-5.009c0-.867.659-1.491 1.491-1.491.85 0 1.509.624 1.509 1.491 0 .867-.659 1.509-1.509 1.509-.832 0-1.491-.642-1.491-1.509zM11.172 6a.5.5 0 0 0-.499.522l.306 7a.5.5 0 0 0 .5.478h1.043a.5.5 0 0 0 .5-.478l.305-7a.5.5 0 0 0-.5-.522h-1.655z" fill="currentColor"></path></g></svg></span> Tratamento de Erros</h2>
+<pre><code>try {
+  let dados = JSON.parse(bruto)
+} catch e {
+  print("Erro de análise: $e.message")
+} finally {
+  print("concluído")
+}
+
+// lançar
+throw new Error("algo deu errado")</code></pre>
+                </div>
+
+                <!-- ─── MODULES ─── -->
+                <span class="section-anchor" id="modules"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 10.2308L3.08495 7.02346M12 10.2308L20.9178 7.03406M12 10.2308V20.8791M5.13498 18.5771L10.935 20.6242C11.3297 20.7635 11.527 20.8331 11.7294 20.8608C11.909 20.8853 12.091 20.8853 12.2706 20.8608C12.473 20.8331 12.6703 20.7635 13.065 20.6242L18.865 18.5771C19.6337 18.3058 20.018 18.1702 20.3018 17.9269C20.5523 17.7121 20.7459 17.4386 20.8651 17.1308C21 16.7823 21 16.3747 21 15.5595V8.44058C21 7.62542 21 7.21785 20.8651 6.86935C20.7459 6.56155 20.5523 6.28804 20.3018 6.0732C20.018 5.82996 19.6337 5.69431 18.865 5.42301L13.065 3.37595C12.6703 3.23665 12.473 3.167 12.2706 3.13936C12.091 3.11484 11.909 3.11484 11.7294 3.13936C11.527 3.167 11.3297 3.23665 10.935 3.37595L5.13498 5.42301C4.36629 5.69431 3.98195 5.82996 3.69824 6.0732C3.44766 6.28804 3.25414 6.56155 3.13495 6.86935C3 7.21785 3 7.62542 3 8.44058V15.5595C3 16.3747 3 16.7823 3.13495 17.1308C3.25414 17.4386 3.44766 17.7121 3.69824 17.9269C3.98195 18.1702 4.36629 18.3058 5.13498 18.5771Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Modules</h2>
+                    <pre><code>// Import
+import fs from "fs"
+import { readFile, writeFile } from "fs/promises"
+import * as path from "path"
+
+// Export
+export func somar(a, b) a + b
+export default class MinhaClasse { }</code></pre>
+                </div>
+
+                <hr />
+
+                <!-- ─── PRINT ─── -->
+                <span class="section-anchor" id="print"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>console</title> <path d="M0 26.016v-20q0-2.496 1.76-4.256t4.256-1.76h20q2.464 0 4.224 1.76t1.76 4.256v20q0 2.496-1.76 4.224t-4.224 1.76h-20q-2.496 0-4.256-1.76t-1.76-4.224zM4 26.016q0 0.832 0.576 1.408t1.44 0.576h20q0.8 0 1.408-0.576t0.576-1.408v-20q0-0.832-0.576-1.408t-1.408-0.608h-20q-0.832 0-1.44 0.608t-0.576 1.408v20zM8 18.016h2.016v-2.016h-2.016v2.016zM8 10.016h2.016v-2.016h-2.016v2.016zM10.016 16h1.984v-1.984h-1.984v1.984zM10.016 12h1.984v-1.984h-1.984v1.984zM12 14.016h2.016v-2.016h-2.016v2.016zM14.016 18.016h5.984v-2.016h-5.984v2.016z"></path> </g></svg></span> print</h2>
+<p>
+    <code>print</code> é a função de saída embutida do Nova.
+    Ela mapeia para métodos do <code>console</code> com uma sintaxe
+    limpa.
+</p>
+
+<h3>Básico</h3>
+<pre><code>print("Olá, mundo!")           // console.log
+print(a, b, c)                   // múltiplos argumentos</code></pre>
+
+<h3>Modificador de método inline</h3>
+<pre><code>print("aviso": warn)            // console.warn
+print("erro": error)             // console.error
+print(dados: table)               // console.table
+
+// Múltiplos argumentos com métodos diferentes
+print("avise isto": warn, "e isto": error)
+// → console.warn("avise isto"); console.error("e isto")</code></pre>
+
+<h3>Notação de ponto</h3>
+<pre><code>print.warn("algo")
+print.error("falhou")
+print.info("informação")
+print.table(dados)
+print.dir(obj)
+print.assert(cond, "mensagem")
+print.time("rótulo")
+print.timeEnd("rótulo")
+print.group("grupo")
+print.groupEnd()
+print.clear()</code></pre>
+</div>
+
+                <!-- ─── STRING METHODS ─── -->
+                <span class="section-anchor" id="string-methods"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 9L9 4M9 9L6.5 7M9 9L11.5 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M10.5861 19.1946C10.5203 18.9868 10.3274 18.8455 10.1094 18.8455H7.55474C7.33675 18.8455 7.14388 18.9868 7.07807 19.1946L6.65978 20.5154C6.59397 20.7233 6.4011 20.8645 6.18311 20.8645H4.72359C4.37391 20.8645 4.13223 20.5148 4.2559 20.1877L7.60741 11.3232C7.68095 11.1287 7.86717 11 8.0751 11H9.58987C9.7974 11 9.98336 11.1282 10.0572 11.3222L13.4308 20.1867C13.5553 20.5139 13.3136 20.8645 12.9635 20.8645H11.4811C11.2631 20.8645 11.0702 20.7233 11.0044 20.5154L10.5861 19.1946ZM7.79577 16.9252C7.75489 17.0541 7.85115 17.1856 7.98642 17.1856H9.66955C9.80482 17.1856 9.90108 17.0541 9.8602 16.9252L9.01863 14.2707C8.95964 14.0846 8.69633 14.0846 8.63734 14.2707L7.79577 16.9252Z" fill="currentColor"></path> <path d="M18.1268 20.8645C18.0402 20.8645 17.9763 20.8529 17.9413 20.7736C17.8621 20.5943 17.6066 20.4922 17.4472 20.6064C17.0811 20.8688 16.6326 21 16.1016 21C15.3584 21 14.7409 20.7967 14.2491 20.3902C13.7628 19.9837 13.5196 19.4575 13.5196 18.8117C13.5196 18.0438 13.8147 17.4499 14.4048 17.0298C15.0005 16.6098 15.8557 16.3952 16.9705 16.3862H17.1754C17.4516 16.3862 17.6754 16.1623 17.6754 15.8862V15.7967C17.6754 15.467 17.6071 15.2344 17.4705 15.0989C17.3339 14.9634 17.1344 14.8957 16.8721 14.8957C16.4947 14.8957 16.2402 15.0146 16.1087 15.2523C15.9751 15.494 15.7794 15.7358 15.5032 15.7358H14.1835C13.9074 15.7358 13.6755 15.5083 13.7433 15.2406C13.8596 14.7814 14.1457 14.3887 14.6016 14.0623C15.2191 13.6197 15.9978 13.3984 16.9377 13.3984C17.9104 13.3984 18.6618 13.6084 19.1918 14.0285C19.7274 14.444 19.9951 15.0402 19.9951 15.8171V19.2656C20.0061 19.8979 19.9951 20.3651 19.9951 20.7493C19.9951 20.8129 19.9436 20.8645 19.88 20.8645H18.1268ZM16.618 19.4959C16.8748 19.4959 17.0934 19.453 17.2738 19.3672C17.389 19.3124 17.4853 19.251 17.5626 19.1833C17.6435 19.1124 17.6754 19.0042 17.6754 18.8966V18.0379C17.6754 17.7618 17.4516 17.5379 17.1754 17.5379H17.118C16.7246 17.5379 16.4131 17.6418 16.1836 17.8496C15.9595 18.0574 15.8475 18.3351 15.8475 18.6829C15.8475 19.2249 16.1043 19.4959 16.618 19.4959Z" fill="currentColor"></path> </g></svg></span> Métodos de String</h2>
+<p>
+    Todos os métodos de string padrão do JS estão disponíveis. Nova adiciona
+    estes extras como métodos encadeáveis:
+</p>
+
+<div class="card-grid">
+    <div class="method-row">
+        <span class="method-sig">.upper()</span
+        ><span class="method-desc">toUpperCase() — converte para maiúsculas</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.lower()</span
+        ><span class="method-desc">toLowerCase() — converte para minúsculas</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.strip()</span
+        ><span class="method-desc"
+            >trim() — remove espaços em branco do início e fim</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.capitalize()</span
+        ><span class="method-desc"
+            >Coloca o primeiro caractere em maiúscula</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.title()</span
+        ><span class="method-desc"
+            >Coloca a primeira letra de cada palavra em maiúscula</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.words()</span
+        ><span class="method-desc"
+            >Divide por espaços em branco → array de strings</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.chars()</span
+        ><span class="method-desc"
+            >Espalha a string → array de caracteres</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.lines()</span
+        ><span class="method-desc"
+            >Divide por \n → array de linhas</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.has(sub)</span
+        ><span class="method-desc"
+            >includes(sub) → booleano</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.count(sub)</span
+        ><span class="method-desc"
+            >Conta ocorrências de sub</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.reverse()</span
+        ><span class="method-desc"
+            >Inverte a string</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.number()</span
+        ><span class="method-desc"
+            >parseFloat — converte para número</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.int()</span
+        ><span class="method-desc"
+            >parseInt — converte para inteiro</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.pad(n, ch?)</span
+        ><span class="method-desc">padStart(n, ch) — preenche à esquerda</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.padR(n, ch?)</span
+        ><span class="method-desc">padEnd(n, ch) — preenche à direita</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.bytes()</span
+        ><span class="method-desc"
+            >TextEncoder().encode() → Uint8Array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.is(type)</span
+        ><span class="method-desc"
+            >"hello".is("string") → verdadeiro</span
+        >
+    </div>
+</div>
+
+<pre><code>let s = "  Olá Mundo  "
+
+print(s.strip().lower())        // "olá mundo"
+print("ola".capitalize())        // "Ola"
+print("a b c".words().string("|")) // "a|b|c"
+print("abc".chars())             // ["a","b","c"]
+print("nova".has("ov"))          // verdadeiro
+print("123".number() + 1)       // 124</code></pre>
+</div>
+
+                <!-- ─── ARRAY METHODS ─── -->
+                <span class="section-anchor" id="array-methods"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5.5 4H3.5V20H5.5M18.5 4H20.5V20H18.5M7.5 12H7.51M12 12H12.01M16.5 12H16.51M8 12C8 12.2761 7.77614 12.5 7.5 12.5C7.22386 12.5 7 12.2761 7 12C7 11.7239 7.22386 11.5 7.5 11.5C7.77614 11.5 8 11.7239 8 12ZM12.5 12C12.5 12.2761 12.2761 12.5 12 12.5C11.7239 12.5 11.5 12.2761 11.5 12C11.5 11.7239 11.7239 11.5 12 11.5C12.2761 11.5 12.5 11.7239 12.5 12ZM17 12C17 12.2761 16.7761 12.5 16.5 12.5C16.2239 12.5 16 12.2761 16 12C16 11.7239 16.2239 11.5 16.5 11.5C16.7761 11.5 17 11.7239 17 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+</span> Métodos de Array</h2>
+<p>
+    Todos os métodos nativos de array do JS funcionam. Nova adiciona estes
+    extras como métodos encadeáveis:
+</p>
+
+<div class="card-grid">
+    <div class="method-row">
+        <span class="method-sig">.clone()</span
+        ><span class="method-desc"
+            >Cópia rasa → novo array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.sum()</span
+        ><span class="method-desc"
+            >Soma de todos os elementos numéricos</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.avg()</span
+        ><span class="method-desc"
+            >Média de todos os elementos</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.min()</span
+        ><span class="method-desc">Valor mínimo</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.max()</span
+        ><span class="method-desc">Valor máximo</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.first()</span
+        ><span class="method-desc">Primeiro elemento</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.last()</span
+        ><span class="method-desc">Último elemento</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.flatten(profundidade?)</span
+        ><span class="method-desc"
+            >flat(Infinity) por padrão</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.unique()</span
+        ><span class="method-desc"
+            >Remove duplicatas → novo array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.shuffle()</span
+        ><span class="method-desc"
+            >Embaralhamento Fisher-Yates → novo array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.sample()</span
+        ><span class="method-desc">Elemento aleatório</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.chunk(tamanho)</span
+        ><span class="method-desc"
+            >Divide em partes de tamanho</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.pluck(chave)</span
+        ><span class="method-desc"
+            >arr.map(x => x[chave])</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.compact()</span
+        ><span class="method-desc"
+            >Remove valores falsy</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.count(fn|val)</span
+        ><span class="method-desc"
+            >Conta elementos correspondentes</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.zip(outro)</span
+        ><span class="method-desc"
+            >Pares [[a,x],[b,y],...]</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.rotate(n)</span
+        ><span class="method-desc"
+            >Rotaciona array à esquerda por n → novo array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.sortBy(chave, dir?)</span
+        ><span class="method-desc"
+            >Ordena array de objetos por chave</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.string(sep?)</span
+        ><span class="method-desc"
+            >join(sep) — padrão ","</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.has(val)</span
+        ><span class="method-desc"
+            >includes(val) → booleano</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.random()</span
+        ><span class="method-desc">Elemento aleatório</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.toSet()</span
+        ><span class="method-desc">new Set(this)</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.object()</span
+        ><span class="method-desc"
+            >Converte pares [chave, valor] em objeto</span
+        >
+    </div>
+</div>
+
+<pre><code>let numeros = [3, 1, 4, 1, 5, 9]
+
+print(numeros.sum())                  // 23
+print(numeros.unique())              // [3,1,4,5,9]
+print(numeros.chunk(2))              // [[3,1],[4,1],[5,9]]
+print(numeros.shuffle().first())     // elemento aleatório
+
+let usuarios = [{ nome: "Bob", idade: 30 }, { nome: "Ana", idade: 25 }]
+print(usuarios.pluck("nome"))        // ["Bob","Ana"]
+print(usuarios.sortBy("idade"))      // ordenado por idade CRESCENTE</code></pre>
+</div>
+
+                <!-- ─── NUMBER METHODS ─── -->
+                <span class="section-anchor" id="number-methods"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M10.3865 1.78527C10.9354 1.84626 11.331 2.34067 11.27 2.88958L10.7299 7.74999H14.2146L14.7853 2.6135C14.8463 2.0646 15.3407 1.66906 15.8896 1.73005L16.3865 1.78527C16.9354 1.84626 17.331 2.34067 17.27 2.88958L16.7299 7.74999H20.25C20.8023 7.74999 21.25 8.19771 21.25 8.74999V9.24999C21.25 9.80228 20.8023 10.25 20.25 10.25H16.4522L16.0633 13.75H20.25C20.8023 13.75 21.25 14.1977 21.25 14.75V15.25C21.25 15.8023 20.8023 16.25 20.25 16.25H15.7855L15.2148 21.3865C15.1538 21.9354 14.6594 22.331 14.1105 22.27L13.6135 22.2148C13.0646 22.1538 12.6691 21.6594 12.7301 21.1104L13.2701 16.25H9.7855L9.21477 21.3865C9.15378 21.9354 8.65936 22.331 8.11045 22.27L7.61351 22.2148C7.06461 22.1538 6.66907 21.6594 6.73006 21.1104L7.27011 16.25H3.75C3.19772 16.25 2.75 15.8023 2.75 15.25V14.75C2.75 14.1977 3.19772 13.75 3.75 13.75H7.54789L7.93678 10.25H3.75C3.19772 10.25 2.75 9.80228 2.75 9.24999V8.74999C2.75 8.19771 3.19772 7.74999 3.75 7.74999H8.21456L8.78528 2.6135C8.84627 2.0646 9.34068 1.66906 9.88959 1.73005L10.3865 1.78527ZM13.5479 13.75L13.9368 10.25H10.4522L10.0633 13.75H13.5479Z" fill="currentColor"></path> </g></svg></span> Métodos de Número</h2>
+                
+                    <div class="card-grid">
+                        <div class="method-row">
+                            <span class="method-sig">.floor()</span
+                            ><span class="method-desc">Math.floor() — arredonda para baixo</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.ceil()</span
+                            ><span class="method-desc">Math.ceil() — arredonda para cima</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.trunc()</span
+                            ><span class="method-desc">Math.trunc() — remove parte decimal</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.round(casasDecimais?)</span
+                            ><span class="method-desc">Arredonda para N casas decimais</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.abs()</span
+                            ><span class="method-desc">Math.abs() — valor absoluto</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.sqrt()</span
+                            ><span class="method-desc">Math.sqrt() — raiz quadrada</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.cbrt()</span
+                            ><span class="method-desc">Math.cbrt() — raiz cúbica</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.pow(exp)</span
+                            ><span class="method-desc">Math.pow(this, exp) — potência</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.sign()</span
+                            ><span class="method-desc">Math.sign() — sinal (-1, 0, 1)</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.exp()</span
+                            ><span class="method-desc">Math.exp() — e^this</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.expm1()</span
+                            ><span class="method-desc">Math.expm1() — e^this - 1</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.log()</span
+                            ><span class="method-desc">Math.log() — logaritmo natural</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.log10()</span
+                            ><span class="method-desc">Math.log10() — logaritmo base 10</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.log2()</span
+                            ><span class="method-desc">Math.log2() — logaritmo base 2</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.log1p()</span
+                            ><span class="method-desc">Math.log1p() — log(1 + this)</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.sin()</span
+                            ><span class="method-desc">Math.sin() — seno</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.cos()</span
+                            ><span class="method-desc">Math.cos() — cosseno</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.tan()</span
+                            ><span class="method-desc">Math.tan() — tangente</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.asin()</span
+                            ><span class="method-desc">Math.asin() — arco seno</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.acos()</span
+                            ><span class="method-desc">Math.acos() — arco cosseno</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.atan()</span
+                            ><span class="method-desc">Math.atan() — arco tangente</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.sinh()</span
+                            ><span class="method-desc">Math.sinh() — seno hiperbólico</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.cosh()</span
+                            ><span class="method-desc">Math.cosh() — cosseno hiperbólico</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.tanh()</span
+                            ><span class="method-desc">Math.tanh() — tangente hiperbólica</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.asinh()</span
+                            ><span class="method-desc">Math.asinh() — arco seno hiperbólico</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.acosh()</span
+                            ><span class="method-desc">Math.acosh() — arco cosseno hiperbólico</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.atanh()</span
+                            ><span class="method-desc">Math.atanh() — arco tangente hiperbólica</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.clamp(min, max)</span
+                            ><span class="method-desc">Restringe ao intervalo [min, max]</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.between(min, max)</span
+                            ><span class="method-desc">Verifica se está dentro do intervalo</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.limit(min, max)</span
+                            ><span class="method-desc">Apelido para clamp</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.map(inMin, inMax, outMin, outMax)</span
+                            ><span class="method-desc">Remapeia valor de um intervalo para outro</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.lerp(para, t)</span
+                            ><span class="method-desc">Interpolação linear</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.fract()</span
+                            ><span class="method-desc">Parte fracionária</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.even()</span
+                            ><span class="method-desc">Verifica se é par</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.odd()</span
+                            ><span class="method-desc">Verifica se é ímpar</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.factorial()</span
+                            ><span class="method-desc">Fatorial (inteiro)</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.gcd(n)</span
+                            ><span class="method-desc">Máximo divisor comum</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.max(n)</span
+                            ><span class="method-desc">Retorna o maior entre este e n</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.min(n)</span
+                            ><span class="method-desc">Retorna o menor entre este e n</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.string()</span
+                            ><span class="method-desc">Converte para string</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.format(locale?, opts?)</span
+                            ><span class="method-desc">toLocaleString — formata conforme localidade</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.deg2rad()</span
+                            ><span class="method-desc">graus → radianos</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.rad2deg()</span
+                            ><span class="method-desc">radianos → graus</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.hex()</span
+                            ><span class="method-desc">Número para string hexadecimal</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.hexPad(digitos)</span
+                            ><span class="method-desc">Hexadecimal com zeros à esquerda</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.bin()</span
+                            ><span class="method-desc">Número para string binária</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.binPad(digitos)</span
+                            ><span class="method-desc">Binário com zeros à esquerda</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.isInt()</span
+                            ><span class="method-desc">Number.isInteger() — verifica se é inteiro</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.isNaN()</span
+                            ><span class="method-desc">isNaN() — verifica se é NaN</span>
+                        </div>
+                        <div class="method-row">
+                            <span class="method-sig">.isFinite()</span
+                            ><span class="method-desc">Number.isFinite() — verifica se é finito</span>
+                        </div>
+                    </div>
+                
+                    <pre><code>print((3.7).floor())           // 3
+print((3.14159).round(2))      // 3.14
+print((1000).format())         // "1.000"
+print((255).hex())             // "ff"
+print((180).deg2rad())         // 3.14159...
+print((-5).abs())              // 5
+print((5).max(10))             // 10
+print((5).min(10))             // 5
+print((7).odd())               // verdadeiro
+print((6).even())              // verdadeiro
+print((5).factorial())         // 120
+print((12).gcd(18))            // 6
+print((0.75).fract())          // 0.75
+print((5).map(0,10,0,100))     // 50</code></pre>
+                </div>
+
+                <!-- ─── MATH UTILS ─── -->
+                <span class="section-anchor" id="math-utils"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g transform="translate(-2.25, 0) scale(1.25, 1)"> <path fill="currentColor" d="M14 16.5c0 .83-.67 1.5-1.5 1.5h-7c-.83 0-1.5-.67-1.5-1.5 0-.293.095-.566.25-.814.443-.707.855-1.433 1.272-2.157l1.38-2.405c.364-.636.73-1.27 1.088-1.91.02-.038.256-.385.23-.425l-.443-.72-1.045-1.697-1.22-1.986-.84-1.36c-.246-.4-.578-.815-.65-1.292-.05-.338.01-.695.185-.992C4.49.258 5.02-.003 5.572 0H13c.55 0 1 .45 1 1s-.45 1-1 1H7.57l.59.983c.415.693.83 1.387 1.247 2.08l1.13 1.887c.197.33.472.673.454 1.074-.01.27-.13.517-.273.74-.35.55-.672 1.12-1.004 1.68L8.275 12.87l-1.092 1.84c-.016.025-.142.29-.173.29h5.49c.83 0 1.5.67 1.5 1.5z"></path> <path fill="currentColor" d="M4.83 11.55c-.19.29-.51.45-.83.45-.19 0-.38-.05-.55-.17l-3-2c-.01-.01-.02-.01-.02-.02-.1-.06-.19-.15-.26-.26-.31-.45-.18-1.08.28-1.38l3-2c.45-.31 1.07-.18 1.382.28.31.45.18 1.08-.28 1.38L2.8 9l1.75 1.17c.46.3.59.92.28 1.38zM13.17 11.55c.19.29.51.45.83.45.19 0 .38-.05-.55-.17l3-2c.01-.01.02-.01.02-.02.1-.06.19-.15.26-.26.31-.45.18-1.08-.28-1.38l-3-2c-.45-.31-1.07-.18-1.382.28-.31.45-.18 1.08.28 1.38L15.198 9l-1.75 1.17c-.46.3-.59.92-.28 1.38z"></path> </g> </g></svg>
+</span> Utilitários Matemáticos</h2>
+<p>
+    Auxiliares matemáticos globais disponíveis em todos os lugares. Todos os métodos
+    padrão <code>Math.*</code> também funcionam diretamente.
+</p>
+
+<div class="card-grid">
+    <div class="card">
+        <div class="card-title">clamp(v, min, max)</div>
+        <div class="card-desc">
+            Restringe valor ao intervalo [min, max]
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">lerp(a, b, t)</div>
+        <div class="card-desc">
+            Interpolação linear entre a e b
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">
+            map(v, in1, in2, out1, out2)
+        </div>
+        <div class="card-desc">
+            Remapeia valor de um intervalo para outro
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">norm(v, min, max)</div>
+        <div class="card-desc">Normaliza para 0..1</div>
+    </div>
+    <div class="card">
+        <div class="card-title">deg2rad(d)</div>
+        <div class="card-desc">Graus para radianos</div>
+    </div>
+    <div class="card">
+        <div class="card-title">rad2deg(r)</div>
+        <div class="card-desc">Radianos para graus</div>
+    </div>
+    <div class="card">
+        <div class="card-title">sqrt(v)</div>
+        <div class="card-desc">Raiz quadrada</div>
+    </div>
+    <div class="card">
+        <div class="card-title">abs(v)</div>
+        <div class="card-desc">Valor absoluto</div>
+    </div>
+    <div class="card">
+        <div class="card-title">log2(v)</div>
+        <div class="card-desc">Logaritmo base 2</div>
+    </div>
+    <div class="card">
+        <div class="card-title">log10(v)</div>
+        <div class="card-desc">Logaritmo base 10</div>
+    </div>
+    <div class="card">
+        <div class="card-title">loge(v)</div>
+        <div class="card-desc">Logaritmo natural</div>
+    </div>
+    <div class="card">
+        <div class="card-title">PI, TAU, E</div>
+        <div class="card-desc">Constantes matemáticas</div>
+    </div>
+</div>
+</div>
+
+                <!-- ─── RANDOM ─── -->
+                <span class="section-anchor" id="random"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32.5 32.5" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M27.5,0H5C2.239,0,0,2.238,0,5v22.5c0,2.762,2.239,5,5,5h22.5c2.762,0,5-2.238,5-5V5C32.5,2.238,30.262,0,27.5,0z M8.596,27.212c-1.775,0-3.213-1.438-3.213-3.214s1.438-3.214,3.213-3.214c1.774,0,3.213,1.438,3.213,3.214 S10.371,27.212,8.596,27.212z M8.596,11.716c-1.775,0-3.213-1.438-3.213-3.214s1.438-3.214,3.213-3.214 c1.774,0,3.213,1.438,3.213,3.214S10.371,11.716,8.596,11.716z M16.25,19.464c-1.774,0-3.213-1.438-3.213-3.214 c0-1.776,1.438-3.214,3.213-3.214c1.775,0,3.213,1.438,3.213,3.214C19.463,18.025,18.023,19.464,16.25,19.464z M23.904,27.212 c-1.774,0-3.213-1.438-3.213-3.214s1.438-3.214,3.213-3.214c1.773,0,3.213,1.438,3.213,3.214S25.68,27.212,23.904,27.212z M23.904,11.716c-1.774,0-3.213-1.438-3.213-3.214s1.438-3.214,3.213-3.214c1.773,0,3.213,1.438,3.213,3.214 S25.68,11.716,23.904,11.716z"></path> </g> </g></svg></span> Aleatório</h2>
+
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">random()</span
+        ><span class="method-desc"
+            >Math.random() → float 0..1</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">random(max)</span
+        ><span class="method-desc"
+            >Float de 0 até max</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">random(min, max)</span
+        ><span class="method-desc"
+            >Float entre min e max</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">random(array)</span
+        ><span class="method-desc"
+            >Elemento aleatório do array</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">randomInt(max)</span
+        ><span class="method-desc"
+            >Inteiro de 0 até max-1</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">randomInt(min, max)</span
+        ><span class="method-desc"
+            >Inteiro entre min e max (inclusive)</span
+        >
+    </div>
+</div>
+
+<pre><code>print(random())            // ex.: 0.742
+print(random(10))          // ex.: 7.3
+print(randomInt(1, 6))    // rolagem de dado: 1..6
+print(random(["a", "b", "c"]))  // escolha aleatória</code></pre>
+</div>
+
+                <!-- ─── OBJECT METHODS ─── -->
+                <span class="section-anchor" id="object-methods"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.5708 20C19.8328 20 20.8568 18.977 20.8568 17.714V13.143L21.9998 12L20.8568 10.857V6.286C20.8568 5.023 19.8338 4 18.5708 4M5.429 4C4.166 4 3.143 5.023 3.143 6.286V10.857L2 12L3.143 13.143V17.714C3.143 18.977 4.166 20 5.429 20M7.5 12H7.51M12 12H12.01M16.5 12H16.51M8 12C8 12.2761 7.77614 12.5 7.5 12.5C7.22386 12.5 7 12.2761 7 12C7 11.7239 7.22386 11.5 7.5 11.5C7.77614 11.5 8 11.7239 8 12ZM12.5 12C12.5 12.2761 12.2761 12.5 12 12.5C11.7239 12.5 11.5 12.2761 11.5 12C11.5 11.7239 11.7239 11.5 12 11.5C12.2761 11.5 12.5 11.7239 12.5 12ZM17 12C17 12.2761 16.7761 12.5 16.5 12.5C16.2239 12.5 16 12.2761 16 12C16 11.7239 16.2239 11.5 16.5 11.5C16.7761 11.5 17 11.7239 17 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Métodos de Objeto</h2>
+<p>
+    Objetos comuns têm métodos disponíveis diretamente neles. Todos são
+    <strong>não enumeráveis</strong> — eles não aparecem em <code>for..in</code> ou
+    <code>Object.keys()</code>.
+    <code>filter</code>, <code>map</code>,
+    <code>find</code>, <code>some</code>,
+    <code>every</code>, e <code>reduce</code> também
+    delegam para os métodos nativos de Array quando chamados em
+    arrays.
+</p>
+
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">.keys()</span
+        ><span class="method-desc">Object.keys(this) — chaves do objeto</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.values()</span
+        ><span class="method-desc">Object.values(this) — valores do objeto</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.entries()</span
+        ><span class="method-desc">Object.entries(this) — pares [chave, valor]</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.has(chave)</span
+        ><span class="method-desc">hasOwnProperty → booleano</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.size()</span
+        ><span class="method-desc">Número de chaves próprias</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.isEmpty()</span
+        ><span class="method-desc">verdadeiro se não há chaves próprias</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.clone()</span
+        ><span class="method-desc">Cópia profunda via structuredClone</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.toJson(indent?)</span
+        ><span class="method-desc">JSON.stringify(this, null, indent)</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.freeze()</span
+        ><span class="method-desc">Object.freeze(this) — congela o objeto</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.merge(...outros)</span
+        ><span class="method-desc">Object.assign({}, this, ...outros) → novo objeto</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.assign(...outros)</span
+        ><span class="method-desc">Object.assign(this, ...outros) — modifica o original</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.pick(chaves)</span
+        ><span class="method-desc">Novo objeto apenas com as chaves listadas</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.omit(chaves)</span
+        ><span class="method-desc">Novo objeto sem as chaves listadas</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.invert()</span
+        ><span class="method-desc">Troca chaves por valores (inversão)</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.map(fn)</span
+        ><span class="method-desc">fn recebe entrada [chave, valor] — retorna novo objeto</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.filter(fn)</span
+        ><span class="method-desc">fn recebe [chave, valor] — retorna objeto filtrado</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.find(fn)</span
+        ><span class="method-desc">Primeira entrada onde fn retorna verdadeiro</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.some(fn)</span
+        ><span class="method-desc">verdadeiro se alguma entrada satisfaz fn</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.every(fn)</span
+        ><span class="method-desc">verdadeiro se todas as entradas satisfazem fn</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.reduce(fn, init)</span
+        ><span class="method-desc">Acumula sobre as entradas</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.each(fn)</span
+        ><span class="method-desc">Itera sem retornar — retorna this</span>
+    </div>
+</div>
+
+<pre><code>let o = { a: 1, b: 2, c: 3 }
+
+print(o.keys())                           // ["a","b","c"]
+print(o.has("a"))                         // verdadeiro
+print(o.size())                           // 3
+print(o.toJson(2))                        // JSON formatado
+print(o.merge({ d: 4 }))                  // { a:1, b:2, c:3, d:4 }
+print(o.pick(["a","b"]))                  // { a:1, b:2 }
+print(o.omit(["c"]))                      // { a:1, b:2 }
+print(o.invert())                         // { 1:"a", 2:"b", 3:"c" }
+
+print(o.map(([k,v]) =&gt; [k, v * 10]))     // { a:10, b:20, c:30 }
+print(o.filter(([k,v]) =&gt; v &gt; 1))        // { b:2, c:3 }
+print(o.find(([k,v]) =&gt; v == 2))         // ["b", 2]
+print(o.some(([k,v]) =&gt; v &gt; 2))          // verdadeiro
+print(o.every(([k,v]) =&gt; v &gt; 0))         // verdadeiro
+print(o.reduce((acc,[k,v]) =&gt; acc+v, 0)) // 6
+o.each(([k,v]) =&gt; print(k, v))           // itera</code></pre>
+</div>
+
+                <hr />
+
+                <!-- ─── DOM ─── -->
+                <span class="section-anchor" id="dom"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg viewBox="-2 -1 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-61.000000, -7639.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M19.4350881,7485 L19.4279481,7485 L10.8119794,7485 L11.0180201,7487 L19.2300674,7487 C19.109707,7488.752 18.7455658,7492.464 18.6119454,7494.153 L13.99949,7495.451 L13.99949,7495.455 L13.98929,7495.46 L9.37377458,7493.836 L9.05757353,7490 L11.3199411,7490 L11.4800816,7492.063 L13.99337,7493 L13.99949,7493 L16.5086984,7492.1 L16.7667592,7489 L8.95659319,7489 C8.91885306,7488.599 8.43333144,7483.392 8.34867116,7483 L19.6370488,7483 C19.5738086,7483.66 19.5095484,7484.338 19.4350881,7485 L19.4350881,7485 Z M5,7479 L6.63812546,7497.148 L13.98929,7499 L21.3598345,7497.111 L23,7479 L5,7479 Z" id="html-[#124]" stroke="currentColor" stroke-width="0.8" stroke-linejoin="round" stroke-linecap="round"> </path> </g> </g> </g> </g></svg>
+</span> dom</h2>
+<p>
+    O objeto global <code>dom</code> fornece uma API limpa
+    para o DOM do navegador. Disponível apenas no contexto do navegador.
+</p>
+
+<h3>Selecionando elementos</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">dom.get(seletor)</span
+        ><span class="method-desc"
+            >querySelector → NovaElement | null</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.id(id)</span
+        ><span class="method-desc"
+            >getElementById → NovaElement | null</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.getAll(seletor)</span
+        ><span class="method-desc"
+            >querySelectorAll → NovaElementList</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >dom.classAll(nomeDaClasse)</span
+        ><span class="method-desc"
+            >getElementsByClassName → NovaElementList</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.tag(nomeDaTag)</span
+        ><span class="method-desc"
+            >getElementsByTagName → NovaElementList</span
+        >
+    </div>
+</div>
+
+<h3>Criando elementos</h3>
+<pre><code>// Simples
+let btn = dom.create("botao")
+
+// Com atributos
+let div = dom.create("div", {
+  class: "cartao",
+  id: "heroi",
+  text: "Olá",
+  style: { color: "vermelho" },
+  onclick: () =&gt; print("clicou")
+})</code></pre>
+
+<h3>Propriedades do documento</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">dom.body</span
+        ><span class="method-desc"
+            >document.body → NovaElement</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.head</span
+        ><span class="method-desc"
+            >document.head → NovaElement</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.root</span
+        ><span class="method-desc"
+            >document.documentElement → NovaElement</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.title</span
+        ><span class="method-desc"
+            >Obter / definir document.title</span
+        >
+    </div>
+</div>
+
+<h3>Eventos &amp; ciclo de vida</h3>
+<pre><code>// Executa quando o DOM estiver pronto
+dom.ready(() =&gt; {
+  print("DOM carregado")
+})
+
+// Evento delegado no documento
+dom.on(".btn", "click", (e) =&gt; {
+  print("botão clicado")
+})
+
+// Remover evento
+dom.off("click", manipulador)</code></pre>
+
+<h3>Utilitários</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">dom.css(texto)</span
+        ><span class="method-desc"
+            >Injeta uma tag &lt;style&gt; no
+            &lt;head&gt;</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.load(url)</span
+        ><span class="method-desc"
+            >Carrega um script → Promise</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">dom.cookie(nome)</span
+        ><span class="method-desc"
+            >Lê um cookie → string | null</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >dom.cookie(nome, valor, opcoes?)</span
+        ><span class="method-desc"
+            >Define um cookie (opções: dias, caminho, seguro)</span
+        >
+    </div>
+</div>
+</div>
+
+<!-- ─── MÉTODOS DE ELEMENTO ─── -->
+<span class="section-anchor" id="element"></span>
+<div class="section">
+    <h2><span class="h2-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8L3 11.6923L7 16M17 8L21 11.6923L17 16M14 4L10 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span> Métodos de Elemento</h2>
+    <p>
+        Todo elemento retornado por <code>dom.get()</code> é um
+        <strong>NovaElement</strong>. Os métodos são encadeáveis. Qualquer
+        propriedade nativa do HTMLElement não listada aqui é
+        acessível transparentemente via Proxy.
+    </p>
+
+    <h3>Classes CSS</h3>
+    <pre><code>let el = dom.get("#caixa")
+
+el.class.add("ativo", "visivel")
+el.class.remove("escondido")
+el.class.toggle("aberto")
+el.class.has("ativo")       // → booleano
+el.class.list()               // → ["ativo","visivel"]
+el.class("nova-classe")         // substitui todas as classes
+print("$el.class")             // lê className como string</code></pre>
+
+    <h3>Conteúdo</h3>
+    <div class="method-list">
+        <div class="method-row">
+            <span class="method-sig">el.text()</span
+            ><span class="method-desc">Lê textContent</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.text("valor")</span
+            ><span class="method-desc"
+                >Define textContent — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.html()</span
+            ><span class="method-desc">Lê innerHTML</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig"
+                >el.html("&lt;b&gt;oi&lt;/b&gt;")</span
+            ><span class="method-desc"
+                >Define innerHTML — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.val()</span
+            ><span class="method-desc">Lê valor do input</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.val("novo")</span
+            ><span class="method-desc"
+                >Define valor do input — retorna el</span
+            >
+        </div>
+    </div>
+
+    <h3>Atributos &amp; Estilo</h3>
+    <div class="method-list">
+        <div class="method-row">
+            <span class="method-sig">el.attr("nome")</span
+            ><span class="method-desc"
+                >getAttribute → string | null</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig"
+                >el.attr("nome", "valor")</span
+            ><span class="method-desc"
+                >setAttribute — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.id()</span
+            ><span class="method-desc">Lê id</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.id("novo")</span
+            ><span class="method-desc"
+                >Define id — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig"
+                >el.style({color:"vermelho"})</span
+            ><span class="method-desc"
+                >Object.assign para el.style</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.style("color:vermelho")</span
+            ><span class="method-desc">Adiciona ao cssText</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.data("chave")</span
+            ><span class="method-desc">Lê dataset.chave</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.data("chave", "valor")</span
+            ><span class="method-desc"
+                >Define dataset.chave — retorna el</span
+            >
+        </div>
+    </div>
+
+    <h3>Eventos</h3>
+    <div class="method-list">
+        <div class="method-row">
+            <span class="method-sig">el.on("click", fn)</span
+            ><span class="method-desc"
+                >addEventListener — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig"
+                >el.on("click", fn, opcoes)</span
+            ><span class="method-desc"
+                >addEventListener com opções</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.off("click", fn)</span
+            ><span class="method-desc"
+                >removeEventListener — retorna el</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.once("click", fn)</span
+            ><span class="method-desc"
+                >Dispara uma vez e depois se remove</span
+            >
+        </div>
+    </div>
+
+    <h3>Árvore DOM</h3>
+    <div class="method-list">
+        <div class="method-row">
+            <span class="method-sig">el.append("html")</span
+            ><span class="method-desc"
+                >insertAdjacentHTML antes de fechar</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.append(outroEl)</span
+            ><span class="method-desc"
+                >appendChild(outroEl._el)</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.prepend(...)</span
+            ><span class="method-desc"
+                >insertAdjacentHTML depois de abrir</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.remove()</span
+            ><span class="method-desc">Remove do DOM</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.clone()</span
+            ><span class="method-desc"
+                >cloneNode(true) → novo NovaElement</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.find(".sel")</span
+            ><span class="method-desc"
+                >querySelector → NovaElement | null</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.findAll(".sel")</span
+            ><span class="method-desc"
+                >querySelectorAll → NovaElement[]</span
+            >
+        </div>
+    </div>
+
+    <h3>Visibilidade &amp; Interação</h3>
+    <div class="method-list">
+        <div class="method-row">
+            <span class="method-sig">el.show(display?)</span
+            ><span class="method-desc"
+                >style.display = "" (ou valor)</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.hide()</span
+            ><span class="method-desc"
+                >style.display = "none"</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.toggle()</span
+            ><span class="method-desc"
+                >Alterna entre mostrar e esconder</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.focus()</span
+            ><span class="method-desc">Foca no elemento</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.blur()</span
+            ><span class="method-desc">Desfoca o elemento</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.click()</span
+            ><span class="method-desc">Clique programático</span>
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.scroll(opcoes?)</span
+            ><span class="method-desc"
+                >scrollIntoView(opcoes)</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.rect()</span
+            ><span class="method-desc"
+                >getBoundingClientRect() → DOMRect</span
+            >
+        </div>
+        <div class="method-row">
+            <span class="method-sig">el.el</span
+            ><span class="method-desc"
+                >HTMLElement bruto (para bypass)</span
+            >
+        </div>
+    </div>
+
+    <h3>Exemplo</h3>
+    <pre><code>dom.ready(() =&gt; {
+  let btn = dom.get("#enviar")
+  let msg = dom.get("#mensagem")
+
+  btn.on("click", () =&gt; {
+    msg
+      .text("Enviado!")
+      .class.add("sucesso")
+    btn.hide()
+  })
+})</code></pre>
+</div>
+
+                <!-- ─── CANVAS ─── -->
+                <span class="section-anchor" id="canvas"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M3,16V6A1,1,0,0,1,4,5h7V3a1,1,0,0,1,2,0V5h7a1,1,0,0,1,1,1V16a1,1,0,0,1-1,1H16.118L17.9,20.553a1,1,0,1,1-1.79.894l-2-4a.982.982,0,0,1-.1-.447H13v3a1,1,0,0,1-2,0V17H9.99a.982.982,0,0,1-.1.447l-2,4a1,1,0,1,1-1.79-.894L7.882,17H4A1,1,0,0,1,3,16Z"></path></g></svg></span> canvas</h2>
+<p>
+    A função <code>canvas(seletor)</code> envolve um elemento canvas HTML
+    e fornece uma API de desenho totalmente encadeável.
+</p>
+
+<pre><code>let c = canvas("#meuCanvas")
+  .size(800, 600)
+  .fill("#1a1a2e")
+  .rect(0, 0, 800, 600)</code></pre>
+
+<h3>Estilo</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">.fill(cor)</span
+        ><span class="method-desc">Define fillStyle (estilo de preenchimento)</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.stroke(cor)</span
+        ><span class="method-desc">Define strokeStyle (estilo de traço)</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.lineWidth(l)</span
+        ><span class="method-desc">Define a largura da linha</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.opacity(v)</span
+        ><span class="method-desc">globalAlpha (0..1) — opacidade global</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.font(f)</span
+        ><span class="method-desc"
+            >Define a fonte, ex.: "16px sans-serif"</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.textAlign(a)</span
+        ><span class="method-desc"
+            >"left" | "center" | "right" — alinhamento do texto</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.shadow(cor, desfoque, x?, y?)</span
+        ><span class="method-desc">Define sombra</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.noShadow()</span
+        ><span class="method-desc">Remove a sombra</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.lineCap(c)</span
+        ><span class="method-desc"
+            >"butt" | "round" | "square" — estilo da extremidade da linha</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.blend(modo)</span
+        ><span class="method-desc"
+            >globalCompositeOperation — modo de mesclagem</span
+        >
+    </div>
+</div>
+
+<h3>Formas</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">.rect(x, y, l, a, r?)</span
+        ><span class="method-desc"
+            >Retângulo preenchido (r = raio da borda)</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.rectStroke(x, y, l, a, r?)</span
+        ><span class="method-desc">Retângulo com contorno</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.circle(x, y, r)</span
+        ><span class="method-desc">Círculo preenchido</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.circleStroke(x, y, r)</span
+        ><span class="method-desc">Círculo com contorno</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.ellipse(x, y, rx, ry, rot?)</span
+        ><span class="method-desc">Elipse preenchida</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.line(x1, y1, x2, y2)</span
+        ><span class="method-desc">Segmento de reta</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.lines(x1,y1, x2,y2, ...)</span
+        ><span class="method-desc"
+            >Polilinha (pares de coordenadas)</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.poly(x1,y1, ...)</span
+        ><span class="method-desc">Polígono preenchido</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.polyStroke(x1,y1, ...)</span
+        ><span class="method-desc">Polígono com contorno</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.arc(x, y, r, inicio, fim)</span
+        ><span class="method-desc"
+            >Arco em graus — com contorno</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.arcFill(x, y, r, inicio, fim)</span
+        ><span class="method-desc">Arco — preenchido</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.bezier(x1,y1, cp1x,cp1y, cp2x,cp2y, x2,y2)</span
+        ><span class="method-desc">Bezier cúbico</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.quadratic(x1,y1, cpx,cpy, x2,y2)</span
+        ><span class="method-desc">Bezier quadrático</span>
+    </div>
+</div>
+
+<h3>Texto</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig"
+            >.text(str, x, y, maxL?)</span
+        ><span class="method-desc">fillText — texto preenchido</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig"
+            >.textStroke(str, x, y, maxL?)</span
+        ><span class="method-desc">strokeText — texto com contorno</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.measureText(str)</span
+        ><span class="method-desc">→ TextMetrics — mede o texto</span>
+    </div>
+</div>
+
+<h3>Transformação</h3>
+<div class="method-list">
+    <div class="method-row">
+        <span class="method-sig">.translate(x, y)</span
+        ><span class="method-desc">Move a origem</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.rotate(graus)</span
+        ><span class="method-desc">Rotaciona em graus</span>
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.scale(x, y?)</span
+        ><span class="method-desc"
+            >Escala (y padrão = x)</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.save() / .restore()</span
+        ><span class="method-desc"
+            >Empilha / desempilha o estado do canvas</span
+        >
+    </div>
+    <div class="method-row">
+        <span class="method-sig">.reset()</span
+        ><span class="method-desc"
+            >Reseta a transformação para a identidade</span
+        >
+    </div>
+</div>
+
+<h3>Gradiente</h3>
+<pre><code>let g = c.linearGradient(0, 0, 800, 0, {
+  "0":   "#ff6b6b",
+  "0.5": "#feca57",
+  "1":   "#48dbfb"
+})
+c.fill(g).rect(0, 0, 800, 100)</code></pre>
+
+<h3>Loop de animação</h3>
+<pre><code>let c = canvas("#c").size(400, 400)
+
+let parar = c.loop((tempo, quadro) =&gt; {
+  c.clear("#000")
+  c.fill("#fff")
+    .circle(200 + Math.sin(tempo / 500) * 100, 200, 20)
+})
+
+// stop() cancela a animação</code></pre>
+</div>
+
+                <!-- ─── ARCADE ─── -->
+                <dialog id="modal" class="section game-modal">
+                    <button id="close-btn" class="close-btn"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff" stroke-width="35.839999999999996"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#ffffff" d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"></path></g></svg></button>
+                    <iframe id="game-frame"></iframe>
+                </dialog>
+
+                <span class="section-anchor" id="arcade"></span>
+                <div class="section">
+                    <h2><span class="h2-icon"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><circle cx="20" cy="12" r="2"></circle><path d="M19.071,4.929a10,10,0,1,0,0,14.142L12,12ZM10,9a2,2,0,1,1,2-2A2,2,0,0,1,10,9Z"></path></g></svg></span> Arcade</h2>
+                    <p>
+                        Alguns jogos aleatórios feitos com NOVAjs.
+                    </p>
+
+                    <h3>Games</h3>
+                    <div class="card-grid games">
+                        <button class="card" data-game="flappy">
+                            <div class="card-title">🐦 FLAPPY BIRD</div>
+                            <div class="card-desc">Clique para jogar</div>
+                        </button>
+                        
+                        <button class="card" data-game="snake">
+                            <div class="card-title">🐍 COBRINHA</div>
+                            <div class="card-desc">Clique para jogar</div>
+                        </button>
+                        
+                        <button class="card" data-game="tetris">
+                            <div class="card-title">🟦 TETRIS</div>
+                            <div class="card-desc">Clique para jogar</div>
+                        </button>
+                        
+                        <button class="card" data-game="tictactoe">
+                            <div class="card-title">🔢 PEDRA-PAPEL-TESOURA</div>
+                            <div class="card-desc">Clique para jogar</div>
+                        </button>
+                        
+                        <button class="card" data-game="pong">
+                            <div class="card-title">🏓 PONG!</div>
+                            <div class="card-desc">Clique para jogar</div>
+                        </button>
+                    </div>
+                </div>
+
+                <footer>
+                    <span>NOVAjs Documentation</span>
+                    <span>Built with NOVAjs &amp; HTML &nbsp;·&nbsp; v1.0</span>
+                </footer>
+            </main>
+        </div>
+
+
+
+        <script>
+            (function highlightNova() {
+                const KEYWORDS = new Set([
+                    "let",
+                    "const",
+                    "var",
+                    "if",
+                    "else",
+                    "for",
+                    "while",
+                    "do",
+                    "return",
+                    "break",
+                    "continue",
+                    "func",
+                    "function",
+                    "fn",
+                    "class",
+                    "extends",
+                    "new",
+                    "this",
+                    "super",
+                    "import",
+                    "export",
+                    "default",
+                    "from",
+                    "as",
+                    "try",
+                    "catch",
+                    "finally",
+                    "throw",
+                    "switch",
+                    "case",
+                    "typeof",
+                    "instanceof",
+                    "in",
+                    "of",
+                    "async",
+                    "await",
+                    "yield",
+                    "static",
+                    "get",
+                    "set",
+                    "delete",
+                    "void",
+                    "print",
+                    "and",
+                    "or",
+                    "not",
+                    "is",
+                    "equal",
+                    "isNot",
+                    "notEqual",
+                    "greaterThan",
+                    "lessThan",
+                    "greaterEqual",
+                    "lessEqual",
+                    "range",
+                    "dom",
+                    "canvas",
+                ]);
+                const TYPES = new Set([
+                    "number",
+                    "num",
+                    "int",
+                    "float",
+                    "string",
+                    "str",
+                    "text",
+                    "boolean",
+                    "bool",
+                    "object",
+                    "obj",
+                    "array",
+                    "function",
+                    "func",
+                    "fn",
+                    "null",
+                    "undefined",
+                    "any",
+                ]);
+                const BUILTIN_FN = new Set([
+                    "print",
+                    "range",
+                    "random",
+                    "randomInt",
+                    "clamp",
+                    "lerp",
+                    "map",
+                    "norm",
+                    "deg2rad",
+                    "rad2deg",
+                    "dist",
+                    "dist3",
+                    "sign",
+                    "frac",
+                    "mod",
+                    "smoothstep",
+                    "smootherstep",
+                    "mix",
+                    "sum",
+                    "avg",
+                    "gcd",
+                    "lcm",
+                    "isPrime",
+                    "factorial",
+                    "fibonacci",
+                    "log2",
+                    "log10",
+                    "loge",
+                    "sqrt",
+                    "abs",
+                    "fetch",
+                    "setTimeout",
+                    "setInterval",
+                    "clearTimeout",
+                    "clearInterval",
+                    "requestAnimationFrame",
+                    "cancelAnimationFrame",
+                    "parseInt",
+                    "parseFloat",
+                    "isNaN",
+                    "isFinite",
+                    "JSON",
+                    "Math",
+                    "Object",
+                    "Array",
+                    "String",
+                    "Number",
+                    "Boolean",
+                    "Promise",
+                    "Error",
+                    "TypeError",
+                    "console",
+                ]);
+                function escape(s) {
+                    return s
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;");
+                }
+                function tokenize(code) {
+                    const tokens = [];
+                    let i = 0;
+                    while (i < code.length) {
+                        if (code[i] === "/" && code[i + 1] === "/") {
+                            let j = i;
+                            while (j < code.length && code[j] !== "\n") j++;
+                            tokens.push({
+                                type: "comment",
+                                value: code.slice(i, j),
+                            });
+                            i = j;
+                            continue;
+                        }
+                        if (code[i] === "/" && code[i + 1] === "*") {
+                            let j = i + 2;
+                            while (
+                                j < code.length &&
+                                !(code[j - 1] === "*" && code[j] === "/")
+                            )
+                                j++;
+                            tokens.push({
+                                type: "comment",
+                                value: code.slice(i, j + 1),
+                            });
+                            i = j + 1;
+                            continue;
+                        }
+                        if (code[i] === "`") {
+                            let j = i + 1,
+                                depth = 0;
+                            while (j < code.length) {
+                                if (code[j] === "\\") {
+                                    j += 2;
+                                    continue;
+                                }
+                                if (code[j] === "$" && code[j + 1] === "{") {
+                                    depth++;
+                                    j += 2;
+                                    continue;
+                                }
+                                if (code[j] === "}" && depth > 0) {
+                                    depth--;
+                                    j++;
+                                    continue;
+                                }
+                                if (code[j] === "`" && depth === 0) {
+                                    j++;
+                                    break;
+                                }
+                                j++;
+                            }
+                            tokens.push({
+                                type: "string",
+                                value: code.slice(i, j),
+                            });
+                            i = j;
+                            continue;
+                        }
+                        if (code[i] === '"' || code[i] === "'") {
+                            const q = code[i];
+                            let j = i + 1;
+                            while (j < code.length) {
+                                if (code[j] === "\\") {
+                                    j += 2;
+                                    continue;
+                                }
+                                if (code[j] === q) {
+                                    j++;
+                                    break;
+                                }
+                                j++;
+                            }
+                            tokens.push({
+                                type: "string",
+                                value: code.slice(i, j),
+                            });
+                            i = j;
+                            continue;
+                        }
+                        if (
+                            /[0-9]/.test(code[i]) ||
+                            (code[i] === "." && /[0-9]/.test(code[i + 1] || ""))
+                        ) {
+                            let j = i;
+                            if (
+                                code[j] === "0" &&
+                                (code[j + 1] === "x" || code[j + 1] === "X")
+                            ) {
+                                j += 2;
+                                while (/[0-9a-fA-F]/.test(code[j])) j++;
+                            } else if (
+                                code[j] === "0" &&
+                                (code[j + 1] === "b" || code[j + 1] === "B")
+                            ) {
+                                j += 2;
+                                while (/[01]/.test(code[j])) j++;
+                            } else {
+                                while (
+                                    j < code.length &&
+                                    /[\d._]/.test(code[j])
+                                )
+                                    j++;
+                                if (code[j] === "e" || code[j] === "E") {
+                                    j++;
+                                    if (code[j] === "+" || code[j] === "-") j++;
+                                    while (/\d/.test(code[j])) j++;
+                                }
+                            }
+                            tokens.push({
+                                type: "number",
+                                value: code.slice(i, j),
+                            });
+                            i = j;
+                            continue;
+                        }
+                        if (/[a-zA-Z_$]/.test(code[i])) {
+                            let j = i;
+                            while (j < code.length && /[\w$]/.test(code[j]))
+                                j++;
+                            const word = code.slice(i, j);
+                            let k = j;
+                            while (code[k] === " ") k++;
+                            const isCall = code[k] === "(";
+                            let type = "ident";
+                            if (KEYWORDS.has(word)) type = "keyword";
+                            else if (TYPES.has(word)) type = "type";
+                            else if (BUILTIN_FN.has(word) && isCall)
+                                type = "builtin";
+                            else if (isCall) type = "call";
+                            else if (/^[A-Z]/.test(word)) type = "class-name";
+                            tokens.push({ type, value: word });
+                            i = j;
+                            continue;
+                        }
+                        const two = code.slice(i, i + 3);
+                        const ops3 = ["===", "!==", "**=", "...", "??="];
+                        if (ops3.includes(two)) {
+                            tokens.push({ type: "op", value: two });
+                            i += 3;
+                            continue;
+                        }
+                        const pair = code.slice(i, i + 2);
+                        const ops2 = [
+                            "=>",
+                            "=>",
+                            "??",
+                            "?.",
+                            "++",
+                            "--",
+                            "+=",
+                            "-=",
+                            "*=",
+                            "/=",
+                            "%=",
+                            "**",
+                            "==",
+                            "!=",
+                            ">=",
+                            "<=",
+                            "&&",
+                            "||",
+                            "<<",
+                            ">>",
+                        ];
+                        if (ops2.includes(pair)) {
+                            tokens.push({ type: "op", value: pair });
+                            i += 2;
+                            continue;
+                        }
+                        const c = code[i];
+                        if ("+-*/%^×&|!<>=~".includes(c)) {
+                            tokens.push({ type: "op", value: c });
+                            i++;
+                            continue;
+                        }
+                        if ("(){}[];:,".includes(c)) {
+                            tokens.push({ type: "punct", value: c });
+                            i++;
+                            continue;
+                        }
+                        tokens.push({ type: "raw", value: c });
+                        i++;
+                    }
+                    return tokens;
+                }
+                const CLASS_MAP = {
+                    comment: "cmt",
+                    string: "str",
+                    number: "num",
+                    keyword: "kw",
+                    type: "typ",
+                    builtin: "fn",
+                    call: "fn",
+                    "class-name": "",
+                    op: "op",
+                    punct: "p",
+                    ident: null,
+                    raw: null,
+                };
+                function highlight(code) {
+                    return tokenize(code)
+                        .map((tok) => {
+                            let val = escape(tok.value);
+                            if (tok.type === "string") {
+                                val = val.replace(
+                                    /(?<!\\)\$([a-zA-Z_$][\w$]*)/g,
+                                    '<span class="var">$$$1</span>',
+                                );
+                                val = val.replace(
+                                    /(?<!\\)\$\{([\s\S]*?)\}/g,
+                                    '<span class="var">${$1}</span>',
+                                );
+                                return `<span class="${CLASS_MAP.string}">${val}</span>`;
+                            }
+                            const cls = CLASS_MAP[tok.type];
+                            return cls
+                                ? `<span class="${cls}">${val}</span>`
+                                : val;
+                        })
+                        .join("");
+                }
+                document.querySelectorAll("pre").forEach((pre) => {
+                    const raw = pre.textContent;
+                    pre.innerHTML = highlight(raw);
+                });
+            })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/gh/kazwtto/novajs@main/src/nova.min.js"></script>
+        <script type="text/novajs">
+            MENUBTN = dom.get('#menuBtn');
+            SIDEBAR = dom.get('#sidebar');
+            OVERLAY = dom.get('#overlay');
+
+            CARDS    = dom.getAll('.card');
+            MODAL    = dom.get('#modal');
+            CLOSEBTN = dom.get('#close-btn');
+            FRAME    = dom.get('#game-frame');
+
+            MENUBTN.on('click', () => {
+                [SIDEBAR, OVERLAY].forEach(x => x.class.toggle('open'));
+            });
+
+            OVERLAY.on('click', () => {
+                [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
+            });
+
+            ANCHORS = dom.getAll('.section-anchor');
+            NAV_LINKS = dom.getAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        NAV_LINKS.forEach(link => link.class.toggle('active', link.attr('href') === '#$entry.target.id'));
+                    }
+                  });
+            }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 });
+
+            ANCHORS.forEach(a => observer.observe(a.el));
+
+            dom.getAll('.nav-link').forEach(link => {
+                link.on('click', () => {
+                    [SIDEBAR, OVERLAY].forEach(x => x.class.remove('open'))
+                });
+            });
+
+            fn createGameHTML(gameId, codeContent) {
+                return `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <style>
+                                * { margin: 0; padding: 0; overflow: hidden }
+                                canvas { display: block; image-rendering: pixelated; }
+                                body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px); pointer-events: none; z-index: 999; }
+                            </style>
+                        </head>
+                        <body>
+                            <canvas id="canvas"></canvas>
+
+                            <script src="https://cdn.jsdelivr.net/gh/kazwtto/novajs@main/src/nova.min.js"><\/script>
+                            <script type="text/novajs">${codeContent}<\/script>
+                            <script>
+                                function resizeCanvas() {
+                                    const canvas = document.getElementById('canvas');
+                                    canvas.width = window.innerWidth;
+                                    canvas.height = window.innerHeight;
+                                }
+
+                                resizeCanvas();
+                                window.addEventListener('resize', resizeCanvas);
+                            <\/script>
+                        </body>
+                        </html>`.trim();
+            }
+
+            
+            CARDS.forEach(card => {
+                card.on('click', async () => {
+                    gameId = card.attr('data-game');
+                    codeContent = await (await fetch("./demo/${gameId}.novajs")).text();
+                
+                    blob = new Blob([createGameHTML(gameId, codeContent)], { type: 'text/html' });
+
+                    FRAME.src = URL.createObjectURL(blob);
+                    FRAME.onload = () => {
+                        cv = FRAME.el.contentWindow.document.getElementById('canvas');
+                        FRAME.style({
+                            width: '${cv.width}px',
+                            height: '${cv.height}px'
+                        })
+                    };
+                    MODAL.showModal();
+                });
+            });
+
+            CLOSEBTN.on('click', () => {
+                MODAL.close();
+                FRAME.src = "";
+            });
+        </script>
+    </body>
+</html>
