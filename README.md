@@ -6,7 +6,7 @@ As a programmer whose only tool is a phone, I felt the need for an easy-to-write
 
 I don't recommend using it in real projects, but I won't stop you either. Have fun!
 
-You can check out the full documentation [here](https://novajs.netlify.app/) and test it [here](https://novajs.netlify.app/).
+You can check out the full documentation [here](https://novajs.netlify.app/) and test it [here](https://novajs.netlify.app/playground).
 
 
 The language code was optimized by Claude Sonnet 4.6, so it's not as bad as it originally was. but it's still awful.
